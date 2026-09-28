@@ -1,0 +1,31 @@
+
+# Local / machine-specific network configuration
+dns/dnsmasq.conf
+edge/nginx.conf
+edge/tls.conf
+
+# Local environment files
+.env
+.env.*
+!.env.example
+.DS_Store
+*.key
+*.pem
+*.crt
+*.csr
+*.p12
+*.log
+__pycache__/
+*.pyc
+.venv/
+venv/
+dist/
+build/
+node_modules/
+
+# Wireshark temporary files
+*.swp
+
+# OS/editor
+.vscode/
+.idea/

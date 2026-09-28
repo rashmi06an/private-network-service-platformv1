@@ -1,0 +1,13 @@
+# Example dnsmasq configuration
+# Replace placeholders with actual local network values.
+# DO NOT commit machine-specific IP addresses.
+
+interface=YOUR_NETWORK_INTERFACE
+listen-address=YOUR_DNS_SERVER_IP
+port=53
+
+address=/service.local/BACKEND_OR_LB_IP
+
+# Example:
+# address=/backend-a.local/BACKEND_A_IP
+# address=/backend-b.local/BACKEND_B_IP
