@@ -68,4 +68,5 @@ scripts/test-load-balancing.sh           # X-Backend alternates A/B
 | F    | HTTP caching (Cache-Control / 304)          | evidence/caching/             |
 | G    | Wireshark capture of DNS / TCP / TLS        | evidence/wireshark/           |
 
-See [reports/phase1-report.md](reports/phase1-report.md) for the status checklist.
+See [reports/phase1-report.md](reports/phase1-report.md) for the status checklist,
+and [docs/demo-runbook.md](docs/demo-runbook.md) for the live demo commands (11 steps).
