@@ -3,9 +3,9 @@
 # Reverse proxy + round-robin load balancer + TLS termination
 # Project: Private Network Service Platform (Team 1)
 #
-# Backend IPs are filled in for Team 1's LAN:
-#   Mac 3 (Backend A) = 10.7.21.15
-#   Mac 4 (Backend B) = 10.7.23.47
+# Replace the placeholders before use:
+#   MAC3_IP_HERE  -> private LAN IP of Mac 3 (Backend A)
+#   MAC4_IP_HERE  -> private LAN IP of Mac 4 (Backend B)
 #
 # If you cannot bind to 80/443, use 8080/8443 instead
 # (no marks are deducted for this substitution).
@@ -15,59 +15,57 @@
 # Round-robin is the default strategy; swap to `least_conn;`
 # if you want to demonstrate a different one.
 upstream team1_backends {
-    server 10.7.21.15:3001;    # Backend A (Mac 3)
-    server 10.7.23.47:3002;   # Backend B (Mac 4)
+    server MAC3_IP_HERE:3001;   # Backend A (Mac 3)
+    server MAC4_IP_HERE:3002;   # Backend B (Mac 4)
 }
 
-# ---- Redirect plain HTTP to HTTPS ----------------------------
-server {
-    listen 80;
-    server_name app.team1.test api.team1.test;
-    return 301 https://$host$request_uri;
-}
+    # ---------------------------------------------------------
+    # HTTP -> HTTPS redirect
+    # ---------------------------------------------------------
+    server {
+        listen 8080;
+        server_name app.team1.test api.team1.test;
 
-# ---- HTTPS edge / TLS termination ----------------------------
-server {
-    listen 443 ssl;
-    http2 on;                       # demonstrates HTTP/2 (Task: HTTP/2)
-    server_name app.team1.test api.team1.test;
-
-    # TLS settings are kept in a separate file for clarity.
-    include /opt/homebrew/etc/nginx/tls.conf;   # see edge/tls.conf.example
-
-    # Each backend already sets its own `X-Backend: A|B` header,
-    # which passes straight through so you can watch load balancing.
-    location / {
-        proxy_pass http://team1_backends;
-
-        proxy_set_header Host              $host;
-        proxy_set_header X-Real-IP         $remote_addr;
-        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        return 301 https://$host:8443$request_uri;
     }
 
-    # ---- HTTP caching demonstration (Task F) -----------------
-    # /api/status returns a short, visible Cache-Control max-age
-    # and lets nginx generate an ETag for conditional (304) requests.
-    location = /api/status {
-        proxy_pass http://team1_backends;
+    # ---------------------------------------------------------
+    # HTTPS edge / TLS termination
+    # ---------------------------------------------------------
+    server {
+        listen 8443 ssl;
+        http2 on;
 
-        proxy_set_header Host              $host;
-        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        server_name app.team1.test api.team1.test;
 
-        add_header Cache-Control "public, max-age=60";
-        etag on;
+        include /opt/homebrew/etc/nginx/tls.conf;
+
+        location / {
+            proxy_pass http://team1_backends;
+
+            proxy_http_version 1.1;
+
+            proxy_set_header Host              $host;
+            proxy_set_header X-Real-IP         $remote_addr;
+            proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # -----------------------------------------------------
+        # HTTP caching demonstration
+        # -----------------------------------------------------
+        location = /api/status {
+            proxy_pass http://team1_backends;
+
+            proxy_http_version 1.1;
+
+            proxy_set_header Host              $host;
+            proxy_set_header X-Real-IP         $remote_addr;
+            proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+
+            add_header Cache-Control "public, max-age=60";
+            etag on;
+        }
     }
 }
-
-# -------------------------------------------------------------
-# Verify after reloading nginx (`sudo nginx -s reload`):
-#
-#   # Load balancing — run several times, watch X-Backend flip A/B:
-#   for i in $(seq 1 6); do curl -s -D - https://app.team1.test/api/status \
-#       -o /dev/null | grep -i x-backend; done
-#
-#   # Caching — look for the Cache-Control header:
-#   curl -I https://app.team1.test/api/status
-# -------------------------------------------------------------
