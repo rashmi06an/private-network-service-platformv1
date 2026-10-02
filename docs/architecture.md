@@ -5,8 +5,12 @@ private domain over HTTPS through a reverse proxy and load balancer.
 
 ## 1. Topology
 
-All four Macs are on the **same private Wi-Fi / LAN**. Fill in the real private
-IPs from `docs/network-inventory.md`.
+All four Macs are on the **same private Wi-Fi / LAN**. See the IP/service table
+in `docs/network-inventory.md`.
+
+![Network topology diagram](../evidence/network/topology-diagram.png)
+
+Text version of the same topology:
 
 ```
                     Private Wi-Fi / LAN (same subnet)
