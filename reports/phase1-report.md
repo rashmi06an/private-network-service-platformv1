@@ -12,13 +12,13 @@ with load balancing across two backends, all on four macOS laptops on one LAN.
 
 | Task | Description                                 | Status | Evidence location                |
 |------|---------------------------------------------|--------|----------------------------------|
-| A    | Private LAN + topology + ping               | TODO   | `evidence/phase1/network/`       |
-| B    | Private DNS (dnsmasq) + client resolvers    | TODO   | `evidence/phase1/dns/`           |
-| C    | Two REST backends (A :3001, B :3002)        | TODO   | `evidence/phase1/backends/`      |
-| D    | nginx reverse proxy + round-robin LB        | TODO   | `evidence/phase1/nginx/`         |
-| E    | HTTPS / TLS termination at the edge         | TODO   | `evidence/phase1/tls/`           |
-| F    | HTTP caching (Cache-Control / 304)          | TODO   | `evidence/phase1/caching/`       |
-| G    | Wireshark capture of DNS / TCP / TLS        | TODO   | `evidence/phase1/wireshark/`     |
+| A    | Private LAN + topology + ping               | TODO   | `evidence/network/`       |
+| B    | Private DNS (dnsmasq) + client resolvers    | TODO   | `evidence/dns/`           |
+| C    | Two REST backends (A :3001, B :3002)        | TODO   | `evidence/backends/`      |
+| D    | nginx reverse proxy + round-robin LB        | TODO   | `evidence/nginx/`         |
+| E    | HTTPS / TLS termination at the edge         | TODO   | `evidence/tls/`           |
+| F    | HTTP caching (Cache-Control / 304)          | TODO   | `evidence/caching/`       |
+| G    | Wireshark capture of DNS / TCP / TLS        | TODO   | `evidence/wireshark/`     |
 
 ## 3. Network inventory
 
