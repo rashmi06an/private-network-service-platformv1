@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response, request
 
 app = Flask(__name__)
 
@@ -12,8 +12,8 @@ def add_backend_header(response):
 @app.route("/", methods=["GET"])
 def home():
     return jsonify(
-        message="Backend B is running",
-        backend="B"
+        backend="B",
+        message="Backend B is running"
     )
 
 
@@ -24,6 +24,22 @@ def status():
         status="ok"
     )
 
+@app.route("/api/cache-demo", methods=["GET"])
+def cache_demo():
+    etag = '"backend-b-v1"'
+
+    if request.headers.get("If-None-Match") == etag:
+        response = make_response("", 304)
+    else:
+        response = make_response(jsonify(
+            backend="B",
+            message="Cache demonstration"
+        ))
+
+    response.headers["Cache-Control"] = "public, max-age=60"
+    response.headers["ETag"] = etag
+
+    return response
 
 if __name__ == "__main__":
     app.run(
