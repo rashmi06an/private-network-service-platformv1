@@ -3,7 +3,7 @@
 # Sends repeated requests and prints the X-Backend header each time.
 set -euo pipefail
 
-URL="${1:-https://app.team1.test/api/status}"
+URL="${1:-https://app.team1.test:8443/api/status}"
 COUNT="${2:-8}"
 
 echo "== Load balancing test: $COUNT requests to $URL =="

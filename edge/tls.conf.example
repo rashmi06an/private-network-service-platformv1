@@ -1,6 +1,6 @@
 # =============================================================
 # TLS configuration for the nginx edge — Mac 2
-# Included from nginx.conf inside the `listen 443 ssl` server block.
+# Included from nginx.conf inside the `listen 8443 ssl` server block.
 # Project: Private Network Service Platform (Team 1)
 # =============================================================
 

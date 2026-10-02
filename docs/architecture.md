@@ -17,7 +17,7 @@ IPs from `docs/network-inventory.md`.
 │ DNS + │      │ Edge   │         │Backend │      │Backend │
 │Client │      │ nginx  │         │  A     │      │  B +   │
 │dnsmasq│      │ TLS/LB │         │ :3001  │      │Client  │
-│  :53  │      │:443/80 │         │        │      │ :3002  │
+│  :53  │      │:8443   │         │        │      │ :3002  │
 └───────┘      └────────┘         └────────┘      └────────┘
  Rashmi        Samiksha          Shubhaang         Ankit
 ```
@@ -25,7 +25,7 @@ IPs from `docs/network-inventory.md`.
 | Machine | Member    | Role                      | Service(s)          | Cloud equivalent          |
 |---------|-----------|---------------------------|---------------------|---------------------------|
 | Mac 1   | Rashmi    | Private DNS + Test Client | dnsmasq (:53/UDP)   | Managed DNS (Route 53)    |
-| Mac 2   | Samiksha  | Edge / Reverse Proxy + LB | nginx, TLS (:443)   | Cloud load balancer / CDN |
+| Mac 2   | Samiksha  | Edge / Reverse Proxy + LB | nginx, TLS (:8443)   | Cloud load balancer / CDN |
 | Mac 3   | Shubhaang | Backend Server A          | Flask REST (:3001)  | App server instance A     |
 | Mac 4   | Ankit     | Backend Server B + Client | Flask REST (:3002)  | App server instance B     |
 
@@ -35,7 +35,7 @@ IPs from `docs/network-inventory.md`.
 Client (Mac 1 / Mac 4)
    │ 1. DNS QUERY   ── UDP :53 ──►  Mac 1 (dnsmasq)   "app.team1.test = ?"
    │    DNS RESPONSE ◄──            "app.team1.test -> Mac 2 IP"
-   │ 2. TCP HANDSHAKE ── TCP :443 ─► Mac 2  SYN -> SYN-ACK -> ACK
+   │ 2. TCP HANDSHAKE ── TCP :8443 ─► Mac 2  SYN -> SYN-ACK -> ACK
    │ 3. TLS HANDSHAKE ──►  Mac 2   ClientHello -> ServerHello -> Certificate
    │                               -> Key Exchange -> Finished  (now encrypted)
    │ 4. HTTPS REQUEST ──►  Mac 2   GET /api/status
@@ -51,9 +51,9 @@ Client receives the response over the encrypted TLS channel
 | Step | Protocol         | OSI layer           | Port            |
 |------|------------------|---------------------|-----------------|
 | 1    | DNS              | Application         | 53/UDP          |
-| 2    | TCP              | Transport           | 443/TCP         |
-| 3    | TLS              | Session / Transport | 443/TCP         |
-| 4/6  | HTTP/HTTPS       | Application         | 443/TCP         |
+| 2    | TCP              | Transport           | 8443/TCP        |
+| 3    | TLS              | Session / Transport | 8443/TCP        |
+| 4/6  | HTTP/HTTPS       | Application         | 8443/TCP        |
 | 5    | HTTP (to backend)| Application         | 3001 / 3002 TCP |
 |  —   | IP / Ethernet    | Network / Link      | —               |
 

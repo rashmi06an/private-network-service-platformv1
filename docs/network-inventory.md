@@ -14,7 +14,7 @@ All machines on the same private LAN (`/19`, gateway `10.7.0.1`, interface `en0`
 | Service              | Host  | IP:Port            |
 |----------------------|-------|--------------------|
 | Private DNS (dnsmasq)| Mac 1 | `10.7.17.21:53`    |
-| nginx edge (HTTPS)   | Mac 2 | `10.7.7.9:443`     |
+| nginx edge (HTTPS)   | Mac 2 | `10.7.7.9:8443`     |
 | Backend A            | Mac 3 | `10.7.21.15:3001`   |
 | Backend B            | Mac 4 | `10.7.23.47:3002`  |
 

@@ -7,7 +7,7 @@ Every team member should be able to explain **any** of these, not just their own
 - **What DNS does here:** maps `app.team1.test` to Mac 2's private IP. It is a
   *directory lookup*, not a connection.
 - **Resolution vs connection:** DNS finds the IP (53/UDP); the browser then opens a
-  *separate* TCP+TLS connection to that IP on 443. They are independent layers —
+  *separate* TCP+TLS connection to that IP on 8443. They are independent layers —
   DNS can fail while raw IP connectivity still works, and vice versa.
 - **Why `.test`:** reserved namespace; `.local` conflicts with macOS mDNS.
 
@@ -15,9 +15,9 @@ Every team member should be able to explain **any** of these, not just their own
 
 - **Three-way handshake:** `SYN → SYN-ACK → ACK` establishes the connection before
   any HTTP data is sent.
-- **Ports / socket pair:** client uses an ephemeral source port; server uses the
-  well-known port (443 for HTTPS, 3001/3002 for backends). A connection is
-  identified by the 4-tuple (src IP, src port, dst IP, dst port).
+- **Ports / socket pair:** client uses an ephemeral source port; server uses a
+  well-known port (443 is the standard for HTTPS — we use 8443; backends on 3001/3002).
+  A connection is identified by the 4-tuple (src IP, src port, dst IP, dst port).
 - **Reliability:** sequence + acknowledgement numbers let TCP detect loss and
   reorder/retransmit; flow control uses the advertised window.
 

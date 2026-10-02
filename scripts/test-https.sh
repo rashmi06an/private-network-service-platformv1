@@ -3,7 +3,7 @@
 # Run from a client Mac that trusts the local CA (no -k flag by design).
 set -euo pipefail
 
-URL="https://app.team1.test/api/status"
+URL="https://app.team1.test:8443/api/status"
 
 echo "== HTTPS request (full headers) =="
 curl -v "$URL" 2>&1 | sed -n '1,40p'
