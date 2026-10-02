@@ -123,8 +123,47 @@ scripts/test-load-balancing.sh    # X-Backend alternates A / B
 | F | HTTP caching (Cache-Control + 304) | [evidence/caching/](evidence/caching/) |
 | G | Wireshark: DNS, TCP, TLS, encrypted data | [evidence/wireshark/](evidence/wireshark/) |
 
-**Failure demonstrations (Section 6.3)** — wrong DNS server, wrong DNS record,
-one backend down, both backends down (502), wrong port -> [evidence/failures/](evidence/failures/)
+### Protocol flow — what each capture shows (Task G)
+
+A single `https://app.team1.test:8443/api/status` request, captured and explained layer by layer:
+
+| Layer / Event | What we show and explain | Evidence |
+|---------------|--------------------------|----------|
+| DNS | Client query for `app.team1.test` and the response containing Mac 2's IP (`10.7.7.9`), over UDP/53. | `evidence/wireshark/wireshark-dns.png` |
+| TCP handshake | `SYN -> SYN-ACK -> ACK` before any application data; source + destination ports recorded. | `evidence/wireshark/tcp-syn-detail.png` |
+| TLS handshake | `ClientHello`, `ServerHello`, `Certificate`, `ChangeCipherSpec`; after this only encrypted Application Data. | `evidence/wireshark/tls-client-hello.png` |
+| HTTP headers | Request/response headers via `curl -v`; payload is unreadable in Wireshark because it's encrypted inside TLS. | `evidence/tls/https-by-name.png` |
+| Load balancing | Repeated requests served by both Backend A and Backend B (visible in `X-Backend`). | `evidence/nginx/domain-load-balancing.txt` |
+| Port identification | Client ephemeral source port -> server well-known port: **53/UDP** (DNS), **8443/TCP** (HTTPS). | `evidence/wireshark/tcp-tls-full-exchange.png` |
+
+### Failure demonstrations (Section 6.3)
+
+Each failure was injected deliberately, observed, and then restored:
+
+| Scenario | Expected observation and explanation | Evidence |
+|----------|--------------------------------------|----------|
+| Wrong DNS server on a client | Name lookup fails (NXDOMAIN) even though the IP is still reachable — DNS and IP layers are independent. | `evidence/failures/wrong-dns-server.png` |
+| DNS record points to a wrong IP | Resolution succeeds but the client reaches the wrong destination — DNS is a directory, not a connection. | `evidence/failures/wrong-dns-record.png` |
+| One backend stopped | The edge keeps serving through the remaining backend (all `X-Backend: B`). | `evidence/failures/backend-a-down.png` |
+| Both backends stopped | DNS and TLS still work at the edge, but nginx returns `502 Bad Gateway` — shows where the edge ends and the backend begins. | `evidence/failures/both-down-502.png` |
+| Wrong destination port | Host is reachable but the TCP connection to the port fails — ports and IP addresses are separate identifiers. | `evidence/failures/wrong-port.png` |
+
+---
+
+## Course-topic mapping (OSI vs TCP/IP)
+
+| Course topic | Where it appears in this project |
+|--------------|----------------------------------|
+| Moving data through the core | Client request crosses the LAN to the edge and back — captured in Wireshark. |
+| OSI vs TCP/IP model | DNS/HTTP = Application · TLS = Session/Transport · TCP/UDP = Transport · IP = Network · Ethernet = Link. |
+| Devices, topologies, cloud concepts | Local topology (Mac 1–4) mapped to cloud roles (Route 53, cloud LB, app instances). |
+| HTTP/1.1, HTTP/2, REST | REST API on both backends; HTTP/1.1 demonstrated (HTTP/2 enabled on the edge). |
+| HTTPS and TLS | TLS terminated at nginx; handshake + certificate validation captured. |
+| Transport layer, ports, TCP/UDP | Service ports and the TCP three-way handshake identified in the capture. |
+| Reliable data transfer, TCP flow control | Sequence/acknowledgement numbers shown in the handshake. |
+| Caching | `Cache-Control` + `ETag` with a `304 Not Modified` conditional request. |
+| Cloud load balancing | nginx round-robin across two backends (relates to AWS ALB / GCP LB). |
+| DNS and Route 53 concepts | Private `app.team1.test` zone with two client machines resolving through Mac 1. |
 
 ---
 
