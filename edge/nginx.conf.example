@@ -1,26 +1,40 @@
 # =============================================================
-# nginx edge configuration — Mac 2
-# Reverse proxy + round-robin load balancer + TLS termination
-# Project: Private Network Service Platform (Team 1)
+# Private Network Service Platform - Team 1
+# Mac 2: nginx reverse proxy + round-robin load balancer
+# + HTTPS/TLS termination
 #
-# Replace the placeholders before use:
-#   MAC3_IP_HERE  -> private LAN IP of Mac 3 (Backend A)
-#   MAC4_IP_HERE  -> private LAN IP of Mac 4 (Backend B)
+# IMPORTANT:
+# Replace BACKEND_A_IP and BACKEND_B_IP with the current
+# LAN IP addresses before using this as the real nginx.conf.
+# Do NOT commit the machine-specific nginx.conf.
 #
-# If you cannot bind to 80/443, use 8080/8443 instead
-# (no marks are deducted for this substitution).
+# Team:
+# Mac 3 -> Backend A -> port 3001
+# Mac 4 -> Backend B -> port 3002
 # =============================================================
 
-# Round-robin load balancer across the two backends.
-# Round-robin is the default strategy; swap to `least_conn;`
-# if you want to demonstrate a different one.
-upstream team1_backends {
-    server MAC3_IP_HERE:3001;   # Backend A (Mac 3)
-    server MAC4_IP_HERE:3002;   # Backend B (Mac 4)
+worker_processes auto;
+
+events {
+    worker_connections 1024;
 }
+
+http {
+    include mime.types;
+    default_type application/octet-stream;
+
+    # ---------------------------------------------------------
+    # Backend pool
+    # nginx uses round-robin by default
+    # ---------------------------------------------------------
+    upstream team1_backends {
+        server 10.7.21.15:3001;
+        server 10.7.23.47:3002;
+    }
 
     # ---------------------------------------------------------
     # HTTP -> HTTPS redirect
+    # Using 8080/8443 because they are allowed by the project
     # ---------------------------------------------------------
     server {
         listen 8080;
@@ -30,42 +44,44 @@ upstream team1_backends {
     }
 
     # ---------------------------------------------------------
-    # HTTPS edge / TLS termination
+    # HTTPS edge
+    # TLS terminates here
     # ---------------------------------------------------------
     server {
         listen 8443 ssl;
-        http2 on;
-
         server_name app.team1.test api.team1.test;
 
         include /opt/homebrew/etc/nginx/tls.conf;
 
+        # -----------------------------------------------------
+        # Normal application traffic
+        # -----------------------------------------------------
         location / {
             proxy_pass http://team1_backends;
 
             proxy_http_version 1.1;
 
-            proxy_set_header Host              $host;
-            proxy_set_header X-Real-IP         $remote_addr;
-            proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto https;
         }
 
         # -----------------------------------------------------
-        # HTTP caching demonstration
+        # Status endpoint
+        # Demonstrates Cache-Control for Phase 1 caching
         # -----------------------------------------------------
-        location = /api/status {
+        location /api/status {
             proxy_pass http://team1_backends;
 
             proxy_http_version 1.1;
 
-            proxy_set_header Host              $host;
-            proxy_set_header X-Real-IP         $remote_addr;
-            proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto https;
 
             add_header Cache-Control "public, max-age=60";
-            etag on;
         }
     }
 }

@@ -1,14 +1,29 @@
 # =============================================================
-# TLS configuration for nginx edge — Mac 2
+# Private Network Service Platform - Team 1
+# TLS configuration for nginx
 # =============================================================
 
+# -------------------------------------------------------------
+# Certificate and private key
+# Generated using mkcert / approved local CA
+# -------------------------------------------------------------
 ssl_certificate     /opt/homebrew/etc/nginx/certs/app.team1.test.pem;
 ssl_certificate_key /opt/homebrew/etc/nginx/certs/app.team1.test-key.pem;
 
+# -------------------------------------------------------------
+# TLS versions
+# -------------------------------------------------------------
 ssl_protocols TLSv1.2 TLSv1.3;
+
+# -------------------------------------------------------------
+# Cipher configuration
+# -------------------------------------------------------------
 ssl_ciphers HIGH:!aNULL:!MD5;
 ssl_prefer_server_ciphers on;
 
+# -------------------------------------------------------------
+# Session configuration
+# -------------------------------------------------------------
 ssl_session_cache shared:SSL:10m;
 ssl_session_timeout 10m;
 ssl_session_tickets off;
