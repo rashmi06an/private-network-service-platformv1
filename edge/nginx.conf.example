@@ -4,7 +4,7 @@
 # Project: Private Network Service Platform (Team 1)
 #
 # Backend IPs are filled in for Team 1's LAN:
-#   Mac 3 (Backend A) = 10.7.7.17
+#   Mac 3 (Backend A) = 10.7.21.15
 #   Mac 4 (Backend B) = 10.7.23.47
 #
 # If you cannot bind to 80/443, use 8080/8443 instead
@@ -15,7 +15,7 @@
 # Round-robin is the default strategy; swap to `least_conn;`
 # if you want to demonstrate a different one.
 upstream team1_backends {
-    server 10.7.7.17:3001;    # Backend A (Mac 3)
+    server 10.7.21.15:3001;    # Backend A (Mac 3)
     server 10.7.23.47:3002;   # Backend B (Mac 4)
 }
 

@@ -10,7 +10,7 @@ Team 1 LAN addresses. Ports assume `443`; if you bound nginx to `8443`, append
 |-------|-------------|--------------|------------|
 | Mac 1 | DNS + client| `10.7.17.21` | 53/UDP     |
 | Mac 2 | nginx edge  | `10.7.7.9`   | 443 (HTTPS)|
-| Mac 3 | Backend A   | `10.7.7.17`  | 3001       |
+| Mac 3 | Backend A   | `10.7.21.15`  | 3001       |
 | Mac 4 | Backend B   | `10.7.23.47` | 3002       |
 
 Domain: `app.team1.test`, `api.team1.test` → `10.7.7.9`
@@ -49,7 +49,7 @@ Show `docs/architecture.md` (diagram + layer map) and `docs/network-inventory.md
 ```bash
 ping -c 2 10.7.17.21    # Mac 1
 ping -c 2 10.7.7.9      # Mac 2
-ping -c 2 10.7.7.17     # Mac 3
+ping -c 2 10.7.21.15     # Mac 3
 ping -c 2 10.7.23.47    # Mac 4
 ```
 
@@ -107,7 +107,7 @@ Order of checks: DNS → TCP → TLS → application.
 dig app.team1.test                      # DNS layer OK?
 nc -vz 10.7.7.9 443                      # TCP to edge OK?
 curl -vI https://app.team1.test/         # TLS/HTTP OK?
-curl -s http://10.7.7.17:3001/api/status # backend A directly
+curl -s http://10.7.21.15:3001/api/status # backend A directly
 curl -s http://10.7.23.47:3002/api/status# backend B directly
 ```
 
