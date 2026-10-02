@@ -57,12 +57,13 @@ Mac 2  nginx reverse proxy + round-robin load balancer
   |--> Mac 4  Backend B :3002   (X-Backend: B)
 ```
 
-| Layer | Protocol | Port |
-|-------|----------|------|
-| Application | DNS / HTTP(S) | 53/UDP, 8443/TCP |
-| Session/Transport | TLS | 8443/TCP |
-| Transport | TCP | 8443/TCP, 3001/3002 |
-| Network / Link | IP / Ethernet | — |
+| Layer | Protocol | Addressing |
+|-------|----------|------------|
+| Application | DNS / HTTP(S) | ports 53/UDP, 8443/TCP |
+| Session/Transport | TLS | port 8443/TCP |
+| Transport | TCP | ports 8443/TCP, 3001/3002 |
+| Network | IP | IP addresses (10.7.x.x) — no ports at this layer |
+| Link | Ethernet | MAC addresses — no ports at this layer |
 
 Full diagram, OSI/TCP-IP mapping, and explanation: **[docs/architecture.md](docs/architecture.md)**.
 

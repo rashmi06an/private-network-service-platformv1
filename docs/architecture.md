@@ -59,7 +59,7 @@ Client receives the response over the encrypted TLS channel
 | 3    | TLS              | Session / Transport | 8443/TCP        |
 | 4/6  | HTTP/HTTPS       | Application         | 8443/TCP        |
 | 5    | HTTP (to backend)| Application         | 3001 / 3002 TCP |
-|  —   | IP / Ethernet    | Network / Link      | —               |
+|  —   | IP / Ethernet    | Network / Link      | no ports (uses IP + MAC addresses) |
 
 ## 3. Key points
 
