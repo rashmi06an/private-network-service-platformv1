@@ -3,9 +3,9 @@
 # Reverse proxy + round-robin load balancer + TLS termination
 # Project: Private Network Service Platform (Team 1)
 #
-# Replace the placeholders before use:
-#   MAC3_IP_HERE  -> private LAN IP of Mac 3 (Backend A)
-#   MAC4_IP_HERE  -> private LAN IP of Mac 4 (Backend B)
+# Backend IPs are filled in for Team 1's LAN:
+#   Mac 3 (Backend A) = 10.7.7.17
+#   Mac 4 (Backend B) = 10.7.23.47
 #
 # If you cannot bind to 80/443, use 8080/8443 instead
 # (no marks are deducted for this substitution).
@@ -15,8 +15,8 @@
 # Round-robin is the default strategy; swap to `least_conn;`
 # if you want to demonstrate a different one.
 upstream team1_backends {
-    server MAC3_IP_HERE:3001;   # Backend A (Mac 3)
-    server MAC4_IP_HERE:3002;   # Backend B (Mac 4)
+    server 10.7.7.17:3001;    # Backend A (Mac 3)
+    server 10.7.23.47:3002;   # Backend B (Mac 4)
 }
 
 # ---- Redirect plain HTTP to HTTPS ----------------------------

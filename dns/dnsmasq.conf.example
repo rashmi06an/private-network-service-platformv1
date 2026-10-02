@@ -1,15 +1,11 @@
 # Private DNS configuration for Team 1
 
-# Listen only on the project LAN interface/IP
-# Replace with actual values during setup
-
-listen-address=127.0.0.1,MAC1_IP_HERE
+# Listen on localhost and the Mac 1 LAN IP (the DNS server)
+listen-address=127.0.0.1,10.7.17.21
 
 # Do not use /etc/resolv.conf automatically
 no-resolv
 
-# Project domain records
-address=/app.team1.test/MAC2_IP_HERE
-address=/api.team1.test/MAC2_IP_HERE
-
-
+# Project domain records -> Mac 2 (nginx edge)
+address=/app.team1.test/10.7.7.9
+address=/api.team1.test/10.7.7.9
