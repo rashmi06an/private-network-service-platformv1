@@ -1,13 +1,15 @@
-# Example dnsmasq configuration
-# Replace placeholders with actual local network values.
-# DO NOT commit machine-specific IP addresses.
+# Private DNS configuration for Team 1
 
-interface=YOUR_NETWORK_INTERFACE
-listen-address=YOUR_DNS_SERVER_IP
-port=53
+# Listen only on the project LAN interface/IP
+# Replace with actual values during setup
 
-address=/service.local/BACKEND_OR_LB_IP
+listen-address=127.0.0.1,MAC1_IP_HERE
 
-# Example:
-# address=/backend-a.local/BACKEND_A_IP
-# address=/backend-b.local/BACKEND_B_IP
+# Do not use /etc/resolv.conf automatically
+no-resolv
+
+# Project domain records
+address=/app.team1.test/MAC2_IP_HERE
+address=/api.team1.test/MAC2_IP_HERE
+
+

@@ -1,62 +1,49 @@
 # Private Network Service Platform
 
-A fully local team-based networking project demonstrating:
+Computer Networks Course — Phase 1
 
-- Private DNS
-- TCP
-- HTTPS / TLS
-- HTTP/REST
-- Reverse Proxy
-- Load Balancing
-- HTTP Caching
-- Wireshark Packet Analysis
+## Team Members
+
+| Name | Enrollment No. | Role |
+|---|---|---|
+| Rashmi Anand | 2401010374 | Private DNS + Test Client |
+| Samiksha Jangid | 2401010410 | Nginx + HTTPS/TLS |
+| Shubhaang Kataruka | 2401010450 | Backend A |
+| Ankit Raj Singh | 2401010075 | Backend B |
 
 ## Architecture
 
 Client
-↓
-Private DNS
-↓
-Nginx Edge
-↓
-Backend A / Backend B
+→ Private DNS
+→ Nginx Reverse Proxy
+→ Backend A / Backend B
 
-## Machine Roles
+## Infrastructure
 
-| Machine | Role | Service |
-|---|---|---|
-| Mac 1 | DNS + Client | dnsmasq |
-| Mac 2 | Edge | nginx |
-| Mac 3 | Backend A | HTTP :3001 |
-| Mac 4 | Backend B + Client | HTTP :3002 |
+macOS laptops on the same private LAN.
+
+## Services
+
+- Private DNS: dnsmasq
+- Reverse Proxy / Load Balancer: nginx
+- Backend A: HTTP :3001
+- Backend B: HTTP :3002
+- HTTPS: TLS terminated at nginx
 
 ## Domain
 
 app.team1.test
-api.team1.test
 
 ## Phase 1
 
-- [ ] LAN connectivity
-- [ ] Private DNS
-- [ ] Backend A
-- [ ] Backend B
-- [ ] nginx reverse proxy
-- [ ] Load balancing
-- [ ] HTTPS/TLS
-- [ ] HTTP caching
-- [ ] Wireshark analysis
-- [ ] Failure demonstrations
+The project demonstrates:
 
-## Phase 2
-
-To be implemented after Phase 1.
-
-## Team
-
-| Member | Machine | Primary Role |
-|---|---|---|
-| Member 1 | Mac 1 | DNS |
-| Member 2 | Mac 2 | Edge |
-| Member 3 | Mac 3 | Backend A |
-| Member 4 | Mac 4 | Backend B |
+- Private DNS
+- TCP connectivity
+- HTTP/REST
+- Reverse proxy
+- Load balancing
+- HTTPS/TLS
+- HTTP caching
+- Wireshark packet analysis
+- Failure diagnosis
