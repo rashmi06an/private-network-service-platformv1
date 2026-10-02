@@ -28,19 +28,19 @@ Domain: `app.team1.test` and `api.team1.test` → `10.7.7.9` (Mac 2).
 Full details in [docs/network-inventory.md](../docs/network-inventory.md) and
 [docs/architecture.md](../docs/architecture.md).
 
-## 3. Build tasks — all complete ✅
+## 3. Build tasks — all complete
 
 | Task | What it shows | Status | Evidence |
 |------|---------------|--------|----------|
-| A | Private LAN + ping between all Macs | ✅ | `evidence/network/mac1-ifconfig-ping.png` |
-| B | Private DNS resolves our domain; clients use Mac 1 | ✅ | `evidence/dns/` (dig, dnsmasq, Mac 3 & Mac 4 clients) |
-| C | Two REST backends, `X-Backend: A/B` header | ✅ | `evidence/backends/` (status + listening) |
-| D | nginx round-robin load balancing | ✅ | `evidence/nginx/` (X-Backend alternates A/B) |
-| E | HTTPS with a trusted cert (no `-k`) | ✅ | `evidence/tls/https-by-name.png` |
-| F | HTTP caching: `Cache-Control` + `304` | ✅ | `evidence/caching/` (headers + 304) |
-| G | Wireshark: DNS, TCP, TLS, encrypted data | ✅ | `evidence/wireshark/` (DNS, SYN, handshake, Client Hello) |
+| A | Private LAN + ping between all Macs | Done | `evidence/network/mac1-ifconfig-ping.png` |
+| B | Private DNS resolves our domain; clients use Mac 1 | Done | `evidence/dns/` (dig, dnsmasq, Mac 3 & Mac 4 clients) |
+| C | Two REST backends, `X-Backend: A/B` header | Done | `evidence/backends/` (status + listening) |
+| D | nginx round-robin load balancing | Done | `evidence/nginx/` (X-Backend alternates A/B) |
+| E | HTTPS with a trusted cert (no `-k`) | Done | `evidence/tls/https-by-name.png` |
+| F | HTTP caching: `Cache-Control` + `304` | Done | `evidence/caching/` (headers + 304) |
+| G | Wireshark: DNS, TCP, TLS, encrypted data | Done | `evidence/wireshark/` (DNS, SYN, handshake, Client Hello) |
 
-## 4. Failure demonstrations — all complete ✅
+## 4. Failure demonstrations — all complete
 
 We deliberately broke the system to prove we understand each layer.
 
