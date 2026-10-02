@@ -49,6 +49,7 @@ http {
     # ---------------------------------------------------------
     server {
         listen 8443 ssl;
+        http2 on;
         server_name app.team1.test api.team1.test;
 
         include /opt/homebrew/etc/nginx/tls.conf;
