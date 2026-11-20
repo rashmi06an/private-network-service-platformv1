@@ -1,0 +1,11 @@
+# Mac 1 Rashmi — PROJECT-SPECIFIC dnsmasq lines from live terminal tests.
+# This snippet is NOT a full dnsmasq.conf. Update IPs if DHCP changes.
+# To be inserted in the active /opt/homebrew/etc/dnsmasq.conf.
+interface=en0
+listen-address=127.0.0.1,10.7.27.145
+local-ttl=30
+address=/app.team1.test/10.7.25.25
+address=/api.team1.test/10.7.25.25
+address=/ttl.team1.test/10.7.25.25
+# During the TTL exercise, ttl.team1.test temporarily pointed to 10.7.28.78.
+# During edge cutover, app/api temporarily pointed to 10.7.28.78.

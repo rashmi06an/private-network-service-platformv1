@@ -1,0 +1,34 @@
+# Mac 2 Samiksha — RECONSTRUCTED example, not a verbatim live full config.
+# Keep /opt/homebrew/etc/nginx/tls.conf machine-local; do not commit TLS key files.
+worker_processes auto;
+events { worker_connections 1024; }
+http {
+    include /opt/homebrew/etc/nginx/mime.types;
+    default_type application/octet-stream;
+    upstream team1_backend {
+        # Live upstream lines verified on Mac 2, 20 Nov 2026
+        server 10.7.28.78:3001;
+        server 10.7.27.247:3002;
+    }
+    server {
+        listen 8080;
+        server_name app.team1.test api.team1.test;
+        return 301 https://$host:8443$request_uri;
+    }
+    server {
+        listen 8443 ssl;
+        server_name app.team1.test api.team1.test;
+        include /opt/homebrew/etc/nginx/tls.conf;
+        location / {
+            proxy_pass http://team1_backend;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto https;
+            proxy_connect_timeout 2s;
+            proxy_next_upstream error timeout;
+            proxy_next_upstream_tries 2;
+        }
+    }
+}

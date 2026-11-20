@@ -1,0 +1,4 @@
+# Mac 4 / Backend B: allow only Mac 2 direct access to port 3002.
+# The backup DNS port 53 stays accessible.
+pass in quick on en0 inet proto tcp from 10.7.25.25 to 10.7.27.247 port 3002
+block drop in quick on en0 inet proto tcp from any to 10.7.27.247 port 3002

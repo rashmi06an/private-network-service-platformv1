@@ -1,0 +1,13 @@
+# Mac 4 Ankit — backup DNS project config, from supplied terminal output.
+# Keep aligned with the primary DNS after controlled cutover.
+port=53
+interface=en0
+listen-address=10.7.27.247
+bind-interfaces
+no-resolv
+local=/team1.test/
+address=/app.team1.test/10.7.25.25
+address=/api.team1.test/10.7.25.25
+log-queries
+# During Extension E, these temporarily pointed to 10.7.28.78.
+# IMPORTANT: Verify actual live Mac 4 dnsmasq is reloaded to primary edge.
