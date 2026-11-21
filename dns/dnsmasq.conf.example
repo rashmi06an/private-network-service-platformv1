@@ -1,4 +1,9 @@
-# Private DNS configuration for Team 1
+# =============================================================
+# Private DNS configuration for Team Scout Regiment — PHASE 1
+# Mac 1 primary resolver. Uses the Phase 1 LAN addresses.
+# (Phase 2 used a different DHCP lease — see dns/dnsmasq-phase2.conf.example
+#  and docs/network-inventory.md for both address sets.)
+# =============================================================
 
 # Listen on localhost and the Mac 1 LAN IP (the DNS server)
 listen-address=127.0.0.1,10.7.17.21

@@ -1,5 +1,5 @@
 # =============================================================
-# Private Network Service Platform - Team 1
+# Private Network Service Platform - Team Scout Regiment
 # Mac 2: nginx reverse proxy + round-robin load balancer
 # + HTTPS/TLS termination
 #

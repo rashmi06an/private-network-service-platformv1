@@ -1,7 +1,11 @@
-# Phase 1 Demo Runbook — Team 1
+# Phase 1 Demo Runbook — Team Scout Regiment
 
 Exact commands for the live demonstration (Section 8, 11 steps), using the real
-Team 1 LAN addresses. The edge runs on **8080 (HTTP)** and **8443 (HTTPS)**.
+Team Scout Regiment LAN addresses. The edge runs on **8080 (HTTP)** and **8443 (HTTPS)**.
+
+> These are the **Phase 1** LAN addresses. In the Phase 2 session DHCP assigned
+> new IPs — see [network-inventory.md](network-inventory.md) and
+> [phase2-demo-runbook.md](phase2-demo-runbook.md) for the Phase 2 set.
 
 ## Addresses
 

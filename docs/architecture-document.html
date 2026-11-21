@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture Document — Team Scout Regiment</title>
+<style>
+  :root{
+    --ink:#1a2230; --muted:#5b6676; --line:#d6dce4; --soft:#f4f6f9;
+    --p1:#1f6feb; --p1bg:#eaf2ff; --p2:#0f766e; --p2bg:#e7f6f3;
+    --accent:#b45309; --accentbg:#fdf3e7;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); line-height:1.5; margin:0; background:#fff; font-size:14px}
+  .page{max-width:900px; margin:0 auto; padding:40px 48px}
+  h1{font-size:26px; margin:0 0 4px}
+  h2{font-size:20px; margin:0}
+  h3{font-size:15px; letter-spacing:.02em; text-transform:uppercase; color:var(--muted); margin:28px 0 10px}
+  p{margin:8px 0}
+  .sub{color:var(--muted); margin:2px 0}
+  .rule{height:3px; border:0; background:var(--ink); margin:14px 0 4px}
+  table{border-collapse:collapse; width:100%; margin:12px 0; font-size:13px}
+  th,td{border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top}
+  th{background:var(--soft); font-weight:600}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92em;
+    background:var(--soft); padding:1px 5px; border-radius:4px}
+  .cover{border:1px solid var(--line); border-radius:12px; padding:28px 30px; background:linear-gradient(180deg,#fafcff,#fff)}
+  .tag{display:inline-block; font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px}
+  .tag.p1{color:var(--p1); background:var(--p1bg)}
+  .tag.p2{color:var(--p2); background:var(--p2bg)}
+  .division{margin-top:10px}
+  .divhead{display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:3px solid var(--ink)}
+  .divhead.p1{border-color:var(--p1)} .divhead.p2{border-color:var(--p2)}
+  .divhead .n{font-size:30px; font-weight:800; color:#fff; width:46px; height:46px; display:flex;
+    align-items:center; justify-content:center; border-radius:10px}
+  .divhead.p1 .n{background:var(--p1)} .divhead.p2 .n{background:var(--p2)}
+  figure{margin:14px 0; text-align:center}
+  figure img{max-width:100%; border:1px solid var(--line); border-radius:8px}
+  figcaption{font-size:12px; color:var(--muted); margin-top:6px}
+  .ph{border:2px dashed var(--line); border-radius:8px; padding:40px 20px; color:var(--muted);
+    text-align:center; background:var(--soft); font-size:13px}
+  pre.flow{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px;
+    line-height:1.45; background:#0f1626; color:#e6edf6; padding:16px 18px; border-radius:10px;
+    overflow:auto; white-space:pre}
+  pre.flow .p1c{color:#7cb7ff} pre.flow .p2c{color:#5ad6c7} pre.flow .w{color:#ffd59e} pre.flow .d{color:#8b97a8}
+  .note{border-left:4px solid var(--accent); background:var(--accentbg); padding:8px 12px; border-radius:0 8px 8px 0; font-size:13px; margin:12px 0}
+  .legend{font-size:12px; color:var(--muted); margin-top:4px}
+  @media print{
+    body{font-size:12px}
+    .page{padding:0 10mm}
+    .division{break-inside:avoid}
+    .divhead{break-after:avoid}
+    .pagebreak{break-before:page}
+    figure,table,pre.flow{break-inside:avoid}
+    a{color:inherit; text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===================== COVER ===================== -->
+  <div class="cover">
+    <p class="sub" style="margin-bottom:6px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)">Computer Networks — Course Project</p>
+    <h1>Architecture Document</h1>
+    <h2 style="font-weight:600; color:var(--muted)">Private Network Service Platform — Team Scout Regiment</h2>
+    <p style="margin-top:14px">
+      <span class="tag p1">Phase 1 · Build &amp; Observe</span>
+      &nbsp;<span class="tag p2">Phase 2 · Harden, Recover &amp; Troubleshoot</span>
+    </p>
+    <table style="margin-top:16px; width:auto">
+      <tr><th>Mac 1</th><td>Rashmi Anand — Private DNS (dnsmasq) + Test Client</td></tr>
+      <tr><th>Mac 2</th><td>Samiksha Jangid — nginx Edge: HTTPS/TLS + Load Balancer</td></tr>
+      <tr><th>Mac 3</th><td>Shubhaang Kataruka — Backend A (Flask REST) + Standby Edge (P2)</td></tr>
+      <tr><th>Mac 4</th><td>Ankit Raj Singh — Backend B (Flask REST) + Backup DNS (P2)</td></tr>
+    </table>
+    <p class="sub" style="margin-top:14px">
+      All four Macs on one private Wi-Fi/LAN <code>10.7.0.0/19</code>, gateway <code>10.7.0.1</code>, interface <code>en0</code>.
+      Private domain: <code>app.team1.test</code> / <code>api.team1.test</code>. Edge ports <code>8080</code> (HTTP→HTTPS) / <code>8443</code> (HTTPS).
+    </p>
+    <div class="note" style="margin-top:14px">
+      <b>Note on addresses.</b> The LAN IPs differ between Phase 1 and Phase 2 because DHCP issued
+      new leases in each session. The <b>domain names and MAC addresses did not change</b> — which is
+      exactly the point of running DNS. Both address sets are given below and in <code>docs/network-inventory.md</code>.
+    </div>
+  </div>
+
+  <!-- ===================== DIVISION 1 — PHASE 1 ===================== -->
+  <div class="division pagebreak">
+    <div class="divhead p1"><div class="n">1</div>
+      <div><h2>Phase 1 — Build &amp; Observe</h2>
+      <p class="sub">The core network: a private domain served over HTTPS through a reverse proxy and load balancer.</p></div>
+    </div>
+
+    <h3>1.1 Network topology diagram</h3>
+    <figure>
+      <img src="../evidence/network/topology-diagram.png" alt="Phase 1 network topology">
+      <figcaption>Four roles on one private LAN — DNS (Mac 1), edge (Mac 2), Backend A (Mac 3), Backend B (Mac 4).</figcaption>
+    </figure>
+
+    <h3>1.2 Machine roles &amp; IP / service table</h3>
+    <table>
+      <tr><th>Machine</th><th>Role</th><th>Service address (Phase 1)</th><th>Cloud equivalent</th></tr>
+      <tr><td>Mac 1</td><td>Private DNS (dnsmasq) + client</td><td><code>10.7.17.21:53</code> (UDP/TCP)</td><td>Managed DNS (Route 53)</td></tr>
+      <tr><td>Mac 2</td><td>nginx edge — TLS + load balancer</td><td><code>10.7.7.9:8443</code> (HTTPS)</td><td>Cloud load balancer / CDN</td></tr>
+      <tr><td>Mac 3</td><td>Backend A (Flask REST)</td><td><code>10.7.21.15:3001</code></td><td>App server instance A</td></tr>
+      <tr><td>Mac 4</td><td>Backend B (Flask REST) + client</td><td><code>10.7.23.47:3002</code></td><td>App server instance B</td></tr>
+    </table>
+    <p class="legend">DNS records: <code>app.team1.test</code> and <code>api.team1.test</code> → <code>10.7.7.9</code> (Mac 2).</p>
+
+    <h3>1.3 Request-flow diagram — each protocol layer</h3>
+    <pre class="flow"><span class="d">CLIENT (Mac 1 / Mac 4)</span>
+   │
+   │ <span class="p1c">1. DNS QUERY</span>      ── UDP 53  ──►  Mac 1  dnsmasq      "app.team1.test = ?"  →  10.7.7.9
+   │ <span class="p1c">2. TCP HANDSHAKE</span>  ── TCP 8443 ──►  Mac 2  SYN → SYN-ACK → ACK
+   │ <span class="p1c">3. TLS HANDSHAKE</span>  ── TCP 8443 ──►  Mac 2  ClientHello → ServerHello → Certificate → Finished
+   │ <span class="p1c">4. HTTPS REQUEST</span>  ── TCP 8443 ──►  Mac 2  GET /api/status            <span class="w">(payload now encrypted)</span>
+   ▼
+ Mac 2  nginx reverse proxy + round-robin load balancer
+   ├─ <span class="p1c">5. HTTP</span> ── TCP 3001 ──►  Mac 3  Backend A   →  X-Backend: A
+   └─ <span class="p1c">5. HTTP</span> ── TCP 3002 ──►  Mac 4  Backend B   →  X-Backend: B
+   │
+   │ <span class="p1c">6. HTTP RESPONSE</span>   JSON + X-Backend + Cache-Control, returned over the encrypted TLS channel
+   ▼
+ CLIENT receives the response</pre>
+
+    <table>
+      <tr><th>Step</th><th>Protocol</th><th>OSI layer</th><th>Port / addressing</th></tr>
+      <tr><td>1</td><td>DNS</td><td>Application</td><td>53/UDP</td></tr>
+      <tr><td>2</td><td>TCP</td><td>Transport</td><td>8443/TCP (SYN/SYN-ACK/ACK)</td></tr>
+      <tr><td>3</td><td>TLS</td><td>Session / Transport</td><td>8443/TCP</td></tr>
+      <tr><td>4 / 6</td><td>HTTP(S)</td><td>Application</td><td>8443/TCP</td></tr>
+      <tr><td>5</td><td>HTTP (edge→backend)</td><td>Application</td><td>3001 / 3002 TCP</td></tr>
+      <tr><td>—</td><td>IP / Ethernet</td><td>Network / Link</td><td>IP addresses + MAC addresses (no ports)</td></tr>
+    </table>
+    <div class="note"><b>Key idea.</b> DNS is a <i>directory</i>, not a connection — it only maps the name to Mac 2's IP;
+      the TCP/TLS connection is a separate step. The client never learns the backend IPs. After the TLS handshake the
+      HTTP payload is encrypted, so Wireshark shows <code>Application Data</code>; use <code>curl -v</code> for cleartext.</div>
+  </div>
+
+  <!-- ===================== DIVISION 2 — PHASE 2 ===================== -->
+  <div class="division pagebreak">
+    <div class="divhead p2"><div class="n">2</div>
+      <div><h2>Phase 2 — Harden, Recover &amp; Troubleshoot</h2>
+      <p class="sub">The same network, extended for resilience, isolation and diagnosability. Nothing was rebuilt.</p></div>
+    </div>
+
+    <h3>2.1 Network topology diagram (hardened)</h3>
+    <figure>
+      <img src="../evidence/network/topology-phase2.png" alt="Phase 2 hardened topology"
+           onerror="this.style.display='none'; document.getElementById('p2ph').style.display='block';">
+      <div id="p2ph" class="ph" style="display:none">
+        Phase 2 topology image — save it as <code>evidence/network/topology-phase2.png</code> and it will appear here.
+        The authoritative hardened topology is drawn below.
+      </div>
+      <figcaption>Hardened topology (Phase 2 addresses) — adds backup DNS (Mac 4), standby edge (Mac 3), backend firewall (Ext C), and HA failover (Ext D); the dashed line is the Ext E DNS cutover.</figcaption>
+    </figure>
+
+    <pre class="flow"><span class="d">                    PRIVATE LAN  10.7.0.0/19</span>
+ CLIENT ──<span class="p1c">DNS</span>─► Mac 1  PRIMARY DNS   <span class="p2c">10.7.27.145</span>   <span class="p2c">◄ Ext B: 30s TTL + ttl.team1.test</span>
+  (resolver   ╲
+   27.145 +    ╲─<span class="p1c">DNS</span>─► Mac 4  BACKUP DNS    <span class="p2c">10.7.27.247</span>   <span class="p2c">◄ Ext A: same records as Mac 1</span>
+   27.247)
+      │ <span class="p1c">HTTPS 8443 (by name)</span>
+      ▼
+   Mac 2  PRIMARY EDGE  <span class="p2c">10.7.25.25</span>   X-Edge: primary-mac2
+      │   <span class="p2c">╌╌ Ext E: DNS cutover repoints the name ╌╌►  Mac 3 STANDBY EDGE 10.7.28.78  (X-Edge: standby-mac3)</span>
+      │   <span class="p2c">Ext D: passive health checks — max_fails / proxy_next_upstream (one backend down → no 502)</span>
+      │ <span class="p1c">HTTP 3001 / 3002</span>   <span class="w">Ext C: pf firewall on backends — ONLY the edge (25.25) may connect</span>
+      ├──► Mac 3  Backend A :3001   <span class="w">(all other clients blocked)</span>
+      └──► Mac 4  Backend B :3002   <span class="w">(all other clients blocked)</span></pre>
+
+    <h3>2.2 Machine roles &amp; IP / service table (Phase 2)</h3>
+    <table>
+      <tr><th>Machine</th><th>Phase 2 role(s)</th><th>Service address (Phase 2)</th><th>Phase 1 address</th></tr>
+      <tr><td>Mac 1</td><td>Primary DNS (dnsmasq) + client</td><td><code>10.7.27.145:53</code></td><td><code>10.7.17.21</code></td></tr>
+      <tr><td>Mac 2</td><td>Primary edge — TLS + LB + HA failover</td><td><code>10.7.25.25:8443</code></td><td><code>10.7.7.9</code></td></tr>
+      <tr><td>Mac 3</td><td>Backend A <b>+ standby edge</b></td><td><code>10.7.28.78:3001</code>, standby <code>:8443</code></td><td><code>10.7.21.15</code></td></tr>
+      <tr><td>Mac 4</td><td>Backend B <b>+ backup DNS</b></td><td><code>10.7.27.247:3002</code>, DNS <code>:53</code></td><td><code>10.7.23.47</code></td></tr>
+    </table>
+    <p class="legend">DNS records (Phase 2): <code>app</code> / <code>api</code> / <code>ttl.team1.test</code> → <code>10.7.25.25</code> (Mac 2), TTL 30 s.
+      During Ext E the name is temporarily repointed to <code>10.7.28.78</code> (Mac 3 standby).</p>
+
+    <h3>2.3 Request-flow diagram — resilience paths</h3>
+    <pre class="flow"><span class="d">Same DNS → TCP → TLS → HTTP flow as Phase 1, now with alternate paths at every layer:</span>
+
+ <span class="p1c">DNS</span>   client resolves via  <b>Mac 1 primary</b>  ──(if down)──►  <b>Mac 4 backup</b>        <span class="p2c">[Ext A]</span>
+ <span class="p1c">EDGE</span>  HTTPS by name to     <b>Mac 2 primary</b>  ──(DNS cutover)─►  <b>Mac 3 standby</b>      <span class="p2c">[Ext E]</span>
+ <span class="p1c">BACK</span>  edge balances A / B  ──(A down)──►  <b>all traffic to B, HTTP 200</b> (no 502)  <span class="p2c">[Ext D]</span>
+ <span class="w">GUARD</span> backends accept connections <b>only from the edge 10.7.25.25</b> (pf firewall)   <span class="w">[Ext C]</span></pre>
+
+    <table>
+      <tr><th>If this fails…</th><th>…this recovers it</th><th>Extension</th></tr>
+      <tr><td>Primary DNS (Mac 1) down</td><td>Backup DNS (Mac 4) answers the same names</td><td>A</td></tr>
+      <tr><td>A backend (Mac 3 / 4) down</td><td>nginx routes to the healthy backend</td><td>D</td></tr>
+      <tr><td>The edge (Mac 2) down</td><td>DNS cutover to the standby edge (Mac 3)</td><td>E (manual)</td></tr>
+      <tr><td>A client bypasses the edge</td><td>pf firewall blocks direct backend access</td><td>C</td></tr>
+    </table>
+    <div class="note"><b>Remaining single point of failure:</b> the edge nginx on Mac 2. Eliminating it fully
+      needs a second always-on edge plus a floating/virtual IP or automatic DNS failover — Extension E is the
+      manual version of this.</div>
+  </div>
+
+  <p class="sub" style="margin-top:28px; text-align:center; border-top:1px solid var(--line); padding-top:12px">
+    Full detail: <code>docs/architecture.md</code> · <code>docs/network-inventory.md</code> ·
+    evidence index: <code>evidence/phase2/INDEX.md</code> · report: <code>reports/phase2-report.md</code>
+  </p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+# =============================================================
+# Private Network Service Platform - Team Scout Regiment
+# Phase 2 / Extension E — STANDBY edge (nginx)
+#
+# Runs on Mac 3 (Shubhaang, 10.7.28.78) as a second, identical
+# edge. Used for the DNS-based edge cutover demonstration:
+# we repoint app.team1.test from Mac 2 (10.7.25.25) to this
+# standby (10.7.28.78) and watch traffic migrate as the TTL
+# expires.
+#
+# This is a COPY of the Phase 2 edge config — the same TLS cert,
+# the same upstream, the same ports — so a client cannot tell
+# the difference except for which machine serves it.
+#
+# NOTE: Mac 3 also runs Backend A on :3001. nginx here listens on
+# :8080 / :8443, so there is no port conflict.
+# =============================================================
+
+worker_processes auto;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include mime.types;
+    default_type application/octet-stream;
+
+    upstream team1_backends {
+        server 10.7.28.78:3001 max_fails=2 fail_timeout=10s;
+        server 10.7.27.247:3002 max_fails=2 fail_timeout=10s;
+    }
+
+    server {
+        listen 8080;
+        server_name app.team1.test api.team1.test;
+        return 301 https://$host:8443$request_uri;
+    }
+
+    server {
+        listen 8443 ssl;
+        http2 on;
+        server_name app.team1.test api.team1.test;
+
+        # Same cert + key as Mac 2 (copy the certs/ folder across,
+        # or re-issue with mkcert for the same name).
+        include /opt/homebrew/etc/nginx/tls.conf;
+
+        # An identifying header so the cutover is visible in curl:
+        add_header X-Edge "standby-mac3" always;
+
+        location / {
+            proxy_pass http://team1_backends;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto https;
+            proxy_next_upstream error timeout http_502 http_503 http_504;
+            proxy_connect_timeout 2s;
+        }
+
+        location /api/status {
+            proxy_pass http://team1_backends;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto https;
+            proxy_next_upstream error timeout http_502 http_503 http_504;
+            proxy_connect_timeout 2s;
+            add_header Cache-Control "public, max-age=60";
+        }
+    }
+}

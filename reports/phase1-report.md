@@ -1,4 +1,4 @@
-# Phase 1 Report — Team 1
+# Phase 1 Report — Team Scout Regiment
 
 **Private Network Service Platform · Build & Observe**
 
