@@ -29,6 +29,13 @@ number on all three Macs. It is a schedule value, not text to type literally.
 
 ## Natural expiry — no manual flush during the cache lifetime
 
+**ARMED means waiting, not finished.** Start the two scheduled DNS commands and
+then the client experiment. Keep all three terminals open. Do not run the restore
+or final both-up check until the client prints PASS or FAIL and finishes. Any
+both-up output timestamped before the scheduled epoch is only a pre-change baseline,
+even if its evidence label contains the word restored. After completion, restore
+both DNS servers and obtain a new both-up result after their changes/rollback.
+
 **Mac 1 and Mac 4**, each in its own terminal:
 
 ```bash

@@ -1,0 +1,22 @@
+{
+  "provenance": "Client experiment and early both-up recorder files copied byte-for-byte from Mac2. Operator ARM/early-restore details below are structured transcriptions of actual pasted outputs.",
+  "scheduled_epoch": 1795411744,
+  "scheduled_utc": "2026-11-23T05:29:04Z",
+  "mac1_armed_utc": "2026-11-23T05:25:50Z",
+  "mac4_armed_utc": "2026-11-23T05:26:02Z",
+  "early_restore_commands_utc": {
+    "mac1": "2026-11-23T05:26:33Z",
+    "mac4": "2026-11-23T05:26:43Z"
+  },
+  "early_check": "B-expiry-restored-20261123T052739Z.txt ran before the scheduled change; it is only a baseline, not final restoration evidence.",
+  "cache_primed_utc": "2026-11-23T05:29:01.066Z",
+  "observed": "Both real DNS servers NEW at05:29:06 while client cache OLD/TTL25; cache TTL counts down25,23,...,1; client NEW/TTL30 at05:29:32.553.",
+  "natural_expiry_elapsed_seconds": 31.49,
+  "client_exit_code": 0,
+  "cleanup": "Both operators supplied post-experiment restored answers; agent ran actual final both-up check05:33:10-05:33:11 UTC, all6 records10.7.25.25 TTL30, exit0.",
+  "post_experiment_restores_utc": {
+    "mac4": "2026-11-23T05:30:48Z",
+    "mac1": "2026-11-23T05:31:07Z"
+  },
+  "final_check": "B-expiry-final-restored-20261123T053310Z.txt"
+}

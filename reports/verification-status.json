@@ -73,9 +73,14 @@
     {
       "id": "ttl-expiry",
       "requirement": "Timestamped real client OLD until TTL expiry then NEW, authoritativeNEW in between, both servers restored",
-      "status": "pending",
-      "artifacts": [],
-      "review_note": ""
+      "status": "verified",
+      "artifacts": [
+        "evidence/verification/B-expiry-20261123T052539Z.txt",
+        "evidence/verification/B-expiry-restored-20261123T052739Z.txt",
+        "evidence/verification/2026-11-23-ttl-expiry-timeline.json",
+        "evidence/verification/B-expiry-final-restored-20261123T053310Z.txt"
+      ],
+      "review_note": "Live client experiment at6ca73eb passed: both real authorities NEW05:29:06, client still OLD with TTL25 then descending to1, NEW05:29:32.553 after31.49seconds; exit0. Original recorder file copied from Mac2. The file labelled restored at05:27:39 predates the scheduled05:29:04 change and is only a baseline. Keep item pending until both post-experiment restores and new both-up check are observed. Superseding cleanup: Ankit restored05:30:48, Rashmi restored05:31:07; agent actual Mac2 both-up check05:33:10-11 returns all6 records10.7.25.25 TTL30/exit0. Natural-expiry acceptance and restoration now verified. Early05:27 restored-labelled file remains a clearly identified pre-change baseline."
     },
     {
       "id": "ttl-flush",

@@ -199,3 +199,19 @@ exit-code footer, so no such code is invented. This text receipt proves Extensio
 but does not replace the separate mandatory saved binary packet capture/frame index.
 The DNS-failover ledger item is now verified. [Fresh Mac4 service readback](../evidence/verification/2026-11-23-mac4-wifi-dns-final-readback.txt)
 at05:18:49 UTC is only8.8.8.8, confirming stale service DNS cleanup.
+
+### Extension B natural expiry verified and restored
+
+The [original live Mac2 recorder](../evidence/verification/B-expiry-20261123T052539Z.txt)
+shows priming at05:29:01.066 UTC with30seconds and OLD10.7.25.25. Both real DNS
+servers returned NEW10.7.28.78 at05:29:06 while the real client cache still returned
+OLD/TTL25. Its remaining TTL declined25,23,...,1; NEW/TTL30 appeared at05:29:32.553,
+31.49seconds after priming, without a manual flush. The client exited0.
+
+[Timeline/provenance](../evidence/verification/2026-11-23-ttl-expiry-timeline.json)
+retains the early user restores at05:26 and the05:27 both-up file, but these predate
+the scheduled05:29:04 change and do not prove final restoration. After completion,
+Ankit supplied a new restore at05:30:48 and Rashmi at05:31:07. The agent then ran
+[the actual final Mac2 both-up check](../evidence/verification/B-expiry-final-restored-20261123T053310Z.txt)
+at05:33:10–05:33:11, obtaining all six normal records/TTL30 and exit0. Natural expiry
+and its restoration are verified; the distinct manual-flush case remains pending.

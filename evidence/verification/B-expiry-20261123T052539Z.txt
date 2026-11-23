@@ -1,0 +1,44 @@
+START_UTC=2026-11-23T05:25:39Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=6ca73ebc20f94a897b23ce96c87a0a5d4b3a0731
+COMMAND: python3 scripts/ttl-experiment.py expiry 1795411744
+2026-11-23T05:25:40.224+00:00 server=10.7.27.145:53 ttl.team1.test.		30	IN	A	10.7.25.25
+2026-11-23T05:25:40.270+00:00 server=10.7.27.247:53 ttl.team1.test.		30	IN	A	10.7.25.25
+2026-11-23T05:25:40.270+00:00 ARMED mode=expiry record=ttl.team1.test change_epoch=1795411744; cache is real dnsmasq on client Mac 2
+2026-11-23T05:29:01.066+00:00 server=127.0.0.1:53535 ttl.team1.test.		30	IN	A	10.7.25.25
+2026-11-23T05:29:06.139+00:00 server=10.7.27.145:53 ttl.team1.test.		30	IN	A	10.7.28.78
+2026-11-23T05:29:06.168+00:00 server=10.7.27.247:53 ttl.team1.test.		30	IN	A	10.7.28.78
+2026-11-23T05:29:06.181+00:00 server=127.0.0.1:53535 ttl.team1.test.		25	IN	A	10.7.25.25
+2026-11-23T05:29:06.200+00:00 server=127.0.0.1:53535 ttl.team1.test.		25	IN	A	10.7.25.25
+elapsed_since_priming=5.13s remaining_ttl=25
+2026-11-23T05:29:08.223+00:00 server=127.0.0.1:53535 ttl.team1.test.		23	IN	A	10.7.25.25
+elapsed_since_priming=7.16s remaining_ttl=23
+2026-11-23T05:29:10.242+00:00 server=127.0.0.1:53535 ttl.team1.test.		21	IN	A	10.7.25.25
+elapsed_since_priming=9.17s remaining_ttl=21
+2026-11-23T05:29:12.267+00:00 server=127.0.0.1:53535 ttl.team1.test.		19	IN	A	10.7.25.25
+elapsed_since_priming=11.20s remaining_ttl=19
+2026-11-23T05:29:14.291+00:00 server=127.0.0.1:53535 ttl.team1.test.		17	IN	A	10.7.25.25
+elapsed_since_priming=13.22s remaining_ttl=17
+2026-11-23T05:29:16.313+00:00 server=127.0.0.1:53535 ttl.team1.test.		15	IN	A	10.7.25.25
+elapsed_since_priming=15.25s remaining_ttl=15
+2026-11-23T05:29:18.333+00:00 server=127.0.0.1:53535 ttl.team1.test.		13	IN	A	10.7.25.25
+elapsed_since_priming=17.27s remaining_ttl=13
+2026-11-23T05:29:20.358+00:00 server=127.0.0.1:53535 ttl.team1.test.		11	IN	A	10.7.25.25
+elapsed_since_priming=19.29s remaining_ttl=11
+2026-11-23T05:29:22.389+00:00 server=127.0.0.1:53535 ttl.team1.test.		9	IN	A	10.7.25.25
+elapsed_since_priming=21.32s remaining_ttl=9
+2026-11-23T05:29:24.412+00:00 server=127.0.0.1:53535 ttl.team1.test.		7	IN	A	10.7.25.25
+elapsed_since_priming=23.34s remaining_ttl=7
+2026-11-23T05:29:26.430+00:00 server=127.0.0.1:53535 ttl.team1.test.		5	IN	A	10.7.25.25
+elapsed_since_priming=25.36s remaining_ttl=5
+2026-11-23T05:29:28.450+00:00 server=127.0.0.1:53535 ttl.team1.test.		3	IN	A	10.7.25.25
+elapsed_since_priming=27.38s remaining_ttl=3
+2026-11-23T05:29:30.473+00:00 server=127.0.0.1:53535 ttl.team1.test.		1	IN	A	10.7.25.25
+elapsed_since_priming=29.41s remaining_ttl=1
+2026-11-23T05:29:32.553+00:00 server=127.0.0.1:53535 ttl.team1.test.		30	IN	A	10.7.28.78
+elapsed_since_priming=31.49s remaining_ttl=30
+PASS: natural cached OLD -> NEW after expiry; elapsed=31.49s
+NEXT: restore the changed record on BOTH DNS Macs with dns-record.sh; verify both-up before another test.
+
+EXIT_CODE=0
+END_UTC=2026-11-23T05:29:32Z
