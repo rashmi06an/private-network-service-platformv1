@@ -47,3 +47,14 @@ scripts/firewall-isolation.sh set-edges both
 Ordinary Mac 1 remains blocked. After DNS restoration switch back using
 `set-edges primary`, or perform the required project rollback. This temporary
 two-edge policy is explicitly distinguished from the strict Mac 2-only C proof.
+
+### Preserve the pre-existing PF mode on rollback
+
+Apply saves both main filter rules and PF info before acquiring its own enable
+reference. Rollback removes only the project anchor rules and releases its token.
+If PF was already enabled before the experiment but releasing the reference disabled
+it, rollback re-enables that prior state. It never globally disables another owner.
+It also compares main filter rules against the saved snapshot and stops for review
+if an external change occurred. Isolated command fixtures cover all four combinations
+of prior Enabled/Disabled and the state left by reference release. Live rollback
+must still be verified by the client/edge checks, not inferred from these fixtures.

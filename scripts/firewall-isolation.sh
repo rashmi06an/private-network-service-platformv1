@@ -42,7 +42,20 @@ case "$action" in
   sudo pfctl -a "$anchor" -F rules
   sudo pfctl -X "$token"
   mv "$state/active-token" "$state/released-token-$(date -u '+%Y%m%dT%H%M%SZ')"
-  echo 'ROLLED BACK: project rules cleared; only the project enable reference released';;
+  # Legacy PF enablement may predate reference-counted -E. Preserve its enabled
+  # state if releasing our reference disabled it; never globally disable other owners.
+  sudo pfctl -s info > "$state/info-after.txt"
+  before=$(awk '$1=="Status:"{print $2;exit}' "$state/info-before.txt")
+  after=$(awk '$1=="Status:"{print $2;exit}' "$state/info-after.txt")
+  if [ "$before" = Enabled ] && [ "$after" = Disabled ]; then
+   sudo pfctl -e
+   sudo pfctl -s info > "$state/info-after.txt"
+   grep -Eq '^Status:[[:space:]]+Enabled' "$state/info-after.txt" || die 'Prior enabled PF state could not be restored'
+   echo 'RESTORED: PF was enabled before this experiment and remains enabled'
+  fi
+  sudo pfctl -sr > "$state/main-after.txt"
+  cmp -s "$state/main-before.txt" "$state/main-after.txt" || die 'Main PF rules changed; inspect saved before/after files without overwriting another owner'
+  echo 'ROLLED BACK: project rules cleared, own reference released, main filter rules unchanged';;
  show) ;;
  *) die 'Usage: firewall-isolation.sh apply [primary|both] | set-edges primary|both | rollback | show';;
 esac
