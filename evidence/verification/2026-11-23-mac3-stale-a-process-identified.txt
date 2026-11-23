@@ -1,0 +1,22 @@
+SOURCE: User-pasted Mac3 process inspection following the 04:48 UTC cache failure.
+Formatting normalized. No process stop or successful replacement is claimed here.
+
+COMMAND: ipconfig getifaddr en0
+10.7.28.78
+
+COMMAND: lsof -nP -iTCP:3001 -sTCP:LISTEN
+COMMAND   PID      USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+Python  19055 shubhaang    3u  IPv4 0x5a52edfd97498c02      0t0  TCP *:3001 (LISTEN)
+
+COMMAND: ps -p 19055 -o pid=,ppid=,command=
+19055   207 /opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Cont
+
+COMMAND: lsof -a -p 19055 -d cwd
+COMMAND   PID      USER   FD   TYPE DEVICE SIZE/OFF     NODE NAME
+Python  19055 shubhaang  cwd    DIR   1,13      256 26401487 /Users/shubhaang/Desktop/private-network-service-platformv1/backend-a
+
+REVIEW: The assigned Mac3 port3001 listener is the old Desktop checkout, not the
+corrected Documents/CN-submission backend-a checkout. The ps command text is
+truncated exactly as pasted. Stop only this identified process after checking its
+current IP/cwd, launch corrected A, and repeat strict direct and edge checks.
+Parent207 was reported; no automatic restart/supervisor behavior has been established.
