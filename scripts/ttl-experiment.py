@@ -99,6 +99,14 @@ def main():
             altered=True;flush_system()
         print(f'{stamp()} ARMED mode={args.mode} record={name} change_epoch={args.epoch}; cache is real dnsmasq on client Mac 2',flush=True)
         wait_until(args.epoch-3)
+        if args.mode=='cutover':
+            # Background OS lookups may have used this resolver while it was armed.
+            # Clear only this owned cache before the measured30-second interval.
+            command=subprocess.run(['ps','-ww','-p',str(daemon_pid),'-o','command='],capture_output=True,text=True).stdout
+            if str(config) not in command:raise RuntimeError('Temporary cache PID no longer matches this experiment')
+            run(['sudo','-n','kill','-HUP',str(daemon_pid)])
+            time.sleep(.1)
+            print(f'{stamp()} PRE_PRIME_RESET: owned cache cleared before measured TTL interval',flush=True)
         ip,ttl=expected(cache_host,cache_port,name,OLD)
         primed=time.monotonic()
         if ttl!=30:raise RuntimeError(f'Expected newly primed TTL 30, got {ttl}')
@@ -142,7 +150,7 @@ def main():
                 print('RESTORED: previous macOS scoped DNS file',flush=True)
         finally:
             if daemon_pid is not None:
-                command=subprocess.run(['ps','-p',str(daemon_pid),'-o','command='],capture_output=True,text=True).stdout
+                command=subprocess.run(['ps','-ww','-p',str(daemon_pid),'-o','command='],capture_output=True,text=True).stdout
                 if str(config) in command:run(['sudo','kill','-TERM',str(daemon_pid)])
             if process is not None and process.poll() is None:
                 process.terminate()

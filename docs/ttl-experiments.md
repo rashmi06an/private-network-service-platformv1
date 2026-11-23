@@ -94,15 +94,18 @@ with no `--resolve` and no `-k`: before change → primary; after servers change
 while cached → primary; after natural expiry → standby. It checks connected IP,
 HTTP 200 and X-Edge. The original scoped file is restored even after a failed test.
 
-**Mac 1**, in another client terminal just after the scheduled epoch, during the
-same 30-second window (primary DNS service must be running):
+**Mac1:** chain this after its successful scheduled app-record update in the same
+terminal, so it starts automatically when that update completes:
 
 ```bash
-sudo dscacheutil -flushcache
-sudo killall -HUP mDNSResponder
-dscacheutil -q host -a name app.team1.test
-/usr/bin/curl --noproxy '*' -sS -D - -o /dev/null -w 'HTTP=%{http_code} CONNECTED_IP=%{remote_ip}\n' https://app.team1.test:8443/api/status
+scripts/record-evidence.sh E-fresh-mac1 scripts/fresh-cutover-client.sh EPOCH
 ```
+
+The role-checked helper waits until epoch+5seconds, flushes the actual system DNS
+cache, obtains a normal system lookup, then performs trusted hostname HTTPS with
+no --resolve/-k. It requires the standby connected IP/X-Edge and completion before
+epoch+25seconds. Late/mismatched results fail rather than being labelled coexistence
+proof. Prepare both DNS schedules and the Mac2 client before the shared epoch.
 
 This fresh client should reach standby while Mac 2 still holds its old cached
 answer. Record both timestamps. After every cutover, BOTH DNS Macs restore:
@@ -134,3 +137,9 @@ at5.27seconds. This tests the helper's actual DNS-cache behavior; it is not evid
 that the four-Mac experiment ran. The live expiry/flush ledger items remain pending.
 Use different evidence labels for the two DNS operators (for example,
 B-expiry-record-mac1 and B-expiry-record-mac4) so their files remain distinct.
+
+For cutover only, the client also clears its own temporary resolver immediately
+before priming the measured TTL interval, preventing an unrelated background lookup
+while armed from shortening it. This is preparation before the measured cache
+lifetime, not a manual flush during the natural-expiry window. Daemon ownership
+checks use full ps arguments so long checkout paths do not hide the config identity.
