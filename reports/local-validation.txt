@@ -37,3 +37,8 @@ Phase2 fixture passes A-down/B-only200 and recoveredA/B. These use temporary
 loopback substitutions, not additional four-Mac deployment experiments.
 See final-validation.json for source/package, original-screenshot integrity,
 visual layout and remaining measured-evidence limits.
+
+FINAL FOLLOW-UP ACCEPTANCE - 2026-11-23
+All13 pre-evaluation ledger items now verified. Strict submission-check.py exits0.
+Actual saved capture, wrong-client-DNS recovery and concurrent timed cutover
+plus both-DNS/primary restoration are included. Faculty challenge/viva remain live.

@@ -1,0 +1,13 @@
+START_UTC=2026-11-23T07:56:42Z
+MACHINE=Ankits-MacBook-Pro-7.local
+COMMIT=c95a791699d2719f301f4f69e50128eaa23776d0
+COMMAND: scripts/dns-record.sh app 10.7.25.25
+CHANGED_UTC=2026-11-23T07:56:42Z DNS=10.7.27.247
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 app.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+app.team1.test.        30 IN A 10.7.25.25
+
+EXIT_CODE=0
+END_UTC=2026-11-23T07:56:42Z

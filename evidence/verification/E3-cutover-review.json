@@ -1,0 +1,28 @@
+{
+  "provenance": "Original native Mac2 recorder copied without editing. Mac1 fresh/restore and Mac4 restore blocks faithfully transcribed from actual pasted output with transport formatting normalized. Missing operator change timestamps are not invented.",
+  "epoch": 1795420458,
+  "scheduled_utc": "2026-11-23T07:54:18Z",
+  "client_original": "E3-cache-cutover-20261123T075124Z.txt",
+  "primed_old_utc": "2026-11-23T07:54:15.389Z",
+  "before_change_https": "07:54:15.607 UTC:200 10.7.25.25 primary-mac2",
+  "both_authorities_new_utc": [
+    "07:54:20.048",
+    "07:54:20.095"
+  ],
+  "cached_old_https": "07:54:20.266 UTC:200 10.7.25.25 primary-mac2; cache TTL25",
+  "concurrent_fresh_mac1": "07:54:23 UTC normal system lookup and trusted HTTPS200 connect10.7.28.78 standby-mac3; exit0. Mac2 stillOLD TTL23 at07:54:22.334 andTTL21 at07:54:24.364, bracketing fresh result.",
+  "natural_expiry": "OLD cache TTL25,23,...,1 then NEW at07:54:46.834 UTC after31.44s",
+  "converged_https": "07:54:47.174 UTC:200 10.7.28.78 standby-mac3; exit0",
+  "mac2_cleanup": "Original dual-DNS scoped file restored; no local53 socket observed after completion. Standby remains available for demonstration, with normal DNS pointing back to primary.",
+  "authority_restores": {
+    "primary_utc": "07:55:59",
+    "backup_utc": "07:56:42",
+    "both_answers": "app.team1.test10.7.25.25 TTL30"
+  },
+  "final_native_checks": {
+    "dns": "E3-final-dns-20261123T075709Z.txt; all6 app/api/ttl answers normal TTL30; exit0",
+    "https": "E3-final-https-20261123T075710Z.txt; normal by-name primary200 and304 with A/B; exit0",
+    "connected_ip_tool_observation": "07:57:10 UTC native curl200 remote10.7.25.25 X-Edge primary-mac2"
+  },
+  "acceptance": "Full controlled cached-old/fresh-new cutover, convergence and restoration verified. Manual DNS cutover, not automatic edge failover."
+}

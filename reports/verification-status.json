@@ -144,7 +144,7 @@
     {
       "id": "edge-cutover",
       "requirement": "Standby trustedA/B; bothDNS updated; cached-old/fresh-new client behavior; convergence and bothDNS/primary restore",
-      "status": "pending",
+      "status": "verified",
       "artifacts": [
         "evidence/verification/E-standby-certificate-prepared.txt",
         "evidence/verification/E-new-leaf-native-trust-preflight.txt",
@@ -156,9 +156,16 @@
         "evidence/verification/E-attempt1-restored-20261123T072351Z.txt",
         "evidence/verification/E-cache-preflight-20261123T072417Z.txt",
         "evidence/phase2/edge-migration/E2-standby-https-xedge-and-dns-mac2.png",
-        "evidence/phase2/edge-migration/E2b-standby-https-both-backends-mac2.png"
+        "evidence/phase2/edge-migration/E2b-standby-https-both-backends-mac2.png",
+        "evidence/verification/E3-cache-cutover-20261123T075124Z.txt",
+        "evidence/verification/E3-fresh-mac1-20261123T075418Z.txt",
+        "evidence/verification/E3-restore-mac1-20261123T075558Z.txt",
+        "evidence/verification/E3-restore-mac4-20261123T075642Z.txt",
+        "evidence/verification/E3-final-dns-20261123T075709Z.txt",
+        "evidence/verification/E3-final-https-20261123T075710Z.txt",
+        "evidence/verification/E3-cutover-review.json"
       ],
-      "review_note": "Standby nginx applied on Mac3 at06:58:44 UTC with existing approved-CA leaf/key. Native Mac2 trusted preflight gives200/304 and twelve200 A6/B6. Operator preflights on Mac1/Mac3/Mac4 also give trusted HTTP2/200 with standby-mac3 and A/B identities. These use explicit --resolve, so they prove connectivity/trust only. Scheduled authoritative change, concurrent cached-old/fresh-new clients, convergence and restoration remain pending. First scheduled trial07:19:51 UTC: freshMac1 reaches standby200 within5seconds, but Mac2 cache failed its initial dig before scheduled change and restored its resolver. Both authoritative records subsequently restored; six-record check and normal primary200 succeed07:23:52. Cached-old/convergence acceptance remains pending. Added preflight that validates local forwarding before touching system resolver; exact first-cache failure cause not yet established. Superseding cache preflight07:24:17\u201318 UTC at2853336 passes real authority and local53 forwarding checks, exits0 and cleans up without changing system resolver or authority data. Historical main-branch screenshot E2 shows both DNS/system standby and normal trusted standby200; E2b proves standbyA/B with explicit --resolve. These support migration components but do not supply the missing contemporaneous cached-old/convergence trial. Team ended further collection; full measured cutover remains unverified."
+      "review_note": "Standby nginx applied on Mac3 at06:58:44 UTC with existing approved-CA leaf/key. Native Mac2 trusted preflight gives200/304 and twelve200 A6/B6. Operator preflights on Mac1/Mac3/Mac4 also give trusted HTTP2/200 with standby-mac3 and A/B identities. These use explicit --resolve, so they prove connectivity/trust only. Scheduled authoritative change, concurrent cached-old/fresh-new clients, convergence and restoration remain pending. First scheduled trial07:19:51 UTC: freshMac1 reaches standby200 within5seconds, but Mac2 cache failed its initial dig before scheduled change and restored its resolver. Both authoritative records subsequently restored; six-record check and normal primary200 succeed07:23:52. Cached-old/convergence acceptance remains pending. Added preflight that validates local forwarding before touching system resolver; exact first-cache failure cause not yet established. Superseding cache preflight07:24:17\u201318 UTC at2853336 passes real authority and local53 forwarding checks, exits0 and cleans up without changing system resolver or authority data. Historical main-branch screenshot E2 shows both DNS/system standby and normal trusted standby200; E2b proves standbyA/B with explicit --resolve. These support migration components but do not supply the missing contemporaneous cached-old/convergence trial. Team ended further collection; full measured cutover remains unverified. Superseding controlled trial epoch1795420458: old cache primed07:54:15.389UTC; both authoritiesNEW by07:54:20.095 while normal cached HTTPS200 reaches primary at20.266. FreshMac1 normal lookup/HTTPS200 reaches standby07:54:23, bracketed by Mac2 OLD cacheTTL23/21. Natural expiryNEW after31.44s; normal trusted standby200 at07:54:47.174. Own cache and scoped override cleaned up. Primary record restored07:55:59 and backup07:56:42. Final actual native checks07:57:09\u201310 return all6 normal records TTL30, trusted primary200/304 and connected10.7.25.25. Full cutover/restoration verified; original failed attempt retained."
     },
     {
       "id": "packet-capture",
@@ -235,8 +242,8 @@
     }
   ],
   "collection_status": {
-    "state": "resumed_by_team",
+    "state": "completed",
     "date": "2026-11-23",
-    "scope": "Team requested step-by-step closure of the four disclosed live-evidence items. Existing submission package remains the earlier snapshot until new results are reviewed."
+    "scope": "All13 pre-evaluation evidence items reviewed verified. Faculty challenge and individual viva remain live assessment tasks."
   }
 }

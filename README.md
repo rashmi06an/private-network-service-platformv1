@@ -5,10 +5,10 @@ branch contains corrected code/configuration, both reports, architecture PDF and
 original main-branch screenshots alongside reviewed new terminal evidence.
 
 Start with **[SUBMISSION.md](SUBMISSION.md)** for package contents, verified results
-and the remaining disclosed evidence limits. Browse the **[screenshot gallery](docs/submission-evidence.html)**
+and verified results. Browse the **[screenshot gallery](docs/submission-evidence.html)**
 offline or use the [historical image index](evidence/phase2/INDEX.md) on GitHub.
 The [11-step runbook](docs/phase2-demo-runbook.md) covers evaluation; [member commands](docs/team-commands.md)
-are reference procedures for future setup. Follow-up collection resumed to close the remaining evidence items.
+are reference procedures for future setup. All13 pre-evaluation evidence items are now verified; the strict gate passes.
 
 | Member | Mac | Current IP | Services |
 |---|---|---|---|
@@ -85,9 +85,9 @@ keeps local backups, and documents rollback.
 | Final demonstration and viva preparation | [11-step runbook](docs/phase2-demo-runbook.md), [viva notes](docs/viva-notes.md) |
 | Acceptance ledger | [verification-status.json](reports/verification-status.json) — reviewed results and disclosed limits |
 
-Run `python3 scripts/submission-check.py` for the strict evidence gate. It must
-remain failing while mandatory evidence is pending. Passing a file-existence
-gate alone does not grade packet contents or replace live viva.
+Run `python3 scripts/submission-check.py` for the strict evidence gate; it now passes.
+Actual reviewed transcripts and saved capture support all13 pre-evaluation items.
+Faculty challenge and individual viva remain live evaluation tasks.
 
 ## Phase 2 acceptance
 

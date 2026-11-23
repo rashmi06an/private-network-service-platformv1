@@ -1,8 +1,8 @@
 {
   "scope": "Final repository/package QA. Native regression/nginx fixtures are isolated local tests, not new distributed LAN experiments.",
-  "review_utc": "2026-11-23T07:34:15.329691+00:00",
+  "review_utc": "2026-11-23T07:59:13.185865+00:00",
   "branch": "samiksha/submission-readiness",
-  "tested_implementation_commit": "28533361b8fddf89e7d4852d2fb336604b3c9f94",
+  "tested_implementation_commit": "df14e7503a00c9fbf4211e4e40c725484d88853e",
   "main_screenshot_baseline": "3617c3ebdc6713ddbc36395bb2fc0aa447a3a130",
   "source_regression": {
     "status": "passed",
@@ -19,8 +19,7 @@
     ],
     "checks": "Syntax, trusted loopback HTTPS, X-Edge/X-Backend, A/B distribution, cross-backend304, realHTTP2; Phase2 A-down/B-only and recoveredA/B",
     "actual_log": "reports/final-nginx-tests.txt",
-    "limit": "Temporary loopback addresses/ports/paths and a local test CA; no deployment configuration changed.",
-    "structured_results": "reports/final-nginx-validation.json"
+    "limit": "Temporary loopback addresses/ports/paths and a local test CA; no deployment configuration changed."
   },
   "checkout_update_fixture": {
     "status": "passed",
@@ -34,7 +33,7 @@
   "source_files": {
     "python_compile_count": 14,
     "executable_shell_syntax_count": 19,
-    "json_parse_count": 12,
+    "json_parse_count": 19,
     "html_relative_links_checked": 127
   },
   "screenshots": {
@@ -49,49 +48,32 @@
     "scope": "Tracked and candidate package file paths and private-key PEM markers; does not claim a third-party credential audit."
   },
   "acceptance": {
-    "verified_items": 9,
-    "unverified_items": [
-      "inventory",
-      "edge-cutover",
-      "packet-capture",
-      "failure-rehearsal"
-    ],
+    "verified_items": 13,
+    "unverified_items": [],
     "collection": "Ended at team request; strict gate not weakened.",
     "live": "Faculty challenge and individual viva remain live assessment."
   },
-  "package_status": "prepared_with_disclosed_evidence_limits",
+  "package_status": "prepared_verified",
   "errors": [],
   "source_gate": {
     "exit_code": 0,
-    "output": "Pending pre-evaluation evidence: inventory, edge-cutover, packet-capture, failure-rehearsal\nLive evaluation: faculty-challenge: live, individual-viva: live\nPASS: source package checks",
+    "output": "Pending pre-evaluation evidence: none\nLive evaluation: faculty-challenge: live, individual-viva: live\nPASS: source package checks",
     "interpretation": "Source/package check"
   },
   "strict_live_evidence_gate": {
-    "exit_code": 1,
-    "output": "Pending pre-evaluation evidence: inventory, edge-cutover, packet-capture, failure-rehearsal\nLive evaluation: faculty-challenge: live, individual-viva: live\nNOT READY: source checks passed, but mandatory reviewed live evidence is pending.",
-    "interpretation": "Expected nonzero because four disclosed measured-evidence items are unverified."
+    "exit_code": 0,
+    "output": "Pending pre-evaluation evidence: none\nLive evaluation: faculty-challenge: live, individual-viva: live\nPASS: source and pre-evaluation artifact ledger; challenge/viva remain live",
+    "interpretation": "All13 pre-evaluation items reviewed verified; strict gate passes."
   },
   "visual_qa": {
-    "architecture_pdf": "All4 existing A4 pages rendered and visually reviewed: no clipping/overlap. PDF unchanged.",
-    "gallery": "Headless browser screenshot inspected at1360x1000; cards, original-image links and captions render correctly."
+    "architecture": "All4 unchanged A4 architecture pages visually checked.",
+    "gallery": "Rendered original screenshot gallery inspected; original61 image bytes preserved."
   },
-  "final_read_only_runtime_observation": {
-    "utc": "2026-11-23T07:33:24Z",
-    "primary_app_answer": "10.7.25.25",
-    "backup_app_answer": "10.7.25.25",
-    "active_temporary_cache_experiments": "No matching process observed",
-    "limit": "Read-only state observation; no further distributed failure experiments executed."
-  },
-  "follow_up_review": {
-    "date": "2026-11-23",
-    "scope": "Post-package distributed ping follow-up; earlier source/nginx test records remain their dated snapshots.",
-    "verified_items": 12,
-    "unverified_items": [
-      "edge-cutover"
-    ],
-    "inventory": "Three repaired inbound directions receive2/2 each; see current ledger and inventory links.",
-    "archive": "Earlier submission ZIP is the d639f20 snapshot and will be refreshed after remaining follow-up work.",
-    "packet_capture": "Original57-packet binary plus derived DNS/TCP/TLS/Certificate/ALPN frame index verified.",
-    "wrong_client_dns": "Mac3 actual bad setting, failure/IP control and original-DNS/HTTPS recovery verified; exit0."
-  }
+  "final_runtime_artifacts": [
+    "evidence/verification/E3-final-dns-20261123T075709Z.txt",
+    "evidence/verification/E3-final-https-20261123T075710Z.txt",
+    "evidence/verification/E3-cutover-review.json"
+  ],
+  "runtime_restoration": "Both normal DNS datasets, primary connected10.7.25.25, trusted200/304 and original Mac2 scoped DNS verified. No temporary cache left. Standby remains ready.",
+  "regression_scope_note": "The implementation remains unchanged since the recorded12-method suite and isolated nginx validation. Later changes are reviewed evidence/documentation."
 }

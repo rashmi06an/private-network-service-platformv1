@@ -1,0 +1,22 @@
+START_UTC=2026-11-23T07:54:18Z
+MACHINE=Rashmis-MacBook-Pro.local
+COMMIT=c95a791699d2719f301f4f69e50128eaa23776d0
+COMMAND: scripts/fresh-cutover-client.sh 1795420458
+FRESH_CLIENT_ARMED epoch=1795420458 probe_epoch=1795420463
+FRESH_CLIENT_START_UTC=2026-11-23T07:54:23Z
+name: app.team1.test
+ip_address: 10.7.28.78
+HTTP/2 200
+server: nginx/1.31.9
+date: Mon, 23 Nov 2026 07:54:24 GMT
+content-type: application/json
+content-length: 30
+cache-control: no-store
+x-backend: A
+x-edge: standby-mac3
+
+FRESH_HTTP_AND_IP=200 10.7.28.78
+PASS: fresh by-name HTTPS reaches standby within the cached-old window; END_UTC=2026-11-23T07:54:23Z
+
+EXIT_CODE=0
+END_UTC=2026-11-23T07:54:23Z

@@ -1,6 +1,6 @@
 # Source fixes and reviewed acceptance
 
-Final package review:23November2026. Collection ended at the team's request;
+Final package review:23November2026. All13 pre-evaluation items are now verified;
 [the ledger](../reports/verification-status.json) retains observed limits.
 
 | Audit ID | Implemented correction | Reviewed status |
@@ -8,7 +8,7 @@ Final package review:23November2026. Collection ended at the team's request;
 | F01 | Real caching resolver and synchronized TTL schedule | Live natural expiry31.49s and restore verified |
 | F02 | Separate explicit before-expiry flush | Live manual flush5.25s and restore verified |
 | F03 | Synchronized DNS data, dual clients, outage/fresh lookup/receipt | Live controlled failover and restoration verified |
-| F04 | Scheduled old/fresh/new cutover and both-server restore | Standby trust/fresh-new/restore verified; concurrent cached-old/convergence incomplete |
+| F04 | Scheduled old/fresh/new cutover and both-server restore | Concurrent cached-old/fresh-new,31.44s convergence and both-DNS/primary restore verified |
 | F05 | Reachable narrow PF anchor and counters | Both hosts applied; edge allowed/client denied verified |
 | F06 | Owned PF token and unchanged-main-rule rollback | Both hosts restored; other owner's enabled PF preserved |
 | F07 | C rollback boundary / optional two-edge policy | Required C rollback verified before standby preflight |

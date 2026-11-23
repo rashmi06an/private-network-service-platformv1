@@ -5,7 +5,8 @@
 Submission branch: `samiksha/submission-readiness`.
 This package contains the corrected source/configuration, both reports, architecture
 PDF, original screenshots from main, new timestamped verification and viva/runbook.
-Further team-side collection was ended at the team's request.
+All13 pre-evaluation acceptance items are now verified, including the four
+follow-up proofs. The strict source/evidence gate passes.
 
 ## Open these first
 
@@ -14,13 +15,6 @@ Further team-side collection was ended at the team's request.
 3. [Screenshot gallery](docs/submission-evidence.html) - original images grouped by topic, with limitations labelled.
 4. [Evidence ledger](reports/verification-status.json), [packet index](evidence/verification/packet-index.md) and [historical failures](evidence/failures/INDEX.md).
 5. [Final validation](reports/final-validation.json), [11-step demonstration](docs/phase2-demo-runbook.md) and [viva notes](docs/viva-notes.md).
-
-Follow-up: ping acceptance is now verified after the three repaired incoming
-directions. Collection resumed at team request; the earlier ZIP remains its dated
-snapshot until the remaining follow-up evidence is finalized.
-
-Saved packet capture and live wrong-client-DNS/recovery are now verified too.
-The current ledger has12 verified items; only full timed cutover remains open.
 
 ## Verified results
 
@@ -31,16 +25,20 @@ backend isolation/rollback, and A-down/B-only/recovery have reviewed live eviden
 The team confirmed faculty approval for the existing mkcert method; all four
 clients trust both the original primary and separate same-CA standby certificate.
 
-## Disclosed evidence limits
+## Final evidence and restoration
 
-- Standby A/B/trust, fresh-new routing and restoration are observed. The first
-  cached-old cutover run failed; a later cache preflight passes, but the complete
-  concurrent cached-old/fresh-new/convergence retry was not supplied.
+- All12 directed ping paths have successful measured results across the baseline
+  and repaired incoming-to-Mac1 follow-ups.
+- Original57-packet capture and actual DNS/TCP/TLS/Certificate/ALPN frame index are included.
+- Effective wrong-client DNS, normal lookup failure despite good IP reachability,
+  and original-DNS/trusted HTTPS restoration are verified.
+- Concurrent cached-old/fresh-new edge cutover and31.44second convergence are verified.
+  Both DNS records and primary trusted HTTPS200/304 are restored and checked.
 
-
-The source/package checks can pass while the strict live-evidence gate remains
-nonzero for the remaining cutover item. Faculty-injected diagnosis and individual viva remain
-live assessment tasks. This package does not certify unperformed experiments.
+Source tests and isolated nginx checks pass; all61 original screenshots are preserved.
+Detailed timelines retain prior failed attempts and their superseding successful runs.
+Faculty-injected diagnosis and individual viva remain live assessment tasks. The
+cutover is controlled manual DNS migration; it is not automatic edge failover.
 
 ## Source checks
 
@@ -52,6 +50,6 @@ python -m unittest discover -s tests -v
 python scripts/submission-check.py --source-only
 ```
 
-The strict `python scripts/submission-check.py` additionally requires every reviewed
-live-evidence item. No private keys, local service PIDs, PF tokens, virtual
+The strict `python scripts/submission-check.py` now passes with every reviewed
+pre-evaluation evidence item. No private keys, local service PIDs, PF tokens, virtual
 environments or `.git` directory belong in the submission archive.
