@@ -19,6 +19,9 @@ Follow-up: ping acceptance is now verified after the three repaired incoming
 directions. Collection resumed at team request; the earlier ZIP remains its dated
 snapshot until the remaining follow-up evidence is finalized.
 
+Saved packet capture and live wrong-client-DNS/recovery are now verified too.
+The current ledger has12 verified items; only full timed cutover remains open.
+
 ## Verified results
 
 Both current backends, trusted HTTPS, A/B balancing, shared cache validator/304 and
@@ -33,14 +36,10 @@ clients trust both the original primary and separate same-CA standby certificate
 - Standby A/B/trust, fresh-new routing and restoration are observed. The first
   cached-old cutover run failed; a later cache preflight passes, but the complete
   concurrent cached-old/fresh-new/convergence retry was not supplied.
-- Packet screenshots and new trusted TLS1.2 curl output are included. The new
-  saved binary capture was not received; unseen packet numbers are not invented.
-- Historical wrong-record, A-down/both-down502 and wrong-port images are retained.
-  Explicit public-resolver dig is not proof of changing the client's effective DNS;
-  the latter live demonstration was not supplied.
+
 
 The source/package checks can pass while the strict live-evidence gate remains
-nonzero for these three items. Faculty-injected diagnosis and individual viva remain
+nonzero for the remaining cutover item. Faculty-injected diagnosis and individual viva remain
 live assessment tasks. This package does not certify unperformed experiments.
 
 ## Source checks

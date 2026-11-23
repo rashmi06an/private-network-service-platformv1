@@ -144,3 +144,17 @@ passed2/2 at07:44:09–10. Together with the earlier nine successful directions,
 all12 directions have successful evidence. The [inventory](../docs/network-inventory.md)
 retains both the earlier failure matrix and the three superseding follow-ups.
 This closes the inventory item; the three remaining evidence items are unchanged.
+
+### Follow-up: saved packet flow and wrong-client DNS verified
+
+The AirDropped [original57-packet capture](../evidence/verification/mac3-full-flow.pcap)
+now supplies matching DNS1/3, TCP6/7/8 and31/33/34, visible TLS1.2 Certificate13/38,
+ChangeCipherSpec and encrypted application traffic. ServerHello38 selects h2.
+The [actual frame index](../evidence/verification/packet-index.md) and extracted
+fields derive from the binary. Earlier no-binary notes describe the earlier snapshot.
+
+The [Mac3 wrong-client-DNS trial](../evidence/verification/2026-11-23-mac3-wrong-client-dns-reviewed.json)
+at07:49:31–41UTC confirms bad effective scoped DNS, normal lookup failure with
+directIP still reachable, and original-DNS/trustedHTTPS304 restoration; exit0.
+Acceptance is now12/13 verified, with only full timed edge cutover still open.
+The faculty challenge remains a separate live assessment.

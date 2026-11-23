@@ -16,12 +16,12 @@ Final package review:23November2026. Collection ended at the team's request;
 | F09 | Shared cache body/ETag and conditional304 | Both current backends and trusted edge304 verified |
 | F10 | Executable shell helpers | Source/executable checks; actual clone invocations observed |
 | F11 | Assertions reject wrong HTTP/identity/DNS | Regression fixtures and real failed attempts retained |
-| F12 | Capture guide and actual saved-file gate | Existing screenshots indexed; new binary not received |
-| F13 | Controlled TLS1.2 / TLS1.3 visibility explanation | New TLS1.2 curl trust/handshake supplied; binary Certificate frame unverified |
+| F12 | Capture guide and actual saved-file gate | 57-packet original binary received; actual frame/socket index verified |
+| F13 | Controlled TLS1.2 / TLS1.3 visibility explanation | Visible TLS1.2 Certificate frames13/38 and matching trusted client requests verified |
 | F14 | Completion claims tied to actual results | Reports distinguish verified, historical and incomplete |
 | F15 | Historical screenshots indexed by actual content | Original main PNGs retained; gallery and integrity report included |
 | F16 | Four current inventories / directed ping checks | All inventories and12 directed successes verified across baseline and three repaired incoming directions |
-| F17 | Historical leases / wrong-client DNS distinction | Direct public-dig exhibit retained; live effective-setting proof not supplied |
+| F17 | Historical leases / wrong-client DNS distinction | Live wrong effective client DNS, IP control, hostname failure and restoredHTTPS verified |
 | F18 | Explicit leaf paths and approved CA / client trust | Team faculty confirmation and all-four-client trust verified |
 | F19 | Full-system viva notes / actual HTTP2 | HTTP2 negotiated; viva remains live |
 | F20 | Eleven-step integrated runbook | Procedures complete; faculty challenge remains live |

@@ -163,16 +163,20 @@
     {
       "id": "packet-capture",
       "requirement": "Focused saved pcap/pcapng and actual frame/stream/port index including Certificate visibility explanation",
-      "status": "pending",
+      "status": "verified",
       "artifacts": [
         "evidence/verification/packet-index.md",
         "evidence/verification/2026-11-23-tls12-client-observations.json",
         "evidence/phase2/wireshark/dns-query-response-app-team1.png",
         "evidence/phase2/wireshark/tls-handshake-clienthello-serverhello.png",
         "evidence/wireshark/tcp-syn-detail.png",
-        "evidence/wireshark/tcp-tls-full-exchange.png"
+        "evidence/wireshark/tcp-tls-full-exchange.png",
+        "evidence/verification/mac3-full-flow.pcap",
+        "evidence/verification/mac3-full-flow-fields.txt",
+        "evidence/verification/mac3-full-flow-certificate-details.txt",
+        "evidence/verification/mac3-full-flow-review.json"
       ],
-      "review_note": "Existing main-branch screenshots reviewed and indexed by actual visible frame/port fields. Mac3 pasted normal hostname TLS1.2 requests with successful certificate verification and HTTP1.1/HTTP2 200 at07:23:14 UTC. The requested saved mac3-full-flow.pcap was not received in the task workspace. No binary capture or unseen Certificate frame is claimed. Collection ended at team request; strict saved-capture acceptance remains pending."
+      "review_note": "Existing main-branch screenshots reviewed and indexed by actual visible frame/port fields. Mac3 pasted normal hostname TLS1.2 requests with successful certificate verification and HTTP1.1/HTTP2 200 at07:23:14 UTC. The requested saved mac3-full-flow.pcap was not received in the task workspace. No binary capture or unseen Certificate frame is claimed. Collection ended at team request; strict saved-capture acceptance remains pending. Superseding follow-up: AirDropped binary received9772bytes/SHA25699c854a019996830f08dfe2b7ae6095faa237410dc4492cbf7452ea65adaceca. tshark reads57packets07:23:14.314426\u2013.642163UTC. Matching DNS1/3, two TCP handshakes, visible TLS1.2 Certificate13/38, CCS and encrypted data; server ALPNh2 in38. Actual binary and verified frame index now included. No decrypted HTTP inferred; matching endpoint curl headers are separate. Saved capture acceptance verified."
     },
     {
       "id": "cache-http2",
@@ -188,7 +192,7 @@
     {
       "id": "failure-rehearsal",
       "requirement": "Layer-aware rehearsal plus effective wrong-client-DNS setting; remaining required failure outcomes and restore",
-      "status": "pending",
+      "status": "verified",
       "artifacts": [
         "evidence/failures/wrong-dns-record.png",
         "evidence/failures/wrong-dns-record-restored.png",
@@ -198,9 +202,10 @@
         "evidence/failures/wrong-dns-server.png",
         "evidence/verification/D-a-down-20261123T060400Z.txt",
         "evidence/verification/D-recovered-20261123T060959Z.txt",
-        "evidence/failures/INDEX.md"
+        "evidence/failures/INDEX.md",
+        "evidence/verification/2026-11-23-mac3-wrong-client-dns-reviewed.json"
       ],
-      "review_note": "Reused and visually reviewed existing main-branch historical exhibits: wrong-record answer10.7.7.250 with curl28, both-down nginx502, wrong port9999 with curl7 despite2/2 IP ping; restoration exhibits retained. Current controlled A-down/B-only/recovered checks are separately verified. Public-resolver dig NXDOMAIN is only a direct query, not a changed effective client resolver. The corrected wrong-client-DNS helper passes local rollback/refusal tests but no live effective-setting run was supplied. Collection ended at team request; keep this remaining proof unverified."
+      "review_note": "Reused and visually reviewed existing main-branch historical exhibits: wrong-record answer10.7.7.250 with curl28, both-down nginx502, wrong port9999 with curl7 despite2/2 IP ping; restoration exhibits retained. Current controlled A-down/B-only/recovered checks are separately verified. Public-resolver dig NXDOMAIN is only a direct query, not a changed effective client resolver. The corrected wrong-client-DNS helper passes local rollback/refusal tests but no live effective-setting run was supplied. Collection ended at team request; keep this remaining proof unverified. Superseding live effective-setting trial07:49:31\u201341UTC fromMac3: trusted200/304 baseline, scoped nameserver changed to own10.7.28.78 with scutil confirmation, direct primaryIP ping2/2, normal curl28 resolution timeout, exact prior scopedfile restored and trusted200/304 recovered with both identities. Exit0. Combined with reviewed historical other fault outcomes and current controlled A-down/recovery, the missing literal wrong-client-DNS acceptance is now verified. This is rehearsal, not the separate live faculty challenge."
     },
     {
       "id": "ca-approval",

@@ -1,0 +1,477 @@
+Frame 13: Packet, 1514 bytes on wire (12112 bits), 1514 bytes captured (12112 bits)
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Nov 23, 2026 12:53:14.408892000 IST
+    UTC Arrival Time: Nov 23, 2026 07:23:14.408892000 UTC
+    Epoch Arrival Time: 1795418594.408892000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 31.297000 milliseconds]
+    [Time since reference or first frame: 94.466000 milliseconds]
+    Frame Number: 13
+    Frame Length: 1514 bytes (12112 bits)
+    Capture Length: 1514 bytes (12112 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:ip:tcp:tls:x509sat:x509sat:x509sat:x509sat:x509sat:x509ce:x509ce:x509ce:x509ce]
+    Character encoding: ASCII (0)
+Ethernet II, Src: 8e:f2:4f:b4:75:a5 (8e:f2:4f:b4:75:a5), Dst: 12:53:0c:44:d1:cb (12:53:0c:44:d1:cb)
+    Destination: 12:53:0c:44:d1:cb (12:53:0c:44:d1:cb)
+        .... ..1. .... .... .... .... = LG bit: Locally administered address (this is NOT the factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: 8e:f2:4f:b4:75:a5 (8e:f2:4f:b4:75:a5)
+        .... ..1. .... .... .... .... = LG bit: Locally administered address (this is NOT the factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: IPv4 (0x0800)
+    [Stream index: 2]
+Internet Protocol Version 4, Src: 10.7.25.25, Dst: 10.7.28.78
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x02 (DSCP: CS0, ECN: ECT(0))
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..10 = Explicit Congestion Notification: ECN-Capable Transport codepoint '10' (2)
+    Total Length: 1500
+    Identification: 0x0000 (0)
+    010. .... = Flags: 0x2, Don't fragment
+        0... .... = Reserved bit: Not set
+        .1.. .... = Don't fragment: Set
+        ..0. .... = More fragments: Not set
+    ...0 0000 0000 0000 = Fragment Offset: 0
+    Time to Live: 64
+    Protocol: TCP (6)
+    Header Checksum: 0xeba5 [validation disabled]
+    [Header checksum status: Unverified]
+    Source Address: 10.7.25.25
+    Destination Address: 10.7.28.78
+    [Stream index: 2]
+Transmission Control Protocol, Src Port: 8443, Dst Port: 58645, Seq: 1, Ack: 229, Len: 1448
+    Source Port: 8443
+    Destination Port: 58645
+    [Stream index: 0]
+    [Stream Packet Number: 7]
+    [Conversation completeness: Incomplete, DATA (15)]
+        ..0. .... = RST: Absent
+        ...0 .... = FIN: Absent
+        .... 1... = Data: Present
+        .... .1.. = ACK: Present
+        .... ..1. = SYN-ACK: Present
+        .... ...1 = SYN: Present
+        [Completeness Flags: ··DASS]
+    [TCP Segment Len: 1448]
+    Sequence Number: 1    (relative sequence number)
+    Sequence Number (raw): 3851226903
+    [Next Sequence Number: 1449    (relative sequence number)]
+    Acknowledgment Number: 229    (relative ack number)
+    Acknowledgment number (raw): 190089102
+    1000 .... = Header Length: 32 bytes (8)
+    Flags: 0x010 (ACK)
+        000. .... .... = Reserved: Not set
+        ...0 .... .... = Accurate ECN: Not set
+        .... 0... .... = Congestion Window Reduced: Not set
+        .... .0.. .... = ECN-Echo: Not set
+        .... ..0. .... = Urgent: Not set
+        .... ...1 .... = Acknowledgment: Set
+        .... .... 0... = Push: Not set
+        .... .... .0.. = Reset: Not set
+        .... .... ..0. = Syn: Not set
+        .... .... ...0 = Fin: Not set
+        [TCP Flags: ·······A····]
+    Window: 2056
+    [Calculated window size: 131584]
+    [Window size scaling factor: 64]
+    Checksum: 0x39d4 [unverified]
+    [Checksum Status: Unverified]
+    Urgent Pointer: 0
+    Options: (12 bytes), No-Operation (NOP), No-Operation (NOP), Timestamps
+        TCP Option - No-Operation (NOP)
+            Kind: No-Operation (1)
+        TCP Option - No-Operation (NOP)
+            Kind: No-Operation (1)
+        TCP Option - Timestamps: TSval 2642474972, TSecr 196837908
+            Kind: Time Stamp Option (8)
+            Length: 10
+            Timestamp value: 2642474972
+            Timestamp echo reply: 196837908
+    [Timestamps]
+        [Time since first frame in this TCP stream: 57.042000 milliseconds]
+        [Time since previous frame in this TCP stream: 32.198000 milliseconds]
+    [SEQ/ACK analysis]
+        [iRTT: 7.053000 milliseconds]
+        [Bytes in flight: 1448]
+        [Bytes sent since last PSH flag: 1448]
+    [Client Contiguous Streams: 1]
+    [Server Contiguous Streams: 1]
+    TCP payload (1448 bytes)
+    TCP segment data (115 bytes)
+Transport Layer Security
+    [Stream index: 0]
+    TLSv1.2 Record Layer: Handshake Protocol: Server Hello
+        Content Type: Handshake (22)
+        Version: TLS 1.2 (0x0303)
+        Length: 106
+        Handshake Protocol: Server Hello
+            Handshake Type: Server Hello (2)
+            Length: 102
+            Version: TLS 1.2 (0x0303)
+            Random: 18a9c9882e58705823418431f9a6254015d344b83bef697b444f574e47524401
+                GMT Unix Time: Feb 11, 1983 08:29:20.000000000 IST
+                Random Bytes: 2e58705823418431f9a6254015d344b83bef697b444f574e47524401
+            Session ID Length: 32
+            Session ID: f5068114965184e4708f212e5e03bbeb5f3b0c10f2b006094200e0d9e0410a76
+            Cipher Suite: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (0xc030)
+            Compression Method: null (0)
+            Extensions Length: 30
+            Extension: renegotiation_info (len=1)
+                Type: renegotiation_info (65281)
+                Length: 1
+                Renegotiation Info extension
+                    Renegotiation info extension length: 0
+            Extension: ec_point_formats (len=2)
+                Type: ec_point_formats (11)
+                Length: 2
+                EC point formats Length: 1
+                Elliptic curves point formats (1)
+                    EC point format: uncompressed (0)
+            Extension: server_name (len=0)
+                Type: server_name (0)
+                Length: 0
+            Extension: application_layer_protocol_negotiation (len=11)
+                Type: application_layer_protocol_negotiation (16)
+                Length: 11
+                ALPN Extension Length: 9
+                ALPN Protocol
+                    ALPN string length: 8
+                    ALPN Next Protocol: http/1.1
+            [JA3S Fullstring: 771,49200,65281-11-0-16]
+            [JA3S: 1778a30a2dce8be0d2968261b8cdcd65]
+    TLSv1.2 Record Layer: Handshake Protocol: Certificate
+        Content Type: Handshake (22)
+        Version: TLS 1.2 (0x0303)
+        Length: 1217
+        Handshake Protocol: Certificate
+            Handshake Type: Certificate (11)
+            Length: 1213
+            Certificates Length: 1210
+            Certificates (1210 bytes)
+                Certificate Length: 1207
+                Certificate […]: 308204b33082031ba003020102021100ef5b4b82e5972222373fdeacd26f96d9300d06092a864886f70d01010b05003081bf311e301c060355040a13156d6b6365727420646576656c6f706d656e74204341314a3048060355040b0c4173616d696b7368616a616e676964303230
+                    signedCertificate
+                        version: v3 (2)
+                        serialNumber: 0x00ef5b4b82e5972222373fdeacd26f96d9
+                        signature (sha256WithRSAEncryption)
+                            Algorithm Id: 1.2.840.113549.1.1.11 (sha256WithRSAEncryption)
+                        issuer: rdnSequence (0)
+                            rdnSequence […]: 3 items (id-at-commonName=mkcert samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ),id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ),id-at-organizationName=mkc
+                                RDNSequence item: 1 item (id-at-organizationName=mkcert development CA)
+                                    RelativeDistinguishedName item (id-at-organizationName=mkcert development CA)
+                                        Object Id: 2.5.4.10 (id-at-organizationName)
+                                        DirectoryString: printableString (1)
+                                            printableString: mkcert development CA
+                                RDNSequence item: 1 item (id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                    RelativeDistinguishedName item (id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                        Object Id: 2.5.4.11 (id-at-organizationalUnitName)
+                                        DirectoryString: uTF8String (4)
+                                            uTF8String: samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid )
+                                RDNSequence item: 1 item (id-at-commonName=mkcert samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                    RelativeDistinguishedName item (id-at-commonName=mkcert samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                        Object Id: 2.5.4.3 (id-at-commonName)
+                                        DirectoryString: uTF8String (4)
+                                            uTF8String: mkcert samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid )
+                        validity
+                            notBefore: utcTime (0)
+                                utcTime: 2026-10-02 07:23:32 (UTC)
+                            notAfter: utcTime (0)
+                                utcTime: 2029-01-02 07:23:32 (UTC)
+                        subject: rdnSequence (0)
+                            rdnSequence: 2 items (id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ),id-at-organizationName=mkcert development certificate)
+                                RDNSequence item: 1 item (id-at-organizationName=mkcert development certificate)
+                                    RelativeDistinguishedName item (id-at-organizationName=mkcert development certificate)
+                                        Object Id: 2.5.4.10 (id-at-organizationName)
+                                        DirectoryString: printableString (1)
+                                            printableString: mkcert development certificate
+                                RDNSequence item: 1 item (id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                    RelativeDistinguishedName item (id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                        Object Id: 2.5.4.11 (id-at-organizationalUnitName)
+                                        DirectoryString: uTF8String (4)
+                                            uTF8String: samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid )
+                        subjectPublicKeyInfo
+                            algorithm (rsaEncryption)
+                                Algorithm Id: 1.2.840.113549.1.1.1 (rsaEncryption)
+                            Padding: 0
+                            subjectPublicKey […]: 3082010a0282010100a347fc4cbcbba431672ce045330f5b586e6cfad6d964f96662ecc75f7d373b9a142ce0c3a0a6918ac4da2d16c98fd538c029c6913aa517d0f279f83f15acc54e11a4019e49ae52271629e8b96908074b27b85442ef6a2a3299bb13ca7c48291d0cd7c
+                                RSA Public Key
+                                    modulus: 0x00a347fc4cbcbba431672ce045330f5b586e6cfad6d964f96662ecc75f7d373b9a142ce0…
+                                    publicExponent: 65537
+                        extensions: 4 items
+                            Extension (id-ce-keyUsage)
+                                Extension Id: 2.5.29.15 (id-ce-keyUsage)
+                                critical: True
+                                Padding: 5
+                                KeyUsage: a0
+                                    1... .... = digitalSignature: True
+                                    .0.. .... = contentCommitment: False
+                                    ..1. .... = keyEncipherment: True
+                                    ...0 .... = dataEncipherment: False
+                                    .... 0... = keyAgreement: False
+                                    .... .0.. = keyCertSign: False
+                                    .... ..0. = cRLSign: False
+                                    .... ...0 = encipherOnly: False
+                                    0... .... = decipherOnly: False
+                            Extension (id-ce-extKeyUsage)
+                                Extension Id: 2.5.29.37 (id-ce-extKeyUsage)
+                                KeyPurposeIDs: 1 item
+                                    KeyPurposeId: 1.3.6.1.5.5.7.3.1 (id-kp-serverAuth)
+                            Extension (id-ce-authorityKeyIdentifier)
+                                Extension Id: 2.5.29.35 (id-ce-authorityKeyIdentifier)
+                                AuthorityKeyIdentifier
+                                    keyIdentifier: 98048c608b5de42b30f3f4a77088f19419309649
+                            Extension (id-ce-subjectAltName)
+                                Extension Id: 2.5.29.17 (id-ce-subjectAltName)
+                                GeneralNames: 2 items
+                                    GeneralName: dNSName (2)
+                                        dNSName: app.team1.test
+                                    GeneralName: dNSName (2)
+                                        dNSName: api.team1.test
+                    algorithmIdentifier (sha256WithRSAEncryption)
+                        Algorithm Id: 1.2.840.113549.1.1.11 (sha256WithRSAEncryption)
+                    Padding: 0
+                    encrypted […]: 0faf054c09406f565f63d482d03c00b8bf719fe9335e1220cec2b7691fc55b4eb36c7f2101e8066bdde8cd3bd81704612d5320e5e8d7e7a3dc19041e75c45877c7882e285e01e23c9b9a0228470d6c66d5c496777cf25da06e49fce1ca8f07d4cd3adde2ab0a632971ebd08e3ff4be
+    TLS segment data (115 bytes)
+
+Frame 38: Packet, 1514 bytes on wire (12112 bits), 1514 bytes captured (12112 bits)
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Nov 23, 2026 12:53:14.575892000 IST
+    UTC Arrival Time: Nov 23, 2026 07:23:14.575892000 UTC
+    Epoch Arrival Time: 1795418594.575892000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 9.137000 milliseconds]
+    [Time delta from previous displayed frame: 167.000000 milliseconds]
+    [Time since reference or first frame: 261.466000 milliseconds]
+    Frame Number: 38
+    Frame Length: 1514 bytes (12112 bits)
+    Capture Length: 1514 bytes (12112 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:ip:tcp:tls:x509sat:x509sat:x509sat:x509sat:x509sat:x509ce:x509ce:x509ce:x509ce]
+    Character encoding: ASCII (0)
+Ethernet II, Src: 8e:f2:4f:b4:75:a5 (8e:f2:4f:b4:75:a5), Dst: 12:53:0c:44:d1:cb (12:53:0c:44:d1:cb)
+    Destination: 12:53:0c:44:d1:cb (12:53:0c:44:d1:cb)
+        .... ..1. .... .... .... .... = LG bit: Locally administered address (this is NOT the factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: 8e:f2:4f:b4:75:a5 (8e:f2:4f:b4:75:a5)
+        .... ..1. .... .... .... .... = LG bit: Locally administered address (this is NOT the factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: IPv4 (0x0800)
+    [Stream index: 2]
+Internet Protocol Version 4, Src: 10.7.25.25, Dst: 10.7.28.78
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x02 (DSCP: CS0, ECN: ECT(0))
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..10 = Explicit Congestion Notification: ECN-Capable Transport codepoint '10' (2)
+    Total Length: 1500
+    Identification: 0x0000 (0)
+    010. .... = Flags: 0x2, Don't fragment
+        0... .... = Reserved bit: Not set
+        .1.. .... = Don't fragment: Set
+        ..0. .... = More fragments: Not set
+    ...0 0000 0000 0000 = Fragment Offset: 0
+    Time to Live: 64
+    Protocol: TCP (6)
+    Header Checksum: 0xeba5 [validation disabled]
+    [Header checksum status: Unverified]
+    Source Address: 10.7.25.25
+    Destination Address: 10.7.28.78
+    [Stream index: 2]
+Transmission Control Protocol, Src Port: 8443, Dst Port: 58648, Seq: 1, Ack: 232, Len: 1448
+    Source Port: 8443
+    Destination Port: 58648
+    [Stream index: 1]
+    [Stream Packet Number: 7]
+    [Conversation completeness: Incomplete, DATA (15)]
+        ..0. .... = RST: Absent
+        ...0 .... = FIN: Absent
+        .... 1... = Data: Present
+        .... .1.. = ACK: Present
+        .... ..1. = SYN-ACK: Present
+        .... ...1 = SYN: Present
+        [Completeness Flags: ··DASS]
+    [TCP Segment Len: 1448]
+    Sequence Number: 1    (relative sequence number)
+    Sequence Number (raw): 3751086332
+    [Next Sequence Number: 1449    (relative sequence number)]
+    Acknowledgment Number: 232    (relative ack number)
+    Acknowledgment number (raw): 2384432575
+    1000 .... = Header Length: 32 bytes (8)
+    Flags: 0x010 (ACK)
+        000. .... .... = Reserved: Not set
+        ...0 .... .... = Accurate ECN: Not set
+        .... 0... .... = Congestion Window Reduced: Not set
+        .... .0.. .... = ECN-Echo: Not set
+        .... ..0. .... = Urgent: Not set
+        .... ...1 .... = Acknowledgment: Set
+        .... .... 0... = Push: Not set
+        .... .... .0.. = Reset: Not set
+        .... .... ..0. = Syn: Not set
+        .... .... ...0 = Fin: Not set
+        [TCP Flags: ·······A····]
+    Window: 2056
+    [Calculated window size: 131584]
+    [Window size scaling factor: 64]
+    Checksum: 0x1575 [unverified]
+    [Checksum Status: Unverified]
+    Urgent Pointer: 0
+    Options: (12 bytes), No-Operation (NOP), No-Operation (NOP), Timestamps
+        TCP Option - No-Operation (NOP)
+            Kind: No-Operation (1)
+        TCP Option - No-Operation (NOP)
+            Kind: No-Operation (1)
+        TCP Option - Timestamps: TSval 2781198417, TSecr 2909011286
+            Kind: Time Stamp Option (8)
+            Length: 10
+            Timestamp value: 2781198417
+            Timestamp echo reply: 2909011286
+    [Timestamps]
+        [Time since first frame in this TCP stream: 50.312000 milliseconds]
+        [Time since previous frame in this TCP stream: 9.137000 milliseconds]
+    [SEQ/ACK analysis]
+        [iRTT: 32.142000 milliseconds]
+        [Bytes in flight: 1448]
+        [Bytes sent since last PSH flag: 1448]
+    [Client Contiguous Streams: 1]
+    [Server Contiguous Streams: 1]
+    TCP payload (1448 bytes)
+    TCP segment data (121 bytes)
+Transport Layer Security
+    [Stream index: 1]
+    TLSv1.2 Record Layer: Handshake Protocol: Server Hello
+        Content Type: Handshake (22)
+        Version: TLS 1.2 (0x0303)
+        Length: 100
+        Handshake Protocol: Server Hello
+            Handshake Type: Server Hello (2)
+            Length: 96
+            Version: TLS 1.2 (0x0303)
+            Random: bc3d89bb745cc6f593fcdbdde9364cdb9ae9af08fec37f1f444f574e47524401
+                GMT Unix Time: Jan 28, 2070 21:16:03.000000000 IST
+                Random Bytes: 745cc6f593fcdbdde9364cdb9ae9af08fec37f1f444f574e47524401
+            Session ID Length: 32
+            Session ID: 677e23ffc4718c8ed17d466242c795e84c7ea135a38886edba623af1ab0b1144
+            Cipher Suite: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (0xc030)
+            Compression Method: null (0)
+            Extensions Length: 24
+            Extension: renegotiation_info (len=1)
+                Type: renegotiation_info (65281)
+                Length: 1
+                Renegotiation Info extension
+                    Renegotiation info extension length: 0
+            Extension: ec_point_formats (len=2)
+                Type: ec_point_formats (11)
+                Length: 2
+                EC point formats Length: 1
+                Elliptic curves point formats (1)
+                    EC point format: uncompressed (0)
+            Extension: server_name (len=0)
+                Type: server_name (0)
+                Length: 0
+            Extension: application_layer_protocol_negotiation (len=5)
+                Type: application_layer_protocol_negotiation (16)
+                Length: 5
+                ALPN Extension Length: 3
+                ALPN Protocol
+                    ALPN string length: 2
+                    ALPN Next Protocol: h2
+            [JA3S Fullstring: 771,49200,65281-11-0-16]
+            [JA3S: 1778a30a2dce8be0d2968261b8cdcd65]
+    TLSv1.2 Record Layer: Handshake Protocol: Certificate
+        Content Type: Handshake (22)
+        Version: TLS 1.2 (0x0303)
+        Length: 1217
+        Handshake Protocol: Certificate
+            Handshake Type: Certificate (11)
+            Length: 1213
+            Certificates Length: 1210
+            Certificates (1210 bytes)
+                Certificate Length: 1207
+                Certificate […]: 308204b33082031ba003020102021100ef5b4b82e5972222373fdeacd26f96d9300d06092a864886f70d01010b05003081bf311e301c060355040a13156d6b6365727420646576656c6f706d656e74204341314a3048060355040b0c4173616d696b7368616a616e676964303230
+                    signedCertificate
+                        version: v3 (2)
+                        serialNumber: 0x00ef5b4b82e5972222373fdeacd26f96d9
+                        signature (sha256WithRSAEncryption)
+                            Algorithm Id: 1.2.840.113549.1.1.11 (sha256WithRSAEncryption)
+                        issuer: rdnSequence (0)
+                            rdnSequence […]: 3 items (id-at-commonName=mkcert samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ),id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ),id-at-organizationName=mkc
+                                RDNSequence item: 1 item (id-at-organizationName=mkcert development CA)
+                                    RelativeDistinguishedName item (id-at-organizationName=mkcert development CA)
+                                        Object Id: 2.5.4.10 (id-at-organizationName)
+                                        DirectoryString: printableString (1)
+                                            printableString: mkcert development CA
+                                RDNSequence item: 1 item (id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                    RelativeDistinguishedName item (id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                        Object Id: 2.5.4.11 (id-at-organizationalUnitName)
+                                        DirectoryString: uTF8String (4)
+                                            uTF8String: samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid )
+                                RDNSequence item: 1 item (id-at-commonName=mkcert samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                    RelativeDistinguishedName item (id-at-commonName=mkcert samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                        Object Id: 2.5.4.3 (id-at-commonName)
+                                        DirectoryString: uTF8String (4)
+                                            uTF8String: mkcert samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid )
+                        validity
+                            notBefore: utcTime (0)
+                                utcTime: 2026-10-02 07:23:32 (UTC)
+                            notAfter: utcTime (0)
+                                utcTime: 2029-01-02 07:23:32 (UTC)
+                        subject: rdnSequence (0)
+                            rdnSequence: 2 items (id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ),id-at-organizationName=mkcert development certificate)
+                                RDNSequence item: 1 item (id-at-organizationName=mkcert development certificate)
+                                    RelativeDistinguishedName item (id-at-organizationName=mkcert development certificate)
+                                        Object Id: 2.5.4.10 (id-at-organizationName)
+                                        DirectoryString: printableString (1)
+                                            printableString: mkcert development certificate
+                                RDNSequence item: 1 item (id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                    RelativeDistinguishedName item (id-at-organizationalUnitName=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ))
+                                        Object Id: 2.5.4.11 (id-at-organizationalUnitName)
+                                        DirectoryString: uTF8String (4)
+                                            uTF8String: samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid )
+                        subjectPublicKeyInfo
+                            algorithm (rsaEncryption)
+                                Algorithm Id: 1.2.840.113549.1.1.1 (rsaEncryption)
+                            Padding: 0
+                            subjectPublicKey […]: 3082010a0282010100a347fc4cbcbba431672ce045330f5b586e6cfad6d964f96662ecc75f7d373b9a142ce0c3a0a6918ac4da2d16c98fd538c029c6913aa517d0f279f83f15acc54e11a4019e49ae52271629e8b96908074b27b85442ef6a2a3299bb13ca7c48291d0cd7c
+                                RSA Public Key
+                                    modulus: 0x00a347fc4cbcbba431672ce045330f5b586e6cfad6d964f96662ecc75f7d373b9a142ce0…
+                                    publicExponent: 65537
+                        extensions: 4 items
+                            Extension (id-ce-keyUsage)
+                                Extension Id: 2.5.29.15 (id-ce-keyUsage)
+                                critical: True
+                                Padding: 5
+                                KeyUsage: a0
+                                    1... .... = digitalSignature: True
+                                    .0.. .... = contentCommitment: False
+                                    ..1. .... = keyEncipherment: True
+                                    ...0 .... = dataEncipherment: False
+                                    .... 0... = keyAgreement: False
+                                    .... .0.. = keyCertSign: False
+                                    .... ..0. = cRLSign: False
+                                    .... ...0 = encipherOnly: False
+                                    0... .... = decipherOnly: False
+                            Extension (id-ce-extKeyUsage)
+                                Extension Id: 2.5.29.37 (id-ce-extKeyUsage)
+                                KeyPurposeIDs: 1 item
+                                    KeyPurposeId: 1.3.6.1.5.5.7.3.1 (id-kp-serverAuth)
+                            Extension (id-ce-authorityKeyIdentifier)
+                                Extension Id: 2.5.29.35 (id-ce-authorityKeyIdentifier)
+                                AuthorityKeyIdentifier
+                                    keyIdentifier: 98048c608b5de42b30f3f4a77088f19419309649
+                            Extension (id-ce-subjectAltName)
+                                Extension Id: 2.5.29.17 (id-ce-subjectAltName)
+                                GeneralNames: 2 items
+                                    GeneralName: dNSName (2)
+                                        dNSName: app.team1.test
+                                    GeneralName: dNSName (2)
+                                        dNSName: api.team1.test
+                    algorithmIdentifier (sha256WithRSAEncryption)
+                        Algorithm Id: 1.2.840.113549.1.1.11 (sha256WithRSAEncryption)
+                    Padding: 0
+                    encrypted […]: 0faf054c09406f565f63d482d03c00b8bf719fe9335e1220cec2b7691fc55b4eb36c7f2101e8066bdde8cd3bd81704612d5320e5e8d7e7a3dc19041e75c45877c7882e285e01e23c9b9a0228470d6c66d5c496777cf25da06e49fce1ca8f07d4cd3adde2ab0a632971ebd08e3ff4be
+    TLS segment data (121 bytes)
+

@@ -1,0 +1,53 @@
+{
+  "provenance": "Structured transcription of actual user-pasted recorder output from Mac3; no expected response is substituted for a missing result.",
+  "original_filename": "F-wrong-client-dns-20261123T074931Z.txt",
+  "machine": "Shubh1.local",
+  "commit": "f5e12989a2e07d08fada43e7504b3d25a4408510",
+  "command": "scripts/wrong-client-dns-demo.sh",
+  "start_utc": "2026-11-23T07:49:31Z",
+  "end_utc": "2026-11-23T07:49:41Z",
+  "baseline": {
+    "trusted_status": 200,
+    "cache_full": 200,
+    "cache_conditional": 304,
+    "x_edge": "primary-mac2",
+    "etag": "team1-cache-v2",
+    "backends": [
+      "A",
+      "B",
+      "A"
+    ]
+  },
+  "effective_bad_setting": {
+    "scoped_domain": "team1.test",
+    "nameserver": "10.7.28.78",
+    "timeout_seconds": 1,
+    "scutil_confirmed": true
+  },
+  "direct_ip_control": {
+    "destination": "10.7.25.25",
+    "sent": 2,
+    "received": 2,
+    "loss_percent": 0,
+    "rtt_ms": [
+      7.72,
+      61.248
+    ]
+  },
+  "actual_failure": "curl: (28) Resolving timed out after 3000 milliseconds",
+  "recovery": {
+    "output": "RESTORED: prior scoped client DNS file",
+    "trusted_status": 200,
+    "cache_full": 200,
+    "cache_conditional": 304,
+    "x_edge": "primary-mac2",
+    "backends": [
+      "B",
+      "A",
+      "B"
+    ],
+    "final_output": "PASS: deliberate client-DNS fault and restored end-to-end service"
+  },
+  "exit_code": 0,
+  "review": "Wrong effective client resolver, failed normal hostname lookup despite good direct IP, and full end-to-end recovery are now verified. Historical other failure categories remain separately indexed."
+}

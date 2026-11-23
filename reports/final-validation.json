@@ -85,13 +85,13 @@
   "follow_up_review": {
     "date": "2026-11-23",
     "scope": "Post-package distributed ping follow-up; earlier source/nginx test records remain their dated snapshots.",
-    "verified_items": 10,
+    "verified_items": 12,
     "unverified_items": [
-      "edge-cutover",
-      "packet-capture",
-      "failure-rehearsal"
+      "edge-cutover"
     ],
     "inventory": "Three repaired inbound directions receive2/2 each; see current ledger and inventory links.",
-    "archive": "Earlier submission ZIP is the d639f20 snapshot and will be refreshed after remaining follow-up work."
+    "archive": "Earlier submission ZIP is the d639f20 snapshot and will be refreshed after remaining follow-up work.",
+    "packet_capture": "Original57-packet binary plus derived DNS/TCP/TLS/Certificate/ALPN frame index verified.",
+    "wrong_client_dns": "Mac3 actual bad setting, failure/IP control and original-DNS/HTTPS recovery verified; exit0."
   }
 }

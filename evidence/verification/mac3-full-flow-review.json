@@ -1,0 +1,13 @@
+{
+  "file": "mac3-full-flow.pcap",
+  "bytes": 9772,
+  "packets": 57,
+  "sha256": "99c854a019996830f08dfe2b7ae6095faa237410dc4492cbf7452ea65adaceca",
+  "source_host": "Mac3 /10.7.28.78",
+  "capture_start_utc": "2026-11-23T07:23:14.314426Z",
+  "capture_end_utc": "2026-11-23T07:23:14.642163Z",
+  "received": "Mac2 Downloads via user-confirmed AirDrop",
+  "verified": "DNS frames1/3; TCP handshakes6/7/8 and31/33/34; Certificate13/38; CCS16/18 and41/43; encrypted data; ServerHello ALPNh2; index asserted against decoded fields.",
+  "http_headers": "Verified at client curl separately, not decrypted from binary.",
+  "private_keys_or_tls_secrets": "None required or included."
+}

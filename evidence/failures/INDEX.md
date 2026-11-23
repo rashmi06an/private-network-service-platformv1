@@ -15,3 +15,7 @@ Historical addresses belong to Phase1; current source uses the Phase2 inventory.
 The live effective wrong-client-resolver demonstration was not completed before
 the team ended collection. Its helper has local failure/rollback tests; those
 fixtures are implementation validation, not a substitute for a live client exhibit.
+
+Superseding live follow-up: the [effective wrong-client DNS trial](../verification/2026-11-23-mac3-wrong-client-dns-reviewed.json)
+is now verified: bad scoped setting, normal resolution timeout, successful directIP
+ping, exact prior-file restoration and trusted HTTPS200/304 recovery.
