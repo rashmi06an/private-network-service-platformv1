@@ -31,9 +31,10 @@
       "status": "pending",
       "artifacts": [
         "evidence/verification/2026-11-23-mac4-backup-dns-restored.txt",
-        "evidence/verification/2026-11-23-mac2-dns-https-baseline.txt"
+        "evidence/verification/2026-11-23-mac2-dns-https-baseline.txt",
+        "evidence/verification/R1-primary-setup-20261123T035000Z.txt"
       ],
-      "review_note": "23 Nov Mac2 can query both resolvers. app/api agree at 10.7.25.25 TTL30; primary ttl still 10.7.28.78 while backup ttl is 10.7.25.25. Restore parity before the controlled outage/fresh-client test."
+      "review_note": "23 Nov 03:50 UTC: Rashmi installed canonical primary config at commit cec41e5. All app/api/ttl answers equal 10.7.25.25 TTL30; setup exits0 and records backup. Original previous TTL mismatch is corrected in this primary-local check. Backup canonical migration, post-migration client parity, controlled outage/fresh lookup and restore remain pending."
     },
     {
       "id": "ttl-expiry",

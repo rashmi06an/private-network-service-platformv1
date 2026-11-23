@@ -103,3 +103,7 @@ Ankit supplied [backup restart/query output](../evidence/verification/2026-11-23
 ### Cross-Mac follow-up
 
 [Mac 2 comparison and HTTPS](../evidence/verification/2026-11-23-mac2-dns-https-baseline.txt) now establishes backup reachability over the LAN, matching app/api answers, and a normal HTTPS 200 response from A after system-cache flush. The TTL record still differs between primary and backup. X-Edge is absent, and shared cache validation/new-config deployment remain unverified. This is partial baseline progress, not a completed failover/TTL experiment.
+
+### Primary canonical configuration applied
+
+At 03:50:00–03:50:09 UTC on 23 November, Rashmi ran the canonical primary setup at commit cec41e5. The [recorded setup output](../evidence/verification/R1-primary-setup-20261123T035000Z.txt), copied from the team-supplied transcript with formatting normalized, shows saved pre-change configuration, syntax validation, service restart, all three records at 10.7.25.25 TTL30, and exit0. This supersedes the earlier primary-local TTL mismatch observation. Backup canonical migration and the complete fresh-client failover experiment remain pending.
