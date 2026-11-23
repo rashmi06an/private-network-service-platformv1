@@ -1,0 +1,55 @@
+SOURCE: Selected command outputs supplied by the team in this chat on 22 November 2026.
+SCOPE: Pre-deployment diagnosis. This is not a completed acceptance test of the corrected branch.
+
+MAC 2 — supplied IP and initial DNS/HTTPS results:
+ipconfig getifaddr en0
+10.7.25.25
+curl: (7) Failed to connect to app.team1.test port 8443 after 44 ms: Couldn't connect to server
+dig @10.7.27.145 app.team1.test +short
+10.7.25.25
+dig @10.7.27.247 app.team1.test +short
+10.7.28.78
+
+MAC 2 — after the team started the existing nginx configuration:
+nginx: the configuration file /opt/homebrew/etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /opt/homebrew/etc/nginx/nginx.conf test is successful
+HTTP/1.1 200 OK
+Server: nginx/1.31.6
+Date: Sun, 22 Nov 2026 14:05:43 GMT
+X-Backend: B
+{"backend":"B","status":"ok"}
+Direct Backend A:
+curl: (7) Failed to connect to 10.7.28.78 port 3001 after 1041 ms: Couldn't connect to server
+Direct Backend B:
+HTTP/1.1 200 OK
+Date: Sun, 22 Nov 2026 14:05:44 GMT
+X-Backend: B
+{"backend":"B","status":"ok"}
+
+MAC 4 — process/config diagnosis supplied by Ankit:
+10.7.27.247
+14168 dnsmasq --no-daemon --log-facility=- -C /Users/ankitrajsingh/team1-phase2/backup-dnsmasq.conf
+dig @127.0.0.1 app.team1.test +short
+10.7.28.78
+dig @127.0.0.1 api.team1.test +short
+10.7.28.78
+dig @127.0.0.1 ttl.team1.test +short
+[No TTL answer in the supplied output.]
+
+MAC 4 — file correction / syntax check (process restart not established by this excerpt):
+local-ttl=30
+address=/app.team1.test/10.7.25.25
+address=/api.team1.test/10.7.25.25
+address=/ttl.team1.test/10.7.25.25
+dnsmasq: syntax check OK.
+
+MAC 3 — later startup output supplied by Shubhaang from the historical checkout:
+ * Serving Flask app 'app'
+ * Debug mode: off
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3001
+ * Running on http://10.7.28.78:3001
+Press CTRL+C to quit
+
+REMAINING: verify client reachability after A restart, active DNS answers after backup
+restart, deployment of corrected branch code/configs, and all required acceptance stages.

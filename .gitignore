@@ -29,3 +29,5 @@ node_modules/
 # OS/editor
 .vscode/
 .idea/
+# Per-Mac backups, service PIDs, tokens and rendered deployment files
+.local-state/

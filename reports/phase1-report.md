@@ -77,3 +77,12 @@ host is reachable — each layer can fail on its own.
 - Edge: [edge/nginx.conf.example](../edge/nginx.conf.example), [edge/tls.conf.example](../edge/tls.conf.example)
 - Backends: [backend-a/](../backend-a/), [backend-b/](../backend-b/)
 - Test scripts: [scripts/](../scripts/)
+
+## Historical scope
+
+This describes the already submitted Phase 1 baseline. Source and operating
+instructions were subsequently corrected for Phase 2; current cache-demo uses
+a shared representation/ETag. Earlier DNS lease and proof limits are labeled in
+the evidence index. Current commands and remaining live acceptance are in
+[the final runbook](../docs/phase2-demo-runbook.md) and
+[verification ledger](verification-status.json).

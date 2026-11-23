@@ -1,0 +1,109 @@
+{
+  "scope": "Current four-Mac acceptance; code fixes do not substitute for reviewed LAN evidence.",
+  "updated": "2026-11-22",
+  "items": [
+    {
+      "id": "inventory",
+      "requirement": "Four current IP/interface/MAC/gateway inventories and all 12 directed ping results",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "baseline",
+      "requirement": "Both updated backends, trusted by-name HTTPS, both backend identities and stable cache validator",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "dns-clients",
+      "requirement": "At least two effective private-zone client resolver settings showing both DNS servers",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "dns-failover",
+      "requirement": "Identical app/api/ttl data; stopped primary; fresh normal lookup/HTTPS via backup and its query receipt; restoration",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "ttl-expiry",
+      "requirement": "Timestamped real client OLD until TTL expiry then NEW, authoritativeNEW in between, both servers restored",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "ttl-flush",
+      "requirement": "Separate real manual cache flush changes OLD to NEW before natural expiry; both servers restored",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "isolation",
+      "requirement": "Both exact PF rules/counters; Mac2 allowed, Mac1 denied; by-nameHTTPS works; owned-token rollback and direct access restored",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "ha",
+      "requirement": "A/B baseline; A stopped, B-onlyHTTP200; A restarted, A/B return",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "edge-cutover",
+      "requirement": "Standby trustedA/B; bothDNS updated; cached-old/fresh-new client behavior; convergence and bothDNS/primary restore",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "packet-capture",
+      "requirement": "Focused saved pcap/pcapng and actual frame/stream/port index including Certificate visibility explanation",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "cache-http2",
+      "requirement": "Trusted hostname cache-demo200/304 and real HTTP2 where supported",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "failure-rehearsal",
+      "requirement": "Layer-aware rehearsal plus effective wrong-client-DNS setting; remaining required failure outcomes and restore",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    },
+    {
+      "id": "ca-approval",
+      "requirement": "Team confirmation of faculty local-CA approval or approved self-signed alternative; all-client trust",
+      "status": "pending",
+      "artifacts": [],
+      "review_note": ""
+    }
+  ],
+  "live_evaluation": [
+    {
+      "id": "faculty-challenge",
+      "status": "live",
+      "requirement": "Faculty-administered fault identified/fixed or isolated with reasoning"
+    },
+    {
+      "id": "individual-viva",
+      "status": "live",
+      "requirement": "All four members explain full system personally"
+    }
+  ]
+}

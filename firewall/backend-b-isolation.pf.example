@@ -1,24 +1,4 @@
-# =============================================================
-# Private Network Service Platform - Team Scout Regiment
-# Phase 2 / Extension C — Service isolation (Backend B, Mac 4)
-#
-# Goal: ONLY the edge (Mac 2, 10.7.25.25) may reach backend port
-# 3002. Any other client Mac connecting directly to :3002 is
-# blocked. This proves clients must go through the edge.
-#
-# Self-contained pf ruleset (does not lock out other traffic):
-# everything else is allowed; only port 3002 is restricted.
-# =============================================================
-
-# Keep loopback unaffected (local testing on the backend itself)
-set skip on lo0
-
-# 1) The edge IS allowed to reach the backend  (quick = stop here)
-pass  in quick proto tcp from 10.7.25.25 to any port 3002
-
-# 2) Everyone else is blocked from the backend port
-block in quick proto tcp from any to any port 3002
-
-# 3) All other traffic is unaffected
-pass in all
-pass out all
+# Load through the reachable com.apple/team1_submission anchor.
+# scripts/firewall-isolation.sh verifies the parent and owns rollback/token.
+pass in quick on en0 inet proto tcp from 10.7.25.25 to 10.7.27.247 port 3002
+block drop in quick on en0 inet proto tcp from any to 10.7.27.247 port 3002

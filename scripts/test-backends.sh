@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
-# Task C — verify both backends respond directly on the LAN.
-# Usage: ./test-backends.sh <MAC3_IP> <MAC4_IP>
 set -euo pipefail
-
-MAC3_IP="${1:-10.7.21.15}"
-MAC4_IP="${2:-10.7.23.47}"
-
-echo "== Backend A (Mac 3 :3001) =="
-curl -i "http://${MAC3_IP}:3001/api/status"
-echo; echo
-
-echo "== Backend B (Mac 4 :3002) =="
-curl -i "http://${MAC4_IP}:3002/api/status"
-echo
-
-echo "Expected: JSON { backend, status:\"ok\" } and an X-Backend: A / B header from each."
+source "$(dirname "$0")/lib.sh"
+a="${1:-$TEAM_BACKEND_A_IP}"; b="${2:-$TEAM_BACKEND_B_IP}"
+tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+for pair in "A $a 3001" "B $b 3002"; do
+ set -- $pair
+ code=$(fetch "http://$2:$3/api/status" "$tmp/headers")
+ cat "$tmp/headers"
+ expect_code "$code" 200
+ [ "$(header "$tmp/headers" X-Backend)" = "$1" ] || die "Wrong backend identity for $2:$3"
+done
+echo 'PASS: both direct backend endpoints returned 200 and the correct identity'

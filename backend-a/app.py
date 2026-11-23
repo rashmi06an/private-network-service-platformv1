@@ -19,26 +19,21 @@ def home():
 
 @app.route("/api/status", methods=["GET"])
 def status():
-    return jsonify(
+    response = jsonify(
         backend="A",
         status="ok"
     )
+    response.headers["Cache-Control"] = "no-store"
+    return response
 
 @app.route("/api/cache-demo", methods=["GET"])
 def cache_demo():
-    etag = '"backend-a-v1"'
-
-    if request.headers.get("If-None-Match") == etag:
-        response = make_response("", 304)
-    else:
-        response = make_response(jsonify(
-            backend="A",
-            message="Cache demonstration"
-        ))
-
+    # The representation is identical on A/B, so validation survives load balancing.
+    # Backend identity remains observable in X-Backend, not in the cached body.
+    response = make_response(jsonify(message="Cache demonstration", version=2))
     response.headers["Cache-Control"] = "public, max-age=60"
-    response.headers["ETag"] = etag
-
+    response.set_etag("team1-cache-v2")
+    response.make_conditional(request)
     return response
 
 if __name__ == "__main__":

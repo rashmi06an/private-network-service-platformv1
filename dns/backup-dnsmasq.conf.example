@@ -1,31 +1,14 @@
-# =============================================================
-# Private Network Service Platform - Team Scout Regiment
-# Phase 2 / Extension A — BACKUP (secondary) DNS resolver
-#
-# Runs on Mac 4 (Ankit, 10.7.27.247) — Phase 2 address.
-# Holds the SAME project records as the primary (Mac 1), so that
-# if the primary dnsmasq is stopped, clients keep resolving names.
-#
-# Install path (Homebrew): /opt/homebrew/etc/dnsmasq.conf
-# =============================================================
-
-# Listen on localhost and the Mac 4 LAN IP (the backup DNS server)
-listen-address=127.0.0.1,10.7.27.247
+# Phase 2 private-zone resolver. Both hosts read the same records file format.
+# Install /opt/homebrew/etc/team1-project.hosts from dns/project.hosts too.
+port=53
 interface=en0
-
-# Do not read /etc/resolv.conf automatically
+listen-address=127.0.0.1,10.7.27.247
+bind-interfaces
 no-resolv
-
-# ---------------------------------------------------------
-# Extension B — short, visible TTL (30 seconds)
-# so TTL / caching behaviour is observable during the demo.
-# ---------------------------------------------------------
+no-hosts
+local=/team1.test/
 local-ttl=30
-
-# ---------------------------------------------------------
-# Project domain records -> Mac 2 (nginx edge, 10.7.25.25)
-# MUST match the primary resolver exactly.
-# ---------------------------------------------------------
-address=/app.team1.test/10.7.25.25
-address=/api.team1.test/10.7.25.25
-address=/ttl.team1.test/10.7.25.25
+addn-hosts=/opt/homebrew/etc/team1-project.hosts
+pid-file=/opt/homebrew/var/run/dnsmasq-team1.pid
+# No public DNS upstream is needed: clients use a scoped /etc/resolver entry.
+# Reload hosts with SIGHUP after a record edit; do not restart for each cutover.

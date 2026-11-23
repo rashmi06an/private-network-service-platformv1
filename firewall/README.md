@@ -1,56 +1,49 @@
-# Backend Service Isolation — Phase 2 / Extension C
+# Backend isolation with project-owned PF rollback
 
-Restrict direct access to the backend ports (3001, 3002) so that **only the
-edge (Mac 2, `10.7.25.25`) can reach them**. Clients must go through the edge.
+Mac 3 :3001 and Mac 4 :3002 deny ordinary LAN clients. During Extension C, only
+the primary edge Mac 2 (10.7.25.25) is permitted. Rules are scoped to en0/IPv4,
+the actual backend destination and its one service port.
 
-Uses the macOS packet filter, `pf`. The rulesets here are self-contained and
-only touch the one backend port, so they will not lock you out of the machine.
-
-| Machine | Backend | Port | Ruleset                        |
-|---------|---------|------|--------------------------------|
-| Mac 3   | A       | 3001 | `backend-a-isolation.pf.example` |
-| Mac 4   | B       | 3002 | `backend-b-isolation.pf.example` |
-
-## Apply (run on the backend machine)
+On BOTH backend Macs:
 
 ```bash
-# Mac 3 (Backend A). On Mac 4 use backend-b-isolation.pf.example.
-sudo pfctl -a com.team1/isolation -f firewall/backend-a-isolation.pf.example
-sudo pfctl -e        # enable pf if not already enabled (ignore "already enabled")
-
-# Confirm the rule is loaded:
-sudo pfctl -a com.team1/isolation -s rules
+scripts/record-evidence.sh C-apply scripts/firewall-isolation.sh apply primary
+scripts/firewall-isolation.sh show
 ```
 
-## Demonstrate
+The helper verifies the reachable parent `anchor "com.apple/*"`, then loads only
+`com.apple/team1_submission`. It saves the main rules/config before changing,
+owns a separate PF enable reference and records the returned token locally.
+Loading a detached arbitrary anchor would not be sufficient.
+
+**Mac 2:** `scripts/record-evidence.sh C-edge-allowed scripts/test-backends.sh`.
+**Mac 1:** `scripts/record-evidence.sh C-denied scripts/test-backend-isolation.sh isolated`.
+Save the rule counters from both backend Macs at the same time.
+
+Rollback on BOTH backends:
 
 ```bash
-# From the EDGE (Mac 2) — still works:
-curl -s http://10.7.28.78:3001/api/status        # Backend A answers
-
-# From a CLIENT Mac (e.g. Mac 1) — now blocked (times out / no route):
-curl -s --max-time 5 http://10.7.28.78:3001/api/status   # hangs then fails
-nc -vz -w 5 10.7.28.78 3001                               # Operation timed out
-
-# The service by NAME through the edge still works from any client:
-curl -s https://app.team1.test:8443/api/status            # OK
+scripts/record-evidence.sh C-rollback scripts/firewall-isolation.sh rollback
 ```
 
-Expected: the edge reaches the backend directly; a client cannot reach port
-3001/3002 directly, but can still use the service through `app.team1.test`.
+Then Mac 1 runs `scripts/test-backend-isolation.sh restored`. Only project anchor
+rules are cleared and the project's enable token released. Other rules/owners
+are left in place; a global `pfctl -d`, global flush, or generic `/etc/pf.conf`
+reload is not the rollback recipe.
 
-## Roll back (restore original configuration after the demo)
+## Interaction with standby migration
+
+The required C demonstration ends with rollback, then E can be demonstrated on
+the original LAN policy. The normal C-only policy deliberately does not allow
+Mac 3 to access Backend B. For an additional combined hardened cutover, both
+designated edges need temporary access during cached-old/new coexistence:
 
 ```bash
-# Flush just our anchor:
-sudo pfctl -a com.team1/isolation -F rules
-
-# And/or reload the default system ruleset:
-sudo pfctl -f /etc/pf.conf
-
-# Optionally disable pf entirely (if you enabled it only for this demo):
-sudo pfctl -d
+scripts/firewall-isolation.sh apply both      # both backend Macs, if no project rules active
+# OR, if project rules are already active:
+scripts/firewall-isolation.sh set-edges both
 ```
 
-> Keep a rollback copy: the original system ruleset is `/etc/pf.conf`.
-> `sudo pfctl -f /etc/pf.conf` always restores it.
+Ordinary Mac 1 remains blocked. After DNS restoration switch back using
+`set-edges primary`, or perform the required project rollback. This temporary
+two-edge policy is explicitly distinguished from the strict Mac 2-only C proof.

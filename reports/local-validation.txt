@@ -1,0 +1,13 @@
+LOCAL SOURCE VALIDATION ONLY (not four-Mac LAN proof)
+UTC=2026-11-22T14:24:11.566422+00:00
+COMMAND=python -m unittest discover -s tests -v (isolated environment, repository requirements)
+test_cache_is_identical_and_validates_across_backends (test_backends.Backends.test_cache_is_identical_and_validates_across_backends) ... ok
+test_routes_and_status_are_not_cached (test_backends.Backends.test_routes_and_status_are_not_cached) ... ok
+test_wrong_http_dns_or_identity_does_not_pass (test_helpers.Helpers.test_wrong_http_dns_or_identity_does_not_pass) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.877s
+
+OK
+
+EXIT_CODE=0

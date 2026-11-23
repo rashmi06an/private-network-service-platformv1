@@ -1,81 +1,28 @@
-# Backend B — Mac 4
+# Backend B — Mac 4, port 3002
 
-Backend B is one of the two application servers used in the **Private Network Service Platform** project.
+From this directory, create `.venv`, activate it, install `requirements.txt`,
+then run `python app.py`. Stop the previous instance first; keep this terminal
+open. The service binds `0.0.0.0:3002` with debug disabled.
 
-It runs on **Mac 4** and serves HTTP requests on **TCP port 3002**. It is designed to receive requests through the nginx reverse proxy and load balancer running on Mac 2.
+| Endpoint | Behavior |
+|---|---|
+| GET / | Backend B running JSON |
+| GET /api/status | status=ok, backend=B; Cache-Control:no-store |
+| GET /api/cache-demo | same body as the other backend, max-age=60, ETag:"team1-cache-v2" |
 
-## Student Details
-
-- **Name:** Ankit Raj Singh
-- **Enrollment Number:** 2401010075
-- **Role:** Mac 4 — Backend Server B + Test Client
-- **Backend Identifier:** B
-- **Port:** 3002
-
-## Network Role
-
-The Phase 1 request flow is:
-
-Client → Private DNS → Mac 2 (nginx) → Backend A / Backend B
-
-Backend B runs on Mac 4:
-
-Mac 2 (nginx) → Mac 4 (Backend B :3002)
-
-The application listens on `0.0.0.0` so that it can be accessed by other machines connected to the same private LAN.
-
-## Technology
-
-- Python 3
-- Flask
-- HTTP/REST
-- TCP Port 3002
-
-## API Endpoints
-
-### GET /
-
-Confirms that Backend B is running.
-
-Example response:
-
-```json
-{
-  "backend": "B",
-  "message": "Backend B is running"
-}
-```
-
-### GET /api/status
-
-Returns the service status and backend identifier.
-
-Example response:
-
-```json
-{
-  "backend": "B",
-  "status": "ok"
-}
-```
-
-Every response also includes the header `X-Backend: B` so the load balancer
-can be observed alternating between Backend A and Backend B.
-
-## Run
+Every response carries `X-Backend: B`. Matching conditional cache-demo
+requests return empty HTTP 304; weak tags, tag lists and wildcard use Werkzeug's
+standard conditional handling. An unmatched tag gives 200. HEAD has no body.
+Backend identity is in the header rather than the shared cache-demo body.
 
 ```bash
-cd backend-b
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python3 app.py
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python app.py
 ```
 
-The server then listens on `0.0.0.0:3002`.
-
-Verify locally:
-
-```bash
-curl -i http://localhost:3002/api/status
-```
+From another terminal at repository root: `python3 -m unittest discover -s tests -v`.
+For submitted network proof, use trusted HTTPS by private hostname through nginx.
+Direct/localhost requests are useful diagnostics and do not replace that path.
+See [member commands](../docs/team-commands.md) for failure, recovery and isolation.

@@ -1,90 +1,66 @@
-# TLS Certificate Setup Notes (Mac 2 edge)
+# TLS generation, trust and standby identity
 
-How the HTTPS certificate for `app.team1.test` / `api.team1.test` was created, installed
-on nginx, and trusted on the client Macs — so the final demo shows a valid padlock with
-**no `-k` flag and no certificate warning**.
+The existing valid `app.team1.test.pem` and `app.team1.test-key.pem` may be reused.
+Do not regenerate the CA during every demonstration. All clients must trust the
+same issuing CA; faculty approval for a local CA/mkcert must be confirmed by the team.
 
-We use **mkcert** (a local CA) because self-signed certs can't be trusted cleanly across
-machines. (`openssl` alternative is noted at the end.)
-
-## 1. One-time: create the local CA (on Mac 2)
+## Generate only if the required leaf certificate is absent/invalid (Mac 2)
 
 ```bash
-brew install mkcert nss          # nss = Firefox trust (optional)
-mkcert -install                  # creates + trusts the local CA (the "rootCA") on Mac 2
-mkcert -CAROOT                    # prints the CA folder — note this path
+brew install mkcert
+mkcert -install
+sudo mkdir -p /opt/homebrew/etc/nginx/certs
+mkcert -cert-file /tmp/team1-leaf.pem -key-file /tmp/team1-leaf-key.pem app.team1.test api.team1.test
+sudo install -m 644 /tmp/team1-leaf.pem /opt/homebrew/etc/nginx/certs/app.team1.test.pem
+sudo install -m 600 /tmp/team1-leaf-key.pem /opt/homebrew/etc/nginx/certs/app.team1.test-key.pem
+rm /tmp/team1-leaf.pem /tmp/team1-leaf-key.pem
 ```
 
-## 2. Issue the server certificate (on Mac 2)
+Explicit output filenames match [tls.conf.example](tls.conf.example); mkcert's
+default `+1` naming is not assumed. Inspect the public certificate:
 
 ```bash
-cd /opt/homebrew/etc/nginx/certs    # create this folder if needed
-mkcert app.team1.test api.team1.test
-# produces:
-#   app.team1.test+1.pem        (certificate)
-#   app.team1.test+1-key.pem    (PRIVATE KEY — never commit this)
+openssl x509 -in /opt/homebrew/etc/nginx/certs/app.team1.test.pem -noout -subject -issuer -dates -ext subjectAltName
 ```
 
-Point nginx at these files (see [tls.conf.example](tls.conf.example)):
+## Client trust (every client, including Mac 1 / 3 / 4)
 
-```nginx
-ssl_certificate     /opt/homebrew/etc/nginx/certs/app.team1.test+1.pem;
-ssl_certificate_key /opt/homebrew/etc/nginx/certs/app.team1.test+1-key.pem;
-ssl_protocols TLSv1.2 TLSv1.3;
-```
+On the issuing Mac, `mkcert -CAROOT` locates **rootCA.pem**. Copy only that public
+certificate to each client using AirDrop or another agreed local transfer. In its
+receiving directory on each client:
 
 ```bash
-sudo nginx -t && sudo nginx -s reload
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain rootCA.pem
+/usr/bin/curl --noproxy '*' -v https://app.team1.test:8443/api/status
 ```
 
-## 3. Trust the CA on every client Mac (Mac 1, Mac 3, Mac 4)
+Capture hostname match, successful certificate verification and HTTP 200 on the
+actual clients. Never copy `rootCA-key.pem` to clients and never commit any private
+key. `.gitignore` keeps certificates/keys and per-Mac deployment state out of Git.
 
-The clients must trust the **same local CA**, otherwise they'd see a warning.
+## Standby (Mac 3)
+
+The standby needs a leaf certificate valid for the same names under a CA the
+clients trust. It may use a separately issued leaf certificate. The CA signing
+key remains on the issuing Mac. Transfer the standby leaf certificate and its
+own leaf key securely to the corresponding `certs/` paths on Mac 3, with key mode
+600. Sharing the exact primary leaf certificate/key is an alternative for this
+local exercise, not a protocol requirement. No key belongs in evidence or GitHub.
+
+## Self-signed alternative
+
+If a local CA is not approved, create a self-signed leaf containing both DNS SANs
+with OpenSSL and explicitly trust that certificate on each client. A self-signed
+certificate can be trusted; omitting trust setup is what produces warnings.
 
 ```bash
-# On Mac 2: find the root CA and copy it to each client (AirDrop / scp):
-mkcert -CAROOT        # e.g. /Users/<you>/Library/Application Support/mkcert
-#   -> copy rootCA.pem to each client
-
-# On each client Mac, add rootCA.pem to the System keychain as trusted:
-sudo security add-trusted-cert -d -r trustRoot \
-  -k /Library/Keychains/System.keychain rootCA.pem
+openssl req -x509 -newkey rsa:2048 -nodes -days 365 -keyout app.team1.test-key.pem -out app.team1.test.pem -subj '/CN=app.team1.test' -addext 'subjectAltName=DNS:app.team1.test,DNS:api.team1.test'
 ```
 
-(Alternatively, install mkcert on each client and run `mkcert -install` after copying the
-same `rootCA.pem` / `rootCA-key.pem` into that machine's `mkcert -CAROOT` folder.)
+TLS 1.3 encrypts handshake messages after ServerHello, including Certificate.
+For the rubric's visible Certificate packet, capture a controlled TLS 1.2 session
+with `--tlsv1.2 --tls-max 1.2` and keep trust validation enabled. Normal service
+still supports both TLS 1.2 and 1.3. See [packet guide](../docs/packet-evidence.md).
 
-## 4. Verify (no `-k`)
-
-```bash
-curl -v https://app.team1.test:8443/api/status     # 200 OK, no cert warning, no -k
-# Browser: https://app.team1.test:8443  → padlock, no warning
-```
-
-## TLS handshake to explain in the viva
-
-`ClientHello` → `ServerHello` → `Certificate` (+ key exchange) → `Finished`; after this the
-HTTP payload is encrypted (Wireshark shows `Application Data`). Captures:
-`evidence/wireshark/tls-client-hello.png` and `evidence/phase2/wireshark/tls-handshake-clienthello-serverhello.png`.
-
-## Phase 2 note — standby edge (Mac 3)
-
-The standby edge must present the **same** certificate for `app.team1.test`, so copy the
-`certs/` folder from Mac 2 to Mac 3 (or re-issue with `mkcert app.team1.test api.team1.test`
-on Mac 3 using the same shared CA). Otherwise the cutover would trigger a cert warning.
-
-## Security
-
-- The **private key** (`*-key.pem`) and `rootCA-key.pem` must **never** be committed to
-  GitHub. `.gitignore` excludes `*.pem` and `*.key` (so no certificate or key is tracked).
-- These are local-CA certs for a private `.test` domain — valid only inside the team LAN.
-
-## OpenSSL alternative (if mkcert is not approved)
-
-```bash
-openssl req -x509 -newkey rsa:2048 -nodes -keyout app.team1.test-key.pem \
-  -out app.team1.test.pem -days 365 \
-  -subj "/CN=app.team1.test" \
-  -addext "subjectAltName=DNS:app.team1.test,DNS:api.team1.test"
-# then add app.team1.test.pem to each client's System keychain as trusted (as in step 3).
-```
+References: [mkcert CA trust](https://github.com/FiloSottile/mkcert#installing-the-ca-on-other-systems),
+[TLS 1.3](https://www.rfc-editor.org/rfc/rfc8446.html#section-2).

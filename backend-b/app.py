@@ -19,26 +19,20 @@ def home():
 
 @app.route("/api/status", methods=["GET"])
 def status():
-    return jsonify(
+    response = jsonify(
         backend="B",
         status="ok"
     )
+    response.headers["Cache-Control"] = "no-store"
+    return response
 
 @app.route("/api/cache-demo", methods=["GET"])
 def cache_demo():
-    etag = '"backend-b-v1"'
-
-    if request.headers.get("If-None-Match") == etag:
-        response = make_response("", 304)
-    else:
-        response = make_response(jsonify(
-            backend="B",
-            message="Cache demonstration"
-        ))
-
+    # Same representation and validator as A; the next request may reach either.
+    response = make_response(jsonify(message="Cache demonstration", version=2))
     response.headers["Cache-Control"] = "public, max-age=60"
-    response.headers["ETag"] = etag
-
+    response.set_etag("team1-cache-v2")
+    response.make_conditional(request)
     return response
 
 if __name__ == "__main__":

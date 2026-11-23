@@ -1,28 +1,22 @@
 #!/usr/bin/env bash
-# Phase 2 / Extension C — service isolation (backend firewall).
-# Run from a CLIENT Mac (NOT the edge). Proves direct access to the backend
-# ports is blocked, while the service still works through the edge by name.
 set -euo pipefail
-
-MAC3_IP="${1:-10.7.28.78}"   # Backend A
-MAC4_IP="${2:-10.7.27.247}"   # Backend B
-
-echo "== Direct backend access from this client (expected: BLOCKED) =="
-for pair in "A ${MAC3_IP} 3001" "B ${MAC4_IP} 3002"; do
-    set -- $pair
-    name=$1 ip=$2 port=$3
-    printf -- "-> Backend %s  %s:%s ... " "$name" "$ip" "$port"
-    if curl -s --max-time 5 -o /dev/null "http://${ip}:${port}/api/status"; then
-        echo "REACHABLE (isolation NOT active)"
-    else
-        echo "blocked / timed out (isolation active)"
-    fi
+source "$(dirname "$0")/lib.sh"
+mode="${1:-isolated}"
+case "$mode" in isolated|restored) ;; *) die 'Use isolated or restored';; esac
+actual=$(ipconfig getifaddr en0)
+[ "$actual" = "$TEAM_PRIMARY_DNS" ] || die 'Run this denial/rollback test from Mac 1 (not an edge or backend)'
+tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+for pair in "A $TEAM_BACKEND_A_IP 3001" "B $TEAM_BACKEND_B_IP 3002"; do
+ set -- $pair
+ if code=$(fetch "http://$2:$3/api/status" "$tmp/headers"); then
+  [ "$mode" = restored ] || die "Backend $1 is directly reachable; isolation is not active"
+  expect_code "$code" 200
+  [ "$(header "$tmp/headers" X-Backend)" = "$1" ] || die 'Wrong restored backend'
+  echo "RESTORED: backend $1 HTTP=$code"
+ else
+  [ "$mode" = isolated ] || die "Backend $1 still inaccessible after rollback"
+  echo "DENIED: backend $1; pair this with a contemporaneous positive test from Mac 2"
+ fi
 done
-
-echo
-echo "== Service through the edge by name (expected: WORKS) =="
-curl -s -o /dev/null -w "https://app.team1.test:8443/api/status -> HTTP %{http_code}\n" \
-    https://app.team1.test:8443/api/status
-
-echo
-echo "Note: from the EDGE (Mac 2) the same direct curl to :3001/:3002 still succeeds."
+code=$(fetch "$TEAM_URL/api/status" "$tmp/edge"); cat "$tmp/edge"; expect_code "$code" 200
+echo "PASS: $mode; by-name HTTPS via edge remains available"

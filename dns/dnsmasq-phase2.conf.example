@@ -1,47 +1,14 @@
-# =============================================================
-# Private Network Service Platform - Team Scout Regiment
-# Mac 1 PRIMARY DNS — PHASE 2 configuration
-#
-# Same role as Phase 1, but:
-#   - the LAN IPs changed (DHCP gave new leases in the Phase 2 session)
-#   - local-ttl=30 added so TTL / cutover behaviour is observable (Ext B)
-#   - a dedicated ttl.team1.test record added for the TTL demo
-#
-# The DOMAIN NAMES did not change between phases — which is exactly why
-# we run DNS: clients keep using app.team1.test while the IPs move.
-#
-# Install path (Homebrew): /opt/homebrew/etc/dnsmasq.conf
-#
-# Phase 2 addresses:
-#   Mac 1 primary DNS   10.7.27.145
-#   Mac 2 edge          10.7.25.25
-#   Mac 3 Backend A     10.7.28.78
-#   Mac 4 Backend B     10.7.27.247  (also backup DNS)
-# =============================================================
-
-# Listen on localhost and the Mac 1 LAN IP (the DNS server)
-listen-address=127.0.0.1,10.7.27.145
+# Phase 2 private-zone resolver. Both hosts read the same records file format.
+# Install /opt/homebrew/etc/team1-project.hosts from dns/project.hosts too.
+port=53
 interface=en0
-
-# Do not read /etc/resolv.conf automatically
+listen-address=127.0.0.1,10.7.27.145
+bind-interfaces
 no-resolv
-
-# ---------------------------------------------------------
-# Extension B — short, visible TTL (30 seconds)
-# Lets us observe clients holding a cached answer until the
-# TTL expires after a record change (DNS-based cutover demo).
-# ---------------------------------------------------------
+no-hosts
+local=/team1.test/
 local-ttl=30
-
-# ---------------------------------------------------------
-# Project domain records -> Mac 2 (nginx edge, 10.7.25.25)
-# ---------------------------------------------------------
-address=/app.team1.test/10.7.25.25
-address=/api.team1.test/10.7.25.25
-
-# ---------------------------------------------------------
-# Dedicated record for the TTL / edge-cutover demo (Ext B / E).
-# During the demo this is repointed to 10.7.28.78 (Mac 3 standby)
-# and then back to 10.7.25.25.
-# ---------------------------------------------------------
-address=/ttl.team1.test/10.7.25.25
+addn-hosts=/opt/homebrew/etc/team1-project.hosts
+pid-file=/opt/homebrew/var/run/dnsmasq-team1.pid
+# No public DNS upstream is needed: clients use a scoped /etc/resolver entry.
+# Reload hosts with SIGHUP after a record edit; do not restart for each cutover.

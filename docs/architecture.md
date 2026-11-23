@@ -1,162 +1,76 @@
-# Architecture Document — Private Network Service Platform (Team Scout Regiment)
+# Architecture — Private Network Service Platform
 
-Four macOS laptops on one private LAN (`10.7.0.0/19`, gateway `10.7.0.1`, interface
-`en0`), serving a private domain over HTTPS through a reverse proxy and load balancer.
-This document has **two divisions** — Phase 1 (build) and Phase 2 (harden) — each with a
-topology diagram, a machine-role / IP-service table, and a request-flow diagram showing
-each protocol layer.
+Four existing macOS laptops on a private LAN. Service names are app.team1.test
+and api.team1.test; TLS ends at nginx on 8443 and the internal backend leg is HTTP.
+The app stays simple; the network path, evidence and failure diagnosis are the project.
 
-> **Printable version:** [architecture-document.html](architecture-document.html)
-> (open in a browser → Print → Save as PDF) and [architecture-document.pdf](architecture-document.pdf).
+## Phase 1 — submitted historical baseline
 
-> **Note on addresses.** The LAN IPs differ between Phase 1 and Phase 2 because DHCP issued
-> new leases in each session. The **domain names and MAC addresses did not change** — the
-> whole point of running DNS. Both sets are in [network-inventory.md](network-inventory.md).
+![Phase 1 role topology](diagrams/phase1.svg)
 
----
+| Mac | Role | Historical address | Cloud analogy |
+|---|---|---|---|
+|1 Rashmi|DNS + client|10.7.17.21:53|managed DNS|
+|2 Samiksha|nginx/TLS/load balancer|10.7.7.9:8443|application load balancer|
+|3 Shubhaang|Backend A|10.7.21.15:3001|app instanceA|
+|4 Ankit|Backend B + client|10.7.23.47:3002|app instanceB|
 
-# DIVISION 1 — PHASE 1 · Build & Observe
+An earlier pair of dig screenshots used DNS lease 10.7.21.14. Later Phase 1 client/
+packet proof uses 10.7.17.21. Those are historical exhibits, not current addressing.
 
-## 1.1 Topology diagram
-
-![Phase 1 network topology diagram](../evidence/network/topology-diagram.png)
-
-Text version of the same topology:
-
-```
-                    Private Wi-Fi / LAN (same subnet)
-   ┌──────────────┬──────────────────┬──────────────┬──────────────┐
-   │              │                  │              │              │
-┌──┴───┐      ┌───┴────┐         ┌────┴───┐      ┌───┴────┐
-│ Mac 1 │      │ Mac 2  │         │ Mac 3  │      │ Mac 4  │
-│ DNS + │      │ Edge   │         │Backend │      │Backend │
-│Client │      │ nginx  │         │  A     │      │  B +   │
-│dnsmasq│      │ TLS/LB │         │ :3001  │      │Client  │
-│  :53  │      │ :8443  │         │        │      │ :3002  │
-└───────┘      └────────┘         └────────┘      └────────┘
- Rashmi        Samiksha          Shubhaang         Ankit
+```text
+1. Client -> Mac 1 DNS, UDP53: name -> Mac 2 address
+2. Client ephemeral TCP port -> Mac 2:8443: SYN / SYN-ACK / ACK
+3. Client <-> Mac 2: TLS handshake and certificate validation
+4. Client -> Mac 2: encrypted HTTP request by hostname
+5. Mac 2 -> A:3001 OR B:3002: HTTP request on the private LAN
+6. Backend -> Mac 2: JSON + X-Backend + relevant cache headers
+7. Mac 2 -> client: HTTP response inside encrypted TLS records
 ```
 
-## 1.2 Machine roles & IP / service table (Phase 1)
+DNS/HTTP are application protocols; TCP/UDP transport; IP network; Ethernet/Wi-Fi
+link. TLS runs over TCP below HTTP (session/transport in the course's simplified
+mapping). DNS is a directory lookup, not the TCP or HTTPS connection itself.
 
-| Machine | Member    | Role                      | Service address (Phase 1) | Cloud equivalent          |
-|---------|-----------|---------------------------|---------------------------|---------------------------|
-| Mac 1   | Rashmi    | Private DNS + Test Client | `10.7.17.21:53` (UDP/TCP) | Managed DNS (Route 53)    |
-| Mac 2   | Samiksha  | Edge / Reverse Proxy + LB | `10.7.7.9:8443` (HTTPS)    | Cloud load balancer / CDN |
-| Mac 3   | Shubhaang | Backend Server A          | `10.7.21.15:3001`         | App server instance A     |
-| Mac 4   | Ankit     | Backend Server B + Client | `10.7.23.47:3002`         | App server instance B     |
+## Phase 2 — same roles, added resilience and diagnosis
 
-**DNS records:** `app.team1.test` and `api.team1.test` → `10.7.7.9` (Mac 2).
+![Phase 2 role topology](diagrams/phase2.svg)
 
-## 1.3 Request-flow diagram — each protocol layer
+| Mac | Current role | Current address |
+|---|---|---|
+|1 Rashmi|primary DNS + client|10.7.27.145:53|
+|2 Samiksha|primary TLS edge/LB|10.7.25.25:8443|
+|3 Shubhaang|Backend A + standbyTLS edge|10.7.28.78:3001 and :8443|
+|4 Ankit|Backend B + backup DNS|10.7.27.247:3002 and :53|
 
-```
-Client (Mac 1 / Mac 4)
-   │ 1. DNS QUERY    ── UDP :53  ──►  Mac 1 (dnsmasq)   "app.team1.test = ?"  → 10.7.7.9
-   │ 2. TCP HANDSHAKE ── TCP :8443 ─►  Mac 2   SYN → SYN-ACK → ACK
-   │ 3. TLS HANDSHAKE ──►  Mac 2   ClientHello → ServerHello → Certificate → Finished
-   │ 4. HTTPS REQUEST ──►  Mac 2   GET /api/status                 (payload now encrypted)
-   ▼
-Mac 2  nginx reverse proxy + round-robin load balancer
-   ├── 5. HTTP ── TCP :3001 ──► Mac 3  Backend A   (X-Backend: A)
-   └── 5. HTTP ── TCP :3002 ──► Mac 4  Backend B   (X-Backend: B)
-   │ 6. HTTP RESPONSE (JSON + X-Backend + Cache-Control), over the encrypted TLS channel
-   ▼
-Client receives the response
+```text
+DNS: client -> primary Mac 1; backup Mac 4 provides another resolver
+EDGE: client -> primary Mac 2; controlled DNS change -> standby Mac 3
+BACKEND: primary/standby edge -> A:3001 OR B:3002
+FAILURE: A stopped -> successful responses through B; A returns -> A/B
+ISOLATION C: only primary Mac 2 -> backend ports, ordinary clients denied
+C ROLLBACK: restore owned rules/token after the isolation demonstration
+MIGRATION E: standby becomes an edge during synchronized DNS cutover
+DIAGNOSIS F: DNS -> TCP -> TLS -> edge HTTP -> permitted backend checks
 ```
 
-| Step | Protocol          | OSI layer           | Port / addressing                 |
-|------|-------------------|---------------------|-----------------------------------|
-| 1    | DNS               | Application         | 53/UDP                            |
-| 2    | TCP               | Transport           | 8443/TCP (SYN/SYN-ACK/ACK)        |
-| 3    | TLS               | Session / Transport | 8443/TCP                          |
-| 4/6  | HTTP / HTTPS      | Application         | 8443/TCP                          |
-| 5    | HTTP (to backend) | Application         | 3001 / 3002 TCP                   |
-| —    | IP / Ethernet     | Network / Link      | IP + MAC addresses (no ports)     |
+A backup resolver must have identical data; a cached answer alone is not proof of
+using it. Real timed client-cache experiments distinguish TTL expiry from manual
+flush. See [TTL procedure](ttl-experiments.md). The primary and standby use the
+same routing, timeout and TLS policy, and identify themselves with X-Edge.
 
-**Key points**
-- **DNS is a directory, not a connection** — it maps the name to Mac 2's IP; the TCP/TLS
-  connection is a separate step.
-- The **client never knows the backend IPs**; it only talks to the edge (Mac 2).
-- After the TLS handshake the HTTP payload is **encrypted** — Wireshark shows
-  `Application Data`; use `curl -v` for the cleartext view.
+**Firewall/migration policy:** C demonstrates strict Mac 2-only access then rolls
+back as required. For optional combined hardened migration, explicitly permit
+both designated edge sources during the cached-old/new transition and restore
+the prior policy afterwards. Ordinary client access stays denied under that policy.
+The strict C rules cannot silently coexist with a Mac 3 standby contacting Backend B.
 
-> Ports note: if a Mac cannot bind 80/443, use 8080/8443 instead (no marks lost).
+**Remaining SPOF:** the primary nginx entry point needs operator DNS cutover on
+failure. Full automatic edge redundancy would need an always-on second edge and
+a floatingVIP/automatic DNS mechanism. The shared LAN/router is another dependency.
+No additional physical hardware or cloud deployment is required.
 
----
-
-# DIVISION 2 — PHASE 2 · Harden, Recover & Troubleshoot
-
-Phase 2 extends the **same** network (nothing rebuilt). Five additions for resilience,
-security and diagnosability. Addresses below are the Phase 2 (DHCP-reassigned) IPs.
-
-## 2.1 Topology diagram (hardened)
-
-![Phase 2 hardened topology](../evidence/network/topology-phase2.png)
-
-Text version of the hardened topology:
-
-```
-                         ┌─────────────────── PRIVATE LAN (10.7.0.0/19) ───────────────────┐
-   ┌──────────────┐  DNS primary :53    ┌──────────────┐                                   │
-   │   CLIENT     │────────────────────►│ Mac 1  DNS   │ 10.7.27.145  ◄─ Ext B: 30s TTL +  │
-   │ resolver:    │                     │ (dnsmasq)    │                 ttl.team1.test     │
-   │ 27.145 +     │  DNS backup :53     └──────────────┘                                   │
-   │ 27.247       │────────────────────►┌──────────────┐ 10.7.27.247  ◄─ Ext A: backup     │
-   └──────┬───────┘                     │ Mac 4  DNS   │                 (same records)     │
-          │  HTTPS 8443 (by name)       └──────────────┘                                   │
-          ▼                                                                                 │
-   ┌──────────────┐  Ext E: DNS cutover repoints name ──► ┌──────────────┐                  │
-   │ Mac 2  EDGE  │ 10.7.25.25  (X-Edge: primary-mac2)     │ Mac 3 STANDBY│ 10.7.28.78       │
-   │ nginx + TLS  │  Ext D: passive health-check failover  │ nginx (same  │ X-Edge:          │
-   │              │  (max_fails / proxy_next_upstream)     │ cert/upstream)│ standby-mac3     │
-   └──────┬───────┘                                        └──────────────┘                  │
-          │ HTTP 3001/3002 ── Ext C: pf firewall — ONLY the edge (10.7.25.25) may connect ── │
-          ├──────► Mac 3  Backend A :3001   (all other clients blocked)                      │
-          └──────► Mac 4  Backend B :3002   (all other clients blocked)                      │
-                         └──────────────────────────────────────────────────────────────────┘
-```
-
-## 2.2 Machine roles & IP / service table (Phase 2)
-
-| Machine | Member    | Phase 2 role(s)                      | Service address (Phase 2)          | Phase 1 address |
-|---------|-----------|--------------------------------------|------------------------------------|-----------------|
-| Mac 1   | Rashmi    | Primary DNS (dnsmasq) + client       | `10.7.27.145:53`                   | `10.7.17.21`    |
-| Mac 2   | Samiksha  | Primary edge — TLS + LB + HA failover| `10.7.25.25:8443`                  | `10.7.7.9`      |
-| Mac 3   | Shubhaang | Backend A **+ standby edge**         | `10.7.28.78:3001`, standby `:8443` | `10.7.21.15`    |
-| Mac 4   | Ankit     | Backend B **+ backup DNS**           | `10.7.27.247:3002`, DNS `:53`      | `10.7.23.47`    |
-
-**DNS records (Phase 2):** `app` / `api` / `ttl.team1.test` → `10.7.25.25` (Mac 2), TTL 30 s.
-During Ext E the name is temporarily repointed to `10.7.28.78` (Mac 3 standby).
-
-## 2.3 Request-flow diagram — resilience paths
-
-The same DNS → TCP → TLS → HTTP flow as Phase 1, now with an alternate path at every layer:
-
-```
- DNS    client resolves via  Mac 1 primary  ──(if down)──►  Mac 4 backup        [Ext A]
- EDGE   HTTPS by name to     Mac 2 primary  ──(DNS cutover)─► Mac 3 standby      [Ext E]
- BACK   edge balances A / B  ──(A down)──►  all traffic to B, HTTP 200 (no 502)  [Ext D]
- GUARD  backends accept connections ONLY from the edge 10.7.25.25 (pf firewall)  [Ext C]
-```
-
-| Ext | Addition | Effect |
-|-----|----------|--------|
-| A | Backup DNS on Mac 4 | Name resolution survives the primary DNS going down |
-| B | 30 s TTL + record change | Controlled, observable cutover; cache vs authoritative |
-| C | pf firewall on Mac 3 / Mac 4 | Backends reachable **only** via the edge (defence in depth) |
-| D | nginx passive health checks | Service survives a backend failure; no `502` to the client |
-| E | Standby edge on Mac 3 + DNS cutover | The entry point can be migrated with no new hardware |
-
-### Failure vs recovery — which layer each extension protects
-
-| If this fails… | …this is what saves it | Extension |
-|----------------|------------------------|-----------|
-| Primary DNS (Mac 1) down | Backup DNS (Mac 4) answers the same names | A |
-| A backend (Mac 3 / 4) down | HA failover routes to the healthy backend | D |
-| The edge (Mac 2) down | DNS cutover to the standby edge (Mac 3) | E (manual) |
-| A client bypasses the edge | pf firewall blocks direct backend access | C |
-
-**Remaining single point of failure:** the edge nginx on Mac 2. Eliminating it fully needs a
-second always-on edge plus a floating/virtual IP or automatic DNS failover — Extension E is
-the manual version of this.
+See [inventory](network-inventory.md), [final runbook](phase2-demo-runbook.md),
+[viva explanations](viva-notes.md), and [verification ledger](../reports/verification-status.json).
+The [printable PDF](architecture-document.pdf) is generated from
+[the HTML source](architecture-document.html), with wrapped flows on four pages.

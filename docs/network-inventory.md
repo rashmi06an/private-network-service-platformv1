@@ -40,3 +40,11 @@ All machines on the same private LAN (`10.7.0.0/19`, gateway `10.7.0.1`, interfa
 During the Phase 2 edge-migration demo (Extension E), `app.team1.test` /
 `ttl.team1.test` are temporarily repointed from `10.7.25.25` (Mac 2) to
 `10.7.28.78` (Mac 3 standby edge), then restored.
+
+## Live verification note
+
+The Phase 2 IPs were supplied again on 22 November 2026. Prefix, gateway,
+interface and MAC values in the table are historical measurements until each
+member records the new preflight. Private Wi-Fi MAC values may rotate; record
+observed values rather than assuming permanence. Early Phase 1 dig screenshots
+used an additional DNS lease 10.7.21.14, explicitly historical.

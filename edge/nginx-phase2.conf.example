@@ -1,91 +1,39 @@
-# =============================================================
-# Private Network Service Platform - Team Scout Regiment
-# Mac 2: nginx edge — PHASE 2
-#
-# Extends the Phase 1 edge config with HA FAILOVER (Extension D):
-# nginx detects an unhealthy backend and routes only to the
-# healthy one, then rebalances when it recovers.
-#
-# Open-source nginx uses PASSIVE health checks:
-#   max_fails / fail_timeout  + proxy_next_upstream
-# (active health checks are an NGINX Plus feature — explanation only).
-#
-# Replace backend IPs with current LAN addresses before use.
-#   Mac 3 -> Backend A -> 3001
-#   Mac 4 -> Backend B -> 3002
-# =============================================================
-
+# Phase 2 - Team Scout Regiment
+# Primary and standby use identical routing/TLS; only X-Edge identifies the host.
 worker_processes auto;
-
-events {
-    worker_connections 1024;
-}
-
+events { worker_connections 1024; }
 http {
     include mime.types;
     default_type application/octet-stream;
-
-    # ---------------------------------------------------------
-    # Backend pool with PASSIVE health checks (Extension D)
-    #   max_fails=2      -> after 2 failed attempts within
-    #   fail_timeout=10s -> 10s, mark the server "down" for 10s
-    # ---------------------------------------------------------
     upstream team1_backends {
+        zone team1_backends 256k;
         server 10.7.28.78:3001 max_fails=2 fail_timeout=10s;
         server 10.7.27.247:3002 max_fails=2 fail_timeout=10s;
     }
-
-    # HTTP -> HTTPS redirect
     server {
         listen 8080;
         server_name app.team1.test api.team1.test;
         return 301 https://$host:8443$request_uri;
     }
-
-    # HTTPS edge — TLS terminates here
     server {
         listen 8443 ssl;
         http2 on;
         server_name app.team1.test api.team1.test;
-
         include /opt/homebrew/etc/nginx/tls.conf;
-
-        # Identifies this edge so the Extension E cutover is visible.
         add_header X-Edge "primary-mac2" always;
-
+        # One location preserves X-Edge inheritance on every endpoint.
+        # Cache-Control and ETag come from /api/cache-demo in the backends.
         location / {
             proxy_pass http://team1_backends;
             proxy_http_version 1.1;
-
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto https;
-
-            # ---- Extension D: fail over to the next backend ----
-            # If one backend errors/times out, retry the other one
-            # so the client still gets a good response.
             proxy_next_upstream error timeout http_502 http_503 http_504;
             proxy_next_upstream_tries 2;
             proxy_connect_timeout 2s;
             proxy_read_timeout 5s;
-        }
-
-        location /api/status {
-            proxy_pass http://team1_backends;
-            proxy_http_version 1.1;
-
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto https;
-
-            proxy_next_upstream error timeout http_502 http_503 http_504;
-            proxy_next_upstream_tries 2;
-            proxy_connect_timeout 2s;
-            proxy_read_timeout 5s;
-
-            add_header Cache-Control "public, max-age=60";
         }
     }
 }

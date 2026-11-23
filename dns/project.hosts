@@ -1,0 +1,4 @@
+# Normal state: keep this file identical on Mac 1 and Mac 4.
+10.7.25.25 app.team1.test
+10.7.25.25 api.team1.test
+10.7.25.25 ttl.team1.test
