@@ -1,0 +1,40 @@
+START_UTC=2026-11-23T04:16:52Z
+MACHINE=Ankits-MacBook-Pro-7.local
+COMMIT=16ff0bd94afae3873e417188ef42e9f63215b8d3
+COMMAND: scripts/setup-dns.sh backup
+Stopping `dnsmasq`... (might take a while)
+==> Successfully stopped `dnsmasq` (label: sh.brew.dnsmasq)
+dnsmasq: syntax check OK.
+Warning: Taking root:admin ownership of some dnsmasq paths:
+  /opt/homebrew/Cellar/dnsmasq/2.93/sbin
+  /opt/homebrew/Cellar/dnsmasq/2.93/sbin/dnsmasq
+  /opt/homebrew/opt/dnsmasq
+  /opt/homebrew/opt/dnsmasq/sbin
+  /opt/homebrew/var/homebrew/linked/dnsmasq
+This will require manual removal of these paths using `sudo rm` on
+brew upgrade/reinstall/uninstall.
+Root services will run Homebrew-installed software as root by default. Only use
+root services if you trust all users who can write to your Homebrew installation.
+==> Successfully started `dnsmasq` (label: sh.brew.dnsmasq)
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 app.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+app.team1.test. 30 IN A 10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 api.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+api.team1.test. 30 IN A 10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 ttl.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+ttl.team1.test. 30 IN A 10.7.25.25
+PASS: all three normal-state records resolve through 10.7.27.247
+Scoped macOS DNS is checked separately with dscacheutil/scutil; bare dig ignores it.
+Saved pre-change files: .local-state/dns-before-20261123T041653Z
+PASS: selected DNS config installed; verify the PID and both-resolver synchronization too
+
+EXIT_CODE=0
+END_UTC=2026-11-23T04:16:56Z

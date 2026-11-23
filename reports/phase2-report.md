@@ -107,3 +107,7 @@ Ankit supplied [backup restart/query output](../evidence/verification/2026-11-23
 ### Primary canonical configuration applied
 
 At 03:50:00–03:50:09 UTC on 23 November, Rashmi ran the canonical primary setup at commit cec41e5. The [recorded setup output](../evidence/verification/R1-primary-setup-20261123T035000Z.txt), copied from the team-supplied transcript with formatting normalized, shows saved pre-change configuration, syntax validation, service restart, all three records at 10.7.25.25 TTL30, and exit0. This supersedes the earlier primary-local TTL mismatch observation. Backup canonical migration and the complete fresh-client failover experiment remain pending.
+
+### Backup canonical configuration applied
+
+Ankit supplied the [backup setup log](../evidence/verification/R1-backup-setup-20261123T041652Z.txt) for 04:16:52–04:16:56 UTC on 23 November, commit16ff0bd. It is copied from the team transcript with formatting normalized. The canonical backup setup saved prior config, passed syntax validation, restarted the managed service and checked app/api/ttl at 10.7.25.25 TTL30, with exit0. Both canonical DNS setup stages are now observed successful; the full cross-client primary-outage/fresh-lookup experiment is still pending.

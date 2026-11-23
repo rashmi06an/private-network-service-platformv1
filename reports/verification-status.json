@@ -32,9 +32,10 @@
       "artifacts": [
         "evidence/verification/2026-11-23-mac4-backup-dns-restored.txt",
         "evidence/verification/2026-11-23-mac2-dns-https-baseline.txt",
-        "evidence/verification/R1-primary-setup-20261123T035000Z.txt"
+        "evidence/verification/R1-primary-setup-20261123T035000Z.txt",
+        "evidence/verification/R1-backup-setup-20261123T041652Z.txt"
       ],
-      "review_note": "23 Nov 03:50 UTC: Rashmi installed canonical primary config at commit cec41e5. All app/api/ttl answers equal 10.7.25.25 TTL30; setup exits0 and records backup. Original previous TTL mismatch is corrected in this primary-local check. Backup canonical migration, post-migration client parity, controlled outage/fresh lookup and restore remain pending."
+      "review_note": "Primary canonical setup passed 23 Nov 03:50 UTC; backup canonical setup passed 04:16:52-04:16:56 UTC at commit16ff0bd. Both local setup checks show app/api/ttl=10.7.25.25 TTL30 and exit0, with config backups. Post-migration cross-client parity/settings, controlled primary outage, fresh client resolution/HTTPS, backup query receipt and restoration remain pending."
     },
     {
       "id": "ttl-expiry",
