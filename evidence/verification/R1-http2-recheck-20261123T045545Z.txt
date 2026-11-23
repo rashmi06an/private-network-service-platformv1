@@ -1,0 +1,18 @@
+START_UTC=2026-11-23T04:55:45Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=dedf0d9846d4e90c95162a42cacd393c9b408bfa
+COMMAND: scripts/test-http2.sh
+HTTP/2 200 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 04:55:46 GMT
+content-type: application/json
+content-length: 30
+cache-control: no-store
+x-backend: A
+x-edge: primary-mac2
+
+HTTP_CODE_AND_VERSION=200 2
+PASS: actual HTTP/2 negotiated
+
+EXIT_CODE=0
+END_UTC=2026-11-23T04:55:46Z

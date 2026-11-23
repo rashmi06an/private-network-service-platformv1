@@ -1,0 +1,66 @@
+START_UTC=2026-11-23T04:55:42Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=dedf0d9846d4e90c95162a42cacd393c9b408bfa
+COMMAND: scripts/test-backends.sh
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.15.2
+Date: Mon, 23 Nov 2026 04:55:43 GMT
+Content-Type: application/json
+Content-Length: 30
+Cache-Control: no-store
+X-Backend: A
+Connection: close
+
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.15.2
+Date: Mon, 23 Nov 2026 04:55:43 GMT
+Content-Type: application/json
+Content-Length: 46
+Cache-Control: public, max-age=60
+ETag: "team1-cache-v2"
+Date: Mon, 23 Nov 2026 04:55:43 GMT
+X-Backend: A
+Connection: close
+
+HTTP/1.1 304 NOT MODIFIED
+Server: Werkzeug/3.1.9 Python/3.15.2
+Date: Mon, 23 Nov 2026 04:55:43 GMT
+Cache-Control: public, max-age=60
+ETag: "team1-cache-v2"
+Date: Mon, 23 Nov 2026 04:55:43 GMT
+X-Backend: A
+Connection: close
+
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.14.6
+Date: Mon, 23 Nov 2026 04:55:43 GMT
+Content-Type: application/json
+Content-Length: 30
+Cache-Control: no-store
+X-Backend: B
+Connection: close
+
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.14.6
+Date: Mon, 23 Nov 2026 04:55:43 GMT
+Content-Type: application/json
+Content-Length: 46
+Cache-Control: public, max-age=60
+ETag: "team1-cache-v2"
+Date: Mon, 23 Nov 2026 04:55:43 GMT
+X-Backend: B
+Connection: close
+
+HTTP/1.1 304 NOT MODIFIED
+Server: Werkzeug/3.1.9 Python/3.14.6
+Date: Mon, 23 Nov 2026 04:55:43 GMT
+Cache-Control: public, max-age=60
+ETag: "team1-cache-v2"
+Date: Mon, 23 Nov 2026 04:55:43 GMT
+X-Backend: B
+Connection: close
+
+PASS: both updated backends have correct identities, no-store, shared cache validator and conditional 304
+
+EXIT_CODE=0
+END_UTC=2026-11-23T04:55:43Z

@@ -135,3 +135,24 @@ v2 ETag, cache policy and conditional304 independently from both backends. Its
 regression fixtures reject old A, old B, an old validator with otherwise new status,
 and a broken conditional response, while accepting both updated backends. Identify
 the active Mac3 process and relaunch the corrected A before repeating the baseline.
+
+### Baseline restored and verified at04:55 UTC
+
+Shubhaang supplied a successful corrected-A startup at04:55:26 UTC from
+`Documents/CN-submission`, commitdedf0d9. The subsequent Mac2 rechecks supersede
+the mixed-deployment failure above. The following original recorder files were
+copied byte-for-byte from Mac2's CN-submission checkout, rather than reconstructed
+from expected output:
+
+| Actual check | Observed result |
+|---|---|
+| [Both updated backends](../evidence/verification/R1-backends-recheck-20261123T045542Z.txt) | Both200 with correct identity, no-store, shared team1-cache-v2 and direct304; exit0 |
+| [Trusted hostname HTTPS/cache](../evidence/verification/R1-https-cache-recheck-20261123T045543Z.txt) | HTTP2 status200, cache200 fromA followed by304 fromB with the shared ETag and primary-mac2; exit0 |
+| [Load balancing](../evidence/verification/R1-balanced-recheck-20261123T045544Z.txt) | Twelve200 responses, A6/B6; exit0 |
+| [Explicit HTTP2](../evidence/verification/R1-http2-recheck-20261123T045545Z.txt) | HTTP_CODE_AND_VERSION=200 2; exit0 |
+
+Baseline and cache/HTTP2 ledger items are now verified. Controlled DNS failover,
+a second client's resolver settings, TTL experiments, isolation/rollback, backend
+HA, standby cutover, saved capture/index, remaining inventory/rehearsal and CA
+approval evidence are still separate pending items. Live faculty challenge and
+individual viva remain live evaluation tasks.

@@ -48,3 +48,13 @@ interface and MAC values in the table are historical measurements until each
 member records the new preflight. Private Wi-Fi MAC values may rotate; record
 observed values rather than assuming permanence. Early Phase 1 dig screenshots
 used an additional DNS lease 10.7.21.14, explicitly historical.
+
+### 23 November current Mac2 observation
+
+[Recorded Mac2 preflight](../evidence/verification/R0-mac2-20261123T045726Z.txt)
+confirms en0,10.7.25.25/19, gateway10.7.0.1 and MAC8e:f2:4f:b4:75:a5. Both
+pings to Mac3 andMac4 replied; both pings to Mac1 timed out, making preflight
+exit1. [A separate transport check](../evidence/verification/R0-primary-dns-transport-20261123T045908Z.txt)
+shows Mac1 still answers the expected DNS record over UDP and accepts TCP53.
+The ICMP behavior needs diagnosis; this is not a completed twelve-ping acceptance.
+The remaining three current inventories are still pending.

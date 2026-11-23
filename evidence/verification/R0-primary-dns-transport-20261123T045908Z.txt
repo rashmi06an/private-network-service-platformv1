@@ -1,0 +1,13 @@
+START_UTC=2026-11-23T04:59:08Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=dedf0d9846d4e90c95162a42cacd393c9b408bfa
+COMMAND: bash -c dig\ @10.7.27.145\ app.team1.test\ A\ +time=2\ +tries=1\ +noall\ +answer\ \&\&\ nc\ -G\ 2\ -vz\ 10.7.27.145\ 53
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 app.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+app.team1.test.		30	IN	A	10.7.25.25
+Connection to 10.7.27.145 port 53 [tcp/domain] succeeded!
+
+EXIT_CODE=0
+END_UTC=2026-11-23T04:59:08Z

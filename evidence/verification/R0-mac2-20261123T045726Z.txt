@@ -1,0 +1,59 @@
+START_UTC=2026-11-23T04:57:26Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=dedf0d9846d4e90c95162a42cacd393c9b408bfa
+COMMAND: scripts/preflight.sh mac2
+ROLE=mac2 UTC=2026-11-23T04:57:26Z
+IP=10.7.25.25 EXPECTED=10.7.25.25
+	ether 8e:f2:4f:b4:75:a5
+	inet 10.7.25.25 netmask 0xffffe000 broadcast 10.7.31.255
+	status: active
+    gateway: 10.7.0.1
+  interface: en0
+
+Effective private resolver settings:
+nameserver 10.7.27.145
+nameserver 10.7.27.247
+  domain   : team1.test
+  nameserver[0] : 10.7.27.145
+  nameserver[1] : 10.7.27.247
+  flags    : Request A records
+  reach    : 0x00020002 (Reachable,Directly Reachable Address)
+
+DNS configuration (for scoped queries)
+
+resolver #1
+
+PING 10.7.25.25 -> 10.7.27.145
+PING 10.7.27.145 (10.7.27.145): 56 data bytes
+Request timeout for icmp_seq 0
+
+--- 10.7.27.145 ping statistics ---
+2 packets transmitted, 0 packets received, 100.0% packet loss
+
+PING 10.7.25.25 -> 10.7.28.78
+PING 10.7.28.78 (10.7.28.78): 56 data bytes
+64 bytes from 10.7.28.78: icmp_seq=0 ttl=64 time=12.871 ms
+64 bytes from 10.7.28.78: icmp_seq=1 ttl=64 time=13.476 ms
+
+--- 10.7.28.78 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 12.871/13.174/13.476/0.302 ms
+
+PING 10.7.25.25 -> 10.7.27.247
+PING 10.7.27.247 (10.7.27.247): 56 data bytes
+64 bytes from 10.7.27.247: icmp_seq=0 ttl=64 time=9.545 ms
+64 bytes from 10.7.27.247: icmp_seq=1 ttl=64 time=7.654 ms
+
+--- 10.7.27.247 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 7.654/8.599/9.545/0.946 ms
+
+Project listeners on this Mac:
+
+Tool versions:
+Python 3.14.3
+curl 8.7.1 (x86_64-apple-darwin26.0) libcurl/8.7.1 (SecureTransport) LibreSSL/3.3.6 zlib/1.2.12 nghttp2/1.69.0
+FAIL: One or more pairwise ping checks failed; inspect LAN/ICMP policy
+
+EXIT_CODE=1
+END_UTC=2026-11-23T04:57:32Z

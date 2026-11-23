@@ -1,0 +1,20 @@
+START_UTC=2026-11-23T04:55:44Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=dedf0d9846d4e90c95162a42cacd393c9b408bfa
+COMMAND: scripts/test-load-balancing.sh
+request=1 HTTP=200 X-Backend=A
+request=2 HTTP=200 X-Backend=B
+request=3 HTTP=200 X-Backend=A
+request=4 HTTP=200 X-Backend=B
+request=5 HTTP=200 X-Backend=A
+request=6 HTTP=200 X-Backend=B
+request=7 HTTP=200 X-Backend=A
+request=8 HTTP=200 X-Backend=B
+request=9 HTTP=200 X-Backend=A
+request=10 HTTP=200 X-Backend=B
+request=11 HTTP=200 X-Backend=A
+request=12 HTTP=200 X-Backend=B
+PASS: A=6 B=6 (other concurrent traffic can affect strict alternation)
+
+EXIT_CODE=0
+END_UTC=2026-11-23T04:55:45Z
