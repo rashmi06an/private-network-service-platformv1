@@ -1,6 +1,6 @@
 {
   "scope": "Current four-Mac acceptance; code fixes do not substitute for reviewed LAN evidence.",
-  "updated": "2026-11-22",
+  "updated": "2026-11-23",
   "items": [
     {
       "id": "inventory",
@@ -27,8 +27,10 @@
       "id": "dns-failover",
       "requirement": "Identical app/api/ttl data; stopped primary; fresh normal lookup/HTTPS via backup and its query receipt; restoration",
       "status": "pending",
-      "artifacts": [],
-      "review_note": ""
+      "artifacts": [
+        "evidence/verification/2026-11-23-mac4-backup-dns-restored.txt"
+      ],
+      "review_note": "23 Nov: Ankit restarted the manual backup config; local and own-LAN-IP app/ttl queries return 10.7.25.25 TTL30. Cross-Mac/API parity and controlled primary-outage/fresh-client proof remain pending; not full failover acceptance."
     },
     {
       "id": "ttl-expiry",

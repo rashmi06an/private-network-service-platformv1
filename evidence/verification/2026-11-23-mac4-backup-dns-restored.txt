@@ -1,0 +1,34 @@
+SOURCE: User-supplied terminal output, received 23 November 2026.
+HOST: Ankit / Mac 4. Formatting normalized from chat; commands were run by the team.
+SCOPE: Backup DNS restart and same-machine query checks. Not a client-failover test.
+
+ipconfig getifaddr en0
+10.7.27.247
+
+sudo dnsmasq --test -C "$HOME/team1-phase2/backup-dnsmasq.conf"
+dnsmasq: syntax check OK.
+
+After terminating the identified old process, the team started:
+sudo dnsmasq --no-daemon --log-facility=- -C "$HOME/team1-phase2/backup-dnsmasq.conf"
+
+Nov 23 09:02:40 dnsmasq[87561]: started, version 2.93 cachesize 150
+Nov 23 09:02:40 dnsmasq[87561]: compile time options: IPv6 GNU-getopt no-DBus no-UBus no-i18n no-IDN DHCP DHCPv6 no-Lua TFTP no-conntrack no-ipset no-nftset auth no-DNSSEC loop-detect no-inotify dumpfile
+Nov 23 09:02:40 dnsmasq[87561]: warning: no upstream servers configured
+Nov 23 09:02:40 dnsmasq[87561]: using only locally-known addresses for team1.test
+Nov 23 09:02:40 dnsmasq[87561]: read /etc/hosts - 3 names
+
+dig @127.0.0.1 app.team1.test +noall +answer +time=2 +tries=1
+app.team1.test. 30 IN A 10.7.25.25
+
+dig @10.7.27.247 app.team1.test +noall +answer +time=2 +tries=1
+app.team1.test. 30 IN A 10.7.25.25
+
+dig @10.7.27.247 ttl.team1.test +noall +answer +time=2 +tries=1
+ttl.team1.test. 30 IN A 10.7.25.25
+
+REVIEW: These observations establish the corrected app/ttl answers from the
+restarted manual backup process, queried on Mac 4. API answer, cross-Mac
+reachability, matching primary answers, fresh system lookup during a primary
+outage, backup query receipt and restoration still need actual verification.
+The canonical branch DNS config/shared-hosts migration has not been certified by
+this manual-config transcript. Do not use the old process PID for future actions.

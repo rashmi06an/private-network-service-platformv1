@@ -95,3 +95,7 @@ participates and explains the complete system personally. After reviewing actual
 new outputs, fill artifact paths/results in the ledger and add a concise factual
 test-result table here. Keep the live challenge and individual viva correctly
 identified until performed. Do not replace missing results with expected outputs.
+
+## 23 November repair observation
+
+Ankit supplied [backup restart/query output](../evidence/verification/2026-11-23-mac4-backup-dns-restored.txt): new manual dnsmasq process 87561, app and ttl names returning 10.7.25.25 with TTL 30 from localhost and its own LAN address. This corrects the prior stale-answer observation for those queries. Cross-Mac reachability, API parity and a fresh system lookup during a controlled primary outage remain pending. The acceptance ledger stays open.
