@@ -1,0 +1,21 @@
+START_UTC=2026-11-23T06:23:38Z
+MACHINE=Rashmis-MacBook-Pro.local
+COMMIT=6ca73ebc20f94a897b23ce96c87a0a5d4b3a0731
+COMMAND: scripts/test-backend-isolation.sh isolated
+curl: (28) Failed to connect to 10.7.28.78 port 3001 after 3006 ms: Timeout was reached
+DENIED: backend A; pair this with a contemporaneous positive test from Mac 2
+curl: (28) Failed to connect to 10.7.27.247 port 3002 after 3004 ms: Timeout was reached
+DENIED: backend B; pair this with a contemporaneous positive test from Mac 2
+HTTP/2 200 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 06:23:45 GMT
+content-type: application/json
+content-length: 30
+cache-control: no-store
+x-backend: A
+x-edge: primary-mac2
+
+PASS: isolated; by-name HTTPS via edge remains available
+
+EXIT_CODE=0
+END_UTC=2026-11-23T06:23:44Z

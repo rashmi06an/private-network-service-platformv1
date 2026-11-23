@@ -1,0 +1,4 @@
+SCOPE: Isolated loopback TLS server with the new standby leaf; not live standby/DNS-cutover proof. Native curl uses its existing trust, with no -k or --cacert.
+HTTP=200 SSL_VERIFY=0
+
+EXIT_CODE=0

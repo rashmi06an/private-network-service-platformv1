@@ -288,3 +288,22 @@ recorder blocks, with formatting normalized. Certificate-method approval and all
 four client trust checks are now verified. Firewall apply/denial/counters/rollback
 still need their actual controlled trial. The apply helper now records pre-PF info
 and requires a filter-anchor call, rather than accidentally matching a scrub anchor.
+
+### Extension C verified and safely rolled back
+
+[Operator apply/counter/rollback observations](../evidence/verification/2026-11-23-isolation-operator-evidence.json)
+retain actual rule addresses, matching packet counters and original log filenames.
+After the pre-isolation Mac1 success, both hosts applied the named project anchor.
+At06:23:27–28 UTC [Mac2 direct and cache checks](../evidence/verification/C-edge-allowed-20261123T062327Z.txt)
+and [trusted edge checks](../evidence/verification/C-edge-https-20261123T062327Z.txt)
+passed. At06:23:38–44 [Mac1 direct probes timed out while HTTPS200 still worked](../evidence/verification/C-client-denied-20261123T062338Z.txt).
+Real matching packet counters showed A allow76/drop3 and B allow74/drop4.
+
+Both rollback commands exited0 at06:31:31/33, cleared only project rules/references
+and verified unchanged main filter rules. Mac3 PF ended Disabled; Mac4 preserved
+its other reference and remained Enabled. [Mac1's final restored check](../evidence/verification/C-client-restored-20261123T063514Z.txt)
+then returned both direct200 and trusted hostnameHTTPS200 at06:35:14–15. Isolation
+and its rollback are verified. A separate standby certificate/key has been prepared
+under the same CA and verified by an isolated native-client TLS preflight; this is
+not yet live standby deployment/cutover evidence. The current system curl's optional
+TLS1.3 flag is unsupported; the required saved packet flow will use validated TLS1.2.

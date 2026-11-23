@@ -1,0 +1,9 @@
+PUBLIC CERTIFICATE METADATA ONLY
+subject=O=mkcert development certificate, OU=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid )
+issuer=O=mkcert development CA, OU=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ), CN=mkcert samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid )
+notBefore=Nov 23 06:39:20 2026 GMT
+notAfter=Feb 23 06:39:20 2029 GMT
+X509v3 Subject Alternative Name: 
+    DNS:app.team1.test, DNS:api.team1.test
+
+REVIEW: Separate standby leaf/key issued locally using the same CA that verifies the existing primary certificate; both OpenSSL chain checks succeeded. Private leaf key remains under ignored .local-state for operator transfer only. No CA signing key was copied. Not standby-deployment proof.

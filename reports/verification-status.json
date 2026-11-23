@@ -108,11 +108,16 @@
     {
       "id": "isolation",
       "requirement": "Both exact PF rules/counters; Mac2 allowed, Mac1 denied; by-nameHTTPS works; owned-token rollback and direct access restored",
-      "status": "pending",
+      "status": "verified",
       "artifacts": [
-        "evidence/verification/C-before-isolation-20261123T061158Z.txt"
+        "evidence/verification/C-before-isolation-20261123T061158Z.txt",
+        "evidence/verification/2026-11-23-isolation-operator-evidence.json",
+        "evidence/verification/C-edge-allowed-20261123T062327Z.txt",
+        "evidence/verification/C-edge-https-20261123T062327Z.txt",
+        "evidence/verification/C-client-denied-20261123T062338Z.txt",
+        "evidence/verification/C-client-restored-20261123T063514Z.txt"
       ],
-      "review_note": "Mac1 before-rule baseline06:11:58-06:12:00 confirms direct A/B both200 and trusted by-name edgeHTTPS200. Actual apply/edge-allowed/client-denied/counters and rollback/restored checks remain pending."
+      "review_note": "Mac1 before-rule baseline06:11:58-06:12:00 confirms direct A/B both200 and trusted by-name edgeHTTPS200. Actual apply/edge-allowed/client-denied/counters and rollback/restored checks remain pending. Controlled apply succeeds onMac3/Mac4; Mac2 strict direct/cache304 plus HTTPS200/304 pass06:23:27-28 while Mac1 two direct probes timeout and hostnameHTTPS200 passes06:23:38-44. Real counters pass/drop packets76/3 onA and74/4 onB. Both scoped rollbacks exit0 at06:31:31/33, main filter snapshots unchanged; A PFdisabled, B retains1 other enable reference/PFenabled. Mac1 post-rollback directA/B200 and trustedHTTPS200 pass06:35:14-15. Actual operator data is explicitly labelled structured transcription; client recorder blocks transcribed from pasted output, Mac2 files are originals. Full isolation/rollback acceptance is verified."
     },
     {
       "id": "ha",
@@ -137,8 +142,11 @@
       "id": "edge-cutover",
       "requirement": "Standby trustedA/B; bothDNS updated; cached-old/fresh-new client behavior; convergence and bothDNS/primary restore",
       "status": "pending",
-      "artifacts": [],
-      "review_note": ""
+      "artifacts": [
+        "evidence/verification/E-standby-certificate-prepared.txt",
+        "evidence/verification/E-new-leaf-native-trust-preflight.txt"
+      ],
+      "review_note": "Mac3 user inspection confirms nginx present but required leaf/key files absent. Separate standby leaf/key issued under same existing approved CA onMac2; OpenSSL verifies both old primary and new standby against thatCA. Native Mac2 loopback TLS preflight with new leaf returnsHTTP200/SSL_VERIFY0 without -k or --cacert. Files remain ignored/local pending secure operator transfer; actual standby deployment/cutover still pending."
     },
     {
       "id": "packet-capture",

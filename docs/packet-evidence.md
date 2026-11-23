@@ -2,7 +2,7 @@
 
 Screenshots are allowed evidence, but final demo step6 asks to open a saved capture.
 Capture only the relevant project hosts/ports. Never include private keys in Git.
-The commands below are executed on Mac 2, after all normal-state checks pass.
+The required full-flow capture below is acquired on Mac3 after normal-state checks pass.
 
 ## Single-client capture: Mac 3, terminal 1
 
@@ -12,7 +12,7 @@ normal DNS, trusted certificates, both updated backends and primary nginx pass.
 ```bash
 cd "$HOME/Documents/CN-submission"
 mkdir -p evidence/verification
-sudo tcpdump -ni en0 -s 0 -w evidence/verification/mac3-full-flow.pcap '((host 10.7.27.145 or host 10.7.27.247) and port 53) or (host 10.7.25.25 and tcp port 8443)'
+sudo tcpdump -ni en0 -s 0 -U -w evidence/verification/mac3-full-flow.pcap '((host 10.7.27.145 or host 10.7.27.247) and port 53) or (host 10.7.25.25 and tcp port 8443)'
 ```
 
 ## Mac 3, terminal 2: normal hostname requests with validation
@@ -20,14 +20,13 @@ sudo tcpdump -ni en0 -s 0 -w evidence/verification/mac3-full-flow.pcap '((host 1
 ```bash
 sudo dscacheutil -flushcache
 sudo killall -HUP mDNSResponder
-dig @10.7.27.145 app.team1.test
-/usr/bin/curl --noproxy '*' --tlsv1.2 --tls-max 1.2 -v https://app.team1.test:8443/api/status
-/usr/bin/curl --noproxy '*' --tlsv1.3 -v https://app.team1.test:8443/api/status
+/usr/bin/curl --noproxy '*' --http1.1 --tlsv1.2 --tls-max 1.2 -v https://app.team1.test:8443/api/status
+/usr/bin/curl --noproxy '*' --http2 --tlsv1.2 --tls-max 1.2 -v https://app.team1.test:8443/api/status
 ```
 
 Stop tcpdump in terminal 1 with Ctrl+C. Open the saved pcap in Wireshark and
-optionally export pcapng. Direct dig checks the server; normal curl uses system
-DNS. Correlate actual hostname, timestamps, client IP and TCP streams. The
+optionally export pcapng. These normal curl requests use system DNS; the first
+request after cache flush should expose its DNS exchange too. Correlate actual hostname, timestamps, client IP and TCP streams. The
 controlled TLS 1.2 request makes Certificate visible; TLS 1.3 encrypts the
 handshake after ServerHello. Do not invent frame numbers before capture.
 
@@ -54,3 +53,15 @@ Useful filters: `dns.qry.name == "app.team1.test"`, `tcp.stream == N`,
 `tls.handshake`, and `tcp.port == 3001 || tcp.port == 3002`.
 Do not invent frame numbers before collecting the real capture. If Wireshark
 exports pcapng, keep that alongside the pcap or use pcapng in the ledger.
+
+### Client TLS-version capability
+
+The installed Mac2 system curl returns feature-unavailable exit4 when forced to
+TLS1.3. That is a client capability probe, not a server TLS-failure exhibit. Use the
+supported TLS1.2 requests above for the required visible Certificate/CCS capture,
+including both HTTP1.1 and actual HTTP2. A TLS1.3 comparison is optional and needs
+a separately verified capable client; never invent encrypted Certificate frames
+or disable validation to make a command appear successful. Explain TLS1.3's
+post-ServerHello encryption using the protocol notes even when no such stream was
+acquired. Analyze this trace with the installed Wireshark/tshark and derive every
+frame/stream number from the actual binary capture.

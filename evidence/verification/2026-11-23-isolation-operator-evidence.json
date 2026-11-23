@@ -1,0 +1,84 @@
+{
+  "provenance": "Structured transcription of actual team-supplied PF apply/show/rollback outputs, not original recorder files. Original filenames and exact relevant rule/counter/state values retained below.",
+  "anchor": "com.apple/team1_submission",
+  "edge_allowed": "10.7.25.25",
+  "mac3": {
+    "machine": "Shubh1.local",
+    "ip": "10.7.28.78",
+    "port": 3001,
+    "apply_log": "C-rules-mac3-20261123T062059Z.txt",
+    "apply_start": "2026-11-23T06:20:59Z",
+    "active_utc": "2026-11-23T06:21:03Z",
+    "apply_commit": "4145059ecd631f351214d92fa6604980d4112142",
+    "apply_exit": 0,
+    "counter_log": "C-counters-mac3-20261123T062745Z.txt",
+    "counter_end": "2026-11-23T06:27:48Z",
+    "pass": {
+      "evaluations": 111076,
+      "packets": 76,
+      "bytes": 5945,
+      "states": 0
+    },
+    "drop": {
+      "evaluations": 11229,
+      "packets": 3,
+      "bytes": 192,
+      "states": 0
+    },
+    "rollback_log": "C-rollback-mac3-20261123T063130Z.txt",
+    "rollback_start": "2026-11-23T06:31:30Z",
+    "rollback_end": "2026-11-23T06:31:31Z",
+    "rollback_commit": "f5e12989a2e07d08fada43e7504b3d25a4408510",
+    "rollback_exit": 0,
+    "final_pf_status": "Disabled",
+    "rollback_stdout_relevant": [
+      "rules cleared",
+      "pf disabled",
+      "ROLLED BACK: project rules cleared, own reference released, main filter rules unchanged"
+    ],
+    "observed_rules": [
+      "pass in quick on en0 inet proto tcp from 10.7.25.25 to 10.7.28.78 port = 3001 flags S/SA keep state",
+      "block drop in quick on en0 inet proto tcp from any to 10.7.28.78 port = 3001"
+    ]
+  },
+  "mac4": {
+    "machine": "Ankits-MacBook-Pro-7.local",
+    "ip": "10.7.27.247",
+    "port": 3002,
+    "apply_log": "C-rules-mac4-20261123T062141Z.txt",
+    "apply_start": "2026-11-23T06:21:41Z",
+    "active_utc": "2026-11-23T06:22:21Z",
+    "apply_commit": "4145059ecd631f351214d92fa6604980d4112142",
+    "apply_exit": 0,
+    "counter_log": "C-counters-mac4-20261123T062754Z.txt",
+    "counter_end": "2026-11-23T06:28:00Z",
+    "pass": {
+      "evaluations": 17998,
+      "packets": 74,
+      "bytes": 5787,
+      "states": 0
+    },
+    "drop": {
+      "evaluations": 2423,
+      "packets": 4,
+      "bytes": 256,
+      "states": 0
+    },
+    "rollback_log": "C-rollback-mac4-20261123T063132Z.txt",
+    "rollback_start": "2026-11-23T06:31:32Z",
+    "rollback_end": "2026-11-23T06:31:33Z",
+    "rollback_commit": "f5e12989a2e07d08fada43e7504b3d25a4408510",
+    "rollback_exit": 0,
+    "final_pf_status": "Enabled",
+    "rollback_stdout_relevant": [
+      "rules cleared",
+      "disable request successful. 1 more pf enable reference(s) remaining, pf still enabled.",
+      "ROLLED BACK: project rules cleared, own reference released, main filter rules unchanged"
+    ],
+    "observed_rules": [
+      "pass in quick on en0 inet proto tcp from 10.7.25.25 to 10.7.27.247 port = 3002 flags S/SA keep state",
+      "block drop in quick on en0 inet proto tcp from any to 10.7.27.247 port = 3002"
+    ]
+  },
+  "warnings": "Repeated No ALTQ support and generic -f warning appeared; actual calls used the named anchor, not a global main ruleset replacement. Actual rollback compared unchanged main filter snapshots; both commands exited0."
+}
