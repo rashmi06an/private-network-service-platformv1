@@ -156,3 +156,15 @@ a second client's resolver settings, TTL experiments, isolation/rollback, backen
 HA, standby cutover, saved capture/index, remaining inventory/rehearsal and CA
 approval evidence are still separate pending items. Live faculty challenge and
 individual viva remain live evaluation tasks.
+
+### Client settings verified; inventory corrections still open
+
+Mac3's [dual-DNS installation](../evidence/verification/R2-mac3-client-dns-20261123T050122Z.txt)
+at05:01:22-05:01:26 UTC passes, verifying the two-client setting requirement with
+Mac2. [Three further inventories](../evidence/verification/2026-11-23-three-mac-inventory-observations.json)
+confirm the remaining assigned addresses and hardware/network fields. Nine of the
+twelve directed ping results pass; three fail toward Mac1, whose recorded stealth
+mode is ON. The change/retest outcome is not yet supplied. Mac4 also still uses
+the old private resolver10.7.17.21, while Mac1 uses localhost only; canonical client
+DNS installation on both remains pending. Controlled primary-outage evidence is
+still a separate required experiment.

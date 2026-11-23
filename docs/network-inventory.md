@@ -58,3 +58,21 @@ exit1. [A separate transport check](../evidence/verification/R0-primary-dns-tran
 shows Mac1 still answers the expected DNS record over UDP and accepts TCP53.
 The ICMP behavior needs diagnosis; this is not a completed twelve-ping acceptance.
 The remaining three current inventories are still pending.
+
+### Remaining inventories and ICMP diagnosis
+
+The [team-supplied observations](../evidence/verification/2026-11-23-three-mac-inventory-observations.json)
+confirm all three remaining IP/MAC/en0/prefix/gateway assignments at05:01 UTC.
+This file is a structured transcription of pasted outputs, not an original recorder
+log. All twelve directed ping outcomes are now observed: nine pass, three fail,
+with every failure directed at Mac1. The [Mac1 setting readout](../evidence/verification/R0-mac1-stealth-20261123T050104Z.txt)
+shows stealth ON. A targeted stealth-off change and inbound retest remain necessary;
+the original setting can be restored after the lab with
+`sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on`.
+Keep the Application Firewall's other settings unchanged.
+
+[Mac3's scoped DNS setup](../evidence/verification/R2-mac3-client-dns-20261123T050122Z.txt)
+now joins Mac2 as the second verified dual-resolver client. Mac1's localhost-only
+private setting and Mac4's old10.7.17.21 setting need `scripts/client-dns.sh install`.
+Inspect Mac4's service-level DNS independently; the private-zone readout alone is
+not proof of its complete global resolver configuration.

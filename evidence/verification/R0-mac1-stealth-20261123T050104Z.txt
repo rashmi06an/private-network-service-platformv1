@@ -1,0 +1,9 @@
+START_UTC=2026-11-23T05:01:04Z
+MACHINE=Rashmis-MacBook-Pro.local
+COMMIT=298f5eccad90ebbda8ee56ce715943d465c2985e
+COMMAND: sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getstealthmode
+Password:
+Firewall stealth mode is on
+
+EXIT_CODE=0
+END_UTC=2026-11-23T05:01:11Z
