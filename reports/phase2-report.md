@@ -35,7 +35,7 @@ transcriptions and historical screenshots are distinguished in each artifact.
 
 | Requirement | Reviewed outcome and evidence |
 |---|---|
-| Current inventories / LAN | All four IP/MAC/interface/prefix/gateway inventories supplied. Nine of12 directed ping probes pass; three inbound-to-Mac1 probes fail. Managed Mac1 stealth remains ON and rejects the CLI change. This restriction remains open; DNS/TCP service success does not prove ICMP success. [Observations](../evidence/verification/2026-11-23-three-mac-inventory-observations.json), [policy readback](../evidence/verification/2026-11-23-managed-stealth-and-dns-rechecks.json) |
+| Current inventories / LAN | All four IP/MAC/interface/prefix/gateway inventories supplied. Initial9/12 directed pings were repaired by three incoming-to-Mac1 follow-ups after the team reported GUI stealth OFF. All12 directions now have successful measurements across the recorded sessions. [Observations](../evidence/verification/2026-11-23-three-mac-inventory-observations.json), [policy readback](../evidence/verification/2026-11-23-managed-stealth-and-dns-rechecks.json) |
 | Baseline / cache / HTTP2 | Both current backends have correct identity/no-store/shared validator/direct304. Normal hostname HTTPS is trusted and negotiatesHTTP2. Twelve requests returnA6/B6. [Backend check](../evidence/verification/D-recovered-apps-20261123T061004Z.txt), [HTTPS/cache](../evidence/verification/D-recovered-https-20261123T061004Z.txt), [HTTP2](../evidence/verification/R1-http2-recheck-20261123T045545Z.txt) |
 | Dual client DNS | Canonical scoped settings verified on all four clients; [Mac2](../evidence/verification/R1-mac2-client-dns-20261123T044808Z.txt), [Mac3](../evidence/verification/R2-mac3-client-dns-20261123T050122Z.txt), [Mac1](../evidence/verification/R2-mac1-client-dns-20261123T050558Z.txt), [Mac4](../evidence/verification/R2-mac4-client-dns-20261123T050617Z.txt) |
 | A — Backup DNS | Primary stopped05:15:26–34. Fresh Mac2 lookup and trusted HTTPS200 succeed through the backup; normal resolver transaction38321 is received/replied05:15:51. Primary restored05:16:40–41 and both datasets verified. [Down test](../evidence/verification/A-primary-down-20261123T051545Z.txt), [backup receipt](../evidence/verification/A-backup-receipt-20261123T051432Z.txt), [restored](../evidence/verification/A-restored-20261123T051653Z.txt) |
@@ -130,8 +130,17 @@ The individual viva remains a live assessment.
 Further distributed collection ended at the team's request. All original main-branch
 screenshots are preserved and available through the [gallery](../docs/submission-evidence.html);
 [final source validation](final-validation.json) and [submission entry point](../SUBMISSION.md)
-describe the checked package. Nine acceptance items are verified; four measurement
+describe the checked package. Follow-up ping repairs bring acceptance to10 verified items; three measurement
 items retain disclosed limits. No future test result or capture file is synthesized.
 The first cutover's [failure/restoration timeline](../evidence/verification/E-attempt1-review.json)
 and successful [cache preflight](../evidence/verification/E-cache-preflight-20261123T072417Z.txt)
 are included as separate outcomes.
+
+### Follow-up: directed ping accepted
+
+After the team reported disabling Mac1 stealth through Settings, Mac2→Mac1
+passed2/2 at07:42:33 UTC, Mac3→Mac1 passed2/2 at07:43:34–35, and Mac4→Mac1
+passed2/2 at07:44:09–10. Together with the earlier nine successful directions,
+all12 directions have successful evidence. The [inventory](../docs/network-inventory.md)
+retains both the earlier failure matrix and the three superseding follow-ups.
+This closes the inventory item; the three remaining evidence items are unchanged.

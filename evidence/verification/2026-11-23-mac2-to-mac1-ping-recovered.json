@@ -1,0 +1,20 @@
+{
+  "provenance": "Structured transcription of actual read-only Mac2 tool output. This is not a Mac1 firewall readback.",
+  "utc_start": "2026-11-23T07:42:33Z",
+  "source_role": "Mac2",
+  "source_ip": "10.7.25.25",
+  "destination_ip": "10.7.27.145",
+  "command": "/sbin/ping -c 2 -W 2000 10.7.27.145",
+  "transmitted": 2,
+  "received": 2,
+  "packet_loss_percent": 0.0,
+  "rtt_ms": {
+    "min": 10.597,
+    "avg": 15.506,
+    "max": 20.416,
+    "stddev": 4.91
+  },
+  "exit_code": 0,
+  "mac1_setting": "User reports Stealth mode turned OFF through settings; no new Mac1 status-command output supplied.",
+  "review": "Previously failed Mac2\u2192Mac1 direction now succeeds. Mac3\u2192Mac1 and Mac4\u2192Mac1 fresh results still required before closing the directed-ping item."
+}

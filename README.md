@@ -5,10 +5,10 @@ branch contains corrected code/configuration, both reports, architecture PDF and
 original main-branch screenshots alongside reviewed new terminal evidence.
 
 Start with **[SUBMISSION.md](SUBMISSION.md)** for package contents, verified results
-and the four disclosed evidence limits. Browse the **[screenshot gallery](docs/submission-evidence.html)**
+and the remaining disclosed evidence limits. Browse the **[screenshot gallery](docs/submission-evidence.html)**
 offline or use the [historical image index](evidence/phase2/INDEX.md) on GitHub.
 The [11-step runbook](docs/phase2-demo-runbook.md) covers evaluation; [member commands](docs/team-commands.md)
-are reference procedures for future setup. Further distributed collection has ended.
+are reference procedures for future setup. Follow-up collection resumed to close the remaining evidence items.
 
 | Member | Mac | Current IP | Services |
 |---|---|---|---|

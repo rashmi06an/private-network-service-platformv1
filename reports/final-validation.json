@@ -81,5 +81,17 @@
     "backup_app_answer": "10.7.25.25",
     "active_temporary_cache_experiments": "No matching process observed",
     "limit": "Read-only state observation; no further distributed failure experiments executed."
+  },
+  "follow_up_review": {
+    "date": "2026-11-23",
+    "scope": "Post-package distributed ping follow-up; earlier source/nginx test records remain their dated snapshots.",
+    "verified_items": 10,
+    "unverified_items": [
+      "edge-cutover",
+      "packet-capture",
+      "failure-rehearsal"
+    ],
+    "inventory": "Three repaired inbound directions receive2/2 each; see current ledger and inventory links.",
+    "archive": "Earlier submission ZIP is the d639f20 snapshot and will be refreshed after remaining follow-up work."
   }
 }

@@ -20,7 +20,7 @@ Final package review:23November2026. Collection ended at the team's request;
 | F13 | Controlled TLS1.2 / TLS1.3 visibility explanation | New TLS1.2 curl trust/handshake supplied; binary Certificate frame unverified |
 | F14 | Completion claims tied to actual results | Reports distinguish verified, historical and incomplete |
 | F15 | Historical screenshots indexed by actual content | Original main PNGs retained; gallery and integrity report included |
-| F16 | Four current inventories / directed ping checks | All inventories supplied;9/12 directions pass; managed Mac1 restriction disclosed |
+| F16 | Four current inventories / directed ping checks | All inventories and12 directed successes verified across baseline and three repaired incoming directions |
 | F17 | Historical leases / wrong-client DNS distinction | Direct public-dig exhibit retained; live effective-setting proof not supplied |
 | F18 | Explicit leaf paths and approved CA / client trust | Team faculty confirmation and all-four-client trust verified |
 | F19 | Full-system viva notes / actual HTTP2 | HTTP2 negotiated; viva remains live |

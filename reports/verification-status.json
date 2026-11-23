@@ -5,7 +5,7 @@
     {
       "id": "inventory",
       "requirement": "Four current IP/interface/MAC/gateway inventories and all 12 directed ping results",
-      "status": "pending",
+      "status": "verified",
       "artifacts": [
         "evidence/verification/R0-mac2-20261123T045726Z.txt",
         "evidence/verification/R0-primary-dns-transport-20261123T045908Z.txt",
@@ -13,9 +13,12 @@
         "evidence/verification/R0-mac1-stealth-20261123T050104Z.txt",
         "evidence/verification/2026-11-23-managed-stealth-and-dns-rechecks.json",
         "evidence/verification/R0-mac1-stealth-off-20261123T050558Z.txt",
-        "evidence/verification/R0-mac1-stealth-confirm-20261123T050558Z.txt"
+        "evidence/verification/R0-mac1-stealth-confirm-20261123T050558Z.txt",
+        "evidence/verification/2026-11-23-mac2-to-mac1-ping-recovered.json",
+        "evidence/verification/R0-mac4-ping-mac1-20261123T074409Z.txt",
+        "evidence/verification/R0-mac3-ping-mac1-20261123T074334Z.txt"
       ],
-      "review_note": "Agent executed actual Mac2 preflight04:57:26-04:57:32 UTC: IP10.7.25.25/en0, netmask0xffffe000(/19), gateway10.7.0.1, MAC8e:f2:4f:b4:75:a5. Pings to Mac3 andMac4 each2/2; Mac1 ping0/2, so preflight exit1 and inventory remains pending. Separate04:59:08 UTC recorded DNS query returns10.7.25.25 TTL30 and TCP53 connects to Mac1. ICMP restriction/cause needs inspection; other three inventories and all12 successful directed ping proofs still required. User supplied Mac1/Mac3/Mac4 inventories05:01 UTC: all current IP/MAC/prefix/gateway values match table; combined 9/12 directed pings pass, all3 failed directions point to Mac1. Mac1 stealth is ON; targeted off/retest pending. Mac1 preflight exit0, Mac3/Mac4 exit1. Structured transcription is explicitly marked as such. 05:05:58 UTC CLI stealth-off refused on managed Mac1 even with exit0; independent readback remainsON. Mac1 outbound3pass, Mac3/Mac4 still cannot pingMac1. This external policy constraint needs permitted IT/faculty change or explicit acceptance exception; keep inventory pending. Mac4 Wi-Fi service DNS separately confirmedobsolete10.7.17.21 plus8.8.8.8."
+      "review_note": "Agent executed actual Mac2 preflight04:57:26-04:57:32 UTC: IP10.7.25.25/en0, netmask0xffffe000(/19), gateway10.7.0.1, MAC8e:f2:4f:b4:75:a5. Pings to Mac3 andMac4 each2/2; Mac1 ping0/2, so preflight exit1 and inventory remains pending. Separate04:59:08 UTC recorded DNS query returns10.7.25.25 TTL30 and TCP53 connects to Mac1. ICMP restriction/cause needs inspection; other three inventories and all12 successful directed ping proofs still required. User supplied Mac1/Mac3/Mac4 inventories05:01 UTC: all current IP/MAC/prefix/gateway values match table; combined 9/12 directed pings pass, all3 failed directions point to Mac1. Mac1 stealth is ON; targeted off/retest pending. Mac1 preflight exit0, Mac3/Mac4 exit1. Structured transcription is explicitly marked as such. 05:05:58 UTC CLI stealth-off refused on managed Mac1 even with exit0; independent readback remainsON. Mac1 outbound3pass, Mac3/Mac4 still cannot pingMac1. This external policy constraint needs permitted IT/faculty change or explicit acceptance exception; keep inventory pending. Mac4 Wi-Fi service DNS separately confirmedobsolete10.7.17.21 plus8.8.8.8. Follow-up after team reports disabling Mac1 stealth: actual Mac2 ping07:42:33 UTC receives2/2,0%loss. This repairs one failed direction; fresh Mac3/Mac4\u2192Mac1 results remain pending. The local Mac2 firewall status printed alongside this command is not treated as a Mac1 readback. Superseding follow-up: after team reports GUI stealth OFF, actual Mac2\u2192Mac1 ping07:42:33 UTC receives2/2; supplied Mac3 recorder07:43:34\u201335 and Mac4 recorder07:44:09\u201310 each receive2/2 with exit0. All previously failed directions now pass, completing12/12 successful directed directions across the recorded baseline and follow-up sessions. These are not12 simultaneous probes. Mac3/Mac4 blocks faithfully transcribed from pasted output with transport escaping removed; their host/commit/timing retained. No new Mac1 firewall readback is invented."
     },
     {
       "id": "baseline",
@@ -227,8 +230,8 @@
     }
   ],
   "collection_status": {
-    "state": "closed_at_team_request",
+    "state": "resumed_by_team",
     "date": "2026-11-23",
-    "scope": "Finalize the repository using supplied outputs and existing main-branch screenshots. No further distributed experiments are requested. Pending measurements remain disclosed; no success is inferred from filenames or expected output."
+    "scope": "Team requested step-by-step closure of the four disclosed live-evidence items. Existing submission package remains the earlier snapshot until new results are reviewed."
   }
 }

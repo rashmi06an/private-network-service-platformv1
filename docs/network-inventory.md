@@ -55,17 +55,27 @@ retain acquisition times, observed fields and actual ping results.
 | Mac3 | 0/2 | 2/2 | — | 2/2 |
 | Mac4 | 0/2 | 2/2 | 2/2 | — |
 
-Nine of12 directed probes succeed; all three failed directions target Mac1.
-Its [stealth readback](../evidence/verification/R0-mac1-stealth-confirm-20261123T050558Z.txt)
-remains ON. The managed Mac refused the command-line change despite exit0;
-no successful GUI change or permitted exception was supplied. Preserve this
-measured limitation. DNS UDP/TCP service success does not prove ICMP success.
-No broad firewall disable is part of the submitted setup.
+The first session had9/12 successful directions, with all three failures toward
+Mac1. The managed CLI stealth setter had failed. The team subsequently reported
+turning stealth OFF through Settings. Follow-up results repair every failed direction:
+
+| Follow-up | UTC on23November | Result |
+|---|---|---|
+| [Mac2→Mac1](../evidence/verification/2026-11-23-mac2-to-mac1-ping-recovered.json) | 07:42:33 | 2/2,0%loss |
+| [Mac3→Mac1](../evidence/verification/R0-mac3-ping-mac1-20261123T074334Z.txt) | 07:43:34–35 | 2/2,0%loss; exit0 |
+| [Mac4→Mac1](../evidence/verification/R0-mac4-ping-mac1-20261123T074409Z.txt) | 07:44:09–10 | 2/2,0%loss; exit0 |
+
+All12 directed directions now have successful evidence across the baseline and
+follow-up measurements; these are not12 simultaneous probes. The matrix above
+preserves the original failed readings. No new Mac1 setting readback is claimed.
+Mac3/Mac4 recorder blocks are faithful transcriptions of pasted outputs; the Mac2
+result is explicitly labelled structured tool-output transcription.
 
 All four clients now have the two current private resolvers in their scoped
 team1.test configuration. Mac4's obsolete service-level DNS entry was removed;
 its [final Wi-Fi readback](../evidence/verification/2026-11-23-mac4-wifi-dns-final-readback.txt)
 is8.8.8.8. These supersede the older localhost-only/stale-address observations.
 
-The team ended further collection; the strict directed-ping acceptance item remains
-open. IP leases and private Wi-Fi MAC addresses can change between sessions.
+The team resumed collection for the remaining evidence items. Directed-ping
+acceptance is now verified. IP leases and private Wi-Fi MAC addresses can change
+between sessions.

@@ -15,6 +15,10 @@ Further team-side collection was ended at the team's request.
 4. [Evidence ledger](reports/verification-status.json), [packet index](evidence/verification/packet-index.md) and [historical failures](evidence/failures/INDEX.md).
 5. [Final validation](reports/final-validation.json), [11-step demonstration](docs/phase2-demo-runbook.md) and [viva notes](docs/viva-notes.md).
 
+Follow-up: ping acceptance is now verified after the three repaired incoming
+directions. Collection resumed at team request; the earlier ZIP remains its dated
+snapshot until the remaining follow-up evidence is finalized.
+
 ## Verified results
 
 Both current backends, trusted HTTPS, A/B balancing, shared cache validator/304 and
@@ -26,8 +30,6 @@ clients trust both the original primary and separate same-CA standby certificate
 
 ## Disclosed evidence limits
 
-- Mac1's managed stealth policy blocks three incoming ping directions;9/12 directed
-  probes pass. All four current inventories are recorded.
 - Standby A/B/trust, fresh-new routing and restoration are observed. The first
   cached-old cutover run failed; a later cache preflight passes, but the complete
   concurrent cached-old/fresh-new/convergence retry was not supplied.
@@ -38,7 +40,7 @@ clients trust both the original primary and separate same-CA standby certificate
   the latter live demonstration was not supplied.
 
 The source/package checks can pass while the strict live-evidence gate remains
-nonzero for these four items. Faculty-injected diagnosis and individual viva remain
+nonzero for these three items. Faculty-injected diagnosis and individual viva remain
 live assessment tasks. This package does not certify unperformed experiments.
 
 ## Source checks
