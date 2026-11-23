@@ -10,9 +10,12 @@
         "evidence/verification/R0-mac2-20261123T045726Z.txt",
         "evidence/verification/R0-primary-dns-transport-20261123T045908Z.txt",
         "evidence/verification/2026-11-23-three-mac-inventory-observations.json",
-        "evidence/verification/R0-mac1-stealth-20261123T050104Z.txt"
+        "evidence/verification/R0-mac1-stealth-20261123T050104Z.txt",
+        "evidence/verification/2026-11-23-managed-stealth-and-dns-rechecks.json",
+        "evidence/verification/R0-mac1-stealth-off-20261123T050558Z.txt",
+        "evidence/verification/R0-mac1-stealth-confirm-20261123T050558Z.txt"
       ],
-      "review_note": "Agent executed actual Mac2 preflight04:57:26-04:57:32 UTC: IP10.7.25.25/en0, netmask0xffffe000(/19), gateway10.7.0.1, MAC8e:f2:4f:b4:75:a5. Pings to Mac3 andMac4 each2/2; Mac1 ping0/2, so preflight exit1 and inventory remains pending. Separate04:59:08 UTC recorded DNS query returns10.7.25.25 TTL30 and TCP53 connects to Mac1. ICMP restriction/cause needs inspection; other three inventories and all12 successful directed ping proofs still required. User supplied Mac1/Mac3/Mac4 inventories05:01 UTC: all current IP/MAC/prefix/gateway values match table; combined 9/12 directed pings pass, all3 failed directions point to Mac1. Mac1 stealth is ON; targeted off/retest pending. Mac1 preflight exit0, Mac3/Mac4 exit1. Structured transcription is explicitly marked as such."
+      "review_note": "Agent executed actual Mac2 preflight04:57:26-04:57:32 UTC: IP10.7.25.25/en0, netmask0xffffe000(/19), gateway10.7.0.1, MAC8e:f2:4f:b4:75:a5. Pings to Mac3 andMac4 each2/2; Mac1 ping0/2, so preflight exit1 and inventory remains pending. Separate04:59:08 UTC recorded DNS query returns10.7.25.25 TTL30 and TCP53 connects to Mac1. ICMP restriction/cause needs inspection; other three inventories and all12 successful directed ping proofs still required. User supplied Mac1/Mac3/Mac4 inventories05:01 UTC: all current IP/MAC/prefix/gateway values match table; combined 9/12 directed pings pass, all3 failed directions point to Mac1. Mac1 stealth is ON; targeted off/retest pending. Mac1 preflight exit0, Mac3/Mac4 exit1. Structured transcription is explicitly marked as such. 05:05:58 UTC CLI stealth-off refused on managed Mac1 even with exit0; independent readback remainsON. Mac1 outbound3pass, Mac3/Mac4 still cannot pingMac1. This external policy constraint needs permitted IT/faculty change or explicit acceptance exception; keep inventory pending. Mac4 Wi-Fi service DNS separately confirmedobsolete10.7.17.21 plus8.8.8.8."
     },
     {
       "id": "baseline",
@@ -42,9 +45,11 @@
       "status": "verified",
       "artifacts": [
         "evidence/verification/R1-mac2-client-dns-20261123T044808Z.txt",
-        "evidence/verification/R2-mac3-client-dns-20261123T050122Z.txt"
+        "evidence/verification/R2-mac3-client-dns-20261123T050122Z.txt",
+        "evidence/verification/R2-mac1-client-dns-20261123T050558Z.txt",
+        "evidence/verification/R2-mac4-client-dns-20261123T050617Z.txt"
       ],
-      "review_note": "Mac2 effective scoped settings04:48 UTC and Mac3 install/effective settings05:01:22-05:01:26 UTC both show10.7.27.145 and10.7.27.247 for team1.test; both setup commands exit0. Requirement for at least2 clients is verified. Additional operational fixes pending: Mac1 currently localhost-only; Mac4 still old10.7.17.21. Correct both before using them as failover/cutover clients."
+      "review_note": "Mac2 effective scoped settings04:48 UTC and Mac3 install/effective settings05:01:22-05:01:26 UTC both show10.7.27.145 and10.7.27.247 for team1.test; both setup commands exit0. Requirement for at least2 clients is verified. Additional operational fixes pending: Mac1 currently localhost-only; Mac4 still old10.7.17.21. Correct both before using them as failover/cutover clients. Superseding05:05/05:06 UTC: canonical private-zone installs now pass on Mac1 andMac4 too; all4 scoped clients have both current resolvers. Mac4 service-level Wi-Fi DNS still needs a separate obsolete-address cleanup."
     },
     {
       "id": "dns-failover",

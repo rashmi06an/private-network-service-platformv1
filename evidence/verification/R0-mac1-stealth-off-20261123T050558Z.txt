@@ -1,0 +1,8 @@
+START_UTC=2026-11-23T05:05:58Z
+MACHINE=Rashmis-MacBook-Pro.local
+COMMIT=298f5eccad90ebbda8ee56ce715943d465c2985e
+COMMAND: sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode off
+Firewall settings cannot be modified from command line on managed Mac computers.
+
+EXIT_CODE=0
+END_UTC=2026-11-23T05:05:58Z

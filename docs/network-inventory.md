@@ -76,3 +76,20 @@ now joins Mac2 as the second verified dual-resolver client. Mac1's localhost-onl
 private setting and Mac4's old10.7.17.21 setting need `scripts/client-dns.sh install`.
 Inspect Mac4's service-level DNS independently; the private-zone readout alone is
 not proof of its complete global resolver configuration.
+
+### Managed-Mac restriction and remaining service DNS
+
+The [05:05–05:06 rechecks](../evidence/verification/2026-11-23-managed-stealth-and-dns-rechecks.json)
+show that the [stealth setter](../evidence/verification/R0-mac1-stealth-off-20261123T050558Z.txt)
+printed a managed-Mac refusal while returning exit0; the independent
+[readback](../evidence/verification/R0-mac1-stealth-confirm-20261123T050558Z.txt)
+still reports ON. The off/retest correction above was therefore **not applied**.
+Inventory acceptance remains open pending a permitted IT/faculty change or explicit
+assessment exception. Other experiments can proceed using verified DNS/TCP service
+reachability. Do not report nine successful directions as twelve.
+
+Canonical private-zone installation now also passed on Mac1 andMac4, so all four
+clients have both current resolver addresses. Mac4's separate Wi-Fi DNS list still
+contains obsolete10.7.17.21 followed by8.8.8.8. Preserve its original list and remove
+the stale entry while retaining the existing public resolver; verify readback rather
+than relying only on a setter's exit code.

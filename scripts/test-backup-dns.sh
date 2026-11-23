@@ -9,10 +9,14 @@ case "$mode" in
   done;;
  primary-down)
   if dig "@$TEAM_PRIMARY_DNS" app.team1.test +time=2 +tries=1 > /dev/null 2>&1; then die 'Primary still answers: do not claim primary-down failover'; fi
+  printf 'BACKUP_DIRECT_CHECKS_START_UTC=%s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
   for name in app.team1.test api.team1.test ttl.team1.test; do dns_answer "$TEAM_BACKUP_DNS" "$name" "$TEAM_EDGE_IP"; done
+  printf 'SYSTEM_LOOKUP_START_UTC=%s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
   echo 'System lookup (flush system cache before invoking this stage):'
   lookup=$(dscacheutil -q host -a name app.team1.test); printf '%s\n' "$lookup"
   printf '%s\n' "$lookup" | awk -v ip="$TEAM_EDGE_IP" '$1=="ip_address:" && $2==ip {ok=1} END{exit !ok}' || die 'System lookup did not return the primary edge'
+  printf 'SYSTEM_LOOKUP_END_UTC=%s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+  printf 'BY_NAME_HTTPS_START_UTC=%s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
   tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
   code=$(fetch "$TEAM_URL/api/status" "$tmp/headers"); cat "$tmp/headers"; expect_code "$code" 200
   ;;

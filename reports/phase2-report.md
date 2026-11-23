@@ -168,3 +168,15 @@ mode is ON. The change/retest outcome is not yet supplied. Mac4 also still uses
 the old private resolver10.7.17.21, while Mac1 uses localhost only; canonical client
 DNS installation on both remains pending. Controlled primary-outage evidence is
 still a separate required experiment.
+
+### Managed policy prevents the ICMP correction
+
+At05:05:58 UTC the Mac1 stealth setter reported that managed Macs cannot modify
+this setting from the command line, despite exit0. Its readback still says ON.
+The [recorded observations](../evidence/verification/2026-11-23-managed-stealth-and-dns-rechecks.json)
+retain this unresolved acceptance gap; a permitted IT/faculty change or explicit
+assessment exception is needed. Current private-zone DNS installs now pass on all
+four Macs. Mac4's separate Wi-Fi DNS list retains the old primary address and needs
+cleanup with original-list backup/readback. DNS failover remains unverified until
+a controlled outage, fresh system lookup/HTTPS, backup receipt and restoration are
+captured; script timestamps now distinguish direct-dig checks from normal lookup.

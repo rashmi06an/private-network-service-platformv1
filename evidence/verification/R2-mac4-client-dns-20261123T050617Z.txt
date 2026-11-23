@@ -1,0 +1,22 @@
+START_UTC=2026-11-23T05:06:17Z
+MACHINE=Ankits-MacBook-Pro-7.local
+COMMIT=298f5eccad90ebbda8ee56ce715943d465c2985e
+COMMAND: scripts/client-dns.sh install
+Password:
+Sorry, try again.
+Password:
+nameserver 10.7.27.145
+nameserver 10.7.27.247
+  domain   : team1.test
+  nameserver[0] : 10.7.27.145
+  nameserver[1] : 10.7.27.247
+  flags    : Request A records
+  reach    : 0x00020002 (Reachable,Directly Reachable Address)
+
+DNS configuration (for scoped queries)
+
+resolver #1
+PASS: scoped DNS install; normal internet resolver settings were not overwritten
+
+EXIT_CODE=0
+END_UTC=2026-11-23T05:06:26Z
