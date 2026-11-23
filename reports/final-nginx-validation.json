@@ -1,0 +1,66 @@
+[
+  {
+    "check": "nginx.conf.example syntax",
+    "result": "PASS with loopback/path/process substitutions"
+  },
+  {
+    "check": "nginx.conf.example HTTPS/headers/A-B/cache304",
+    "result": "PASS; shared upstream state with two workers; validation enabled"
+  },
+  {
+    "check": "nginx.conf.example test-https.sh",
+    "result": "PASS"
+  },
+  {
+    "check": "nginx.conf.example test-load-balancing.sh",
+    "result": "PASS"
+  },
+  {
+    "check": "nginx.conf.example test-http2.sh",
+    "result": "PASS"
+  },
+  {
+    "check": "nginx-phase2.conf.example syntax",
+    "result": "PASS with loopback/path/process substitutions"
+  },
+  {
+    "check": "nginx-phase2.conf.example HTTPS/headers/A-B/cache304",
+    "result": "PASS; shared upstream state with two workers; validation enabled"
+  },
+  {
+    "check": "nginx-phase2.conf.example test-https.sh",
+    "result": "PASS"
+  },
+  {
+    "check": "nginx-phase2.conf.example test-load-balancing.sh",
+    "result": "PASS"
+  },
+  {
+    "check": "nginx-phase2.conf.example test-http2.sh",
+    "result": "PASS"
+  },
+  {
+    "check": "Phase2 A-down/restart/recovered",
+    "result": "PASS: 200 B only, then A/B return; helper assertions pass"
+  },
+  {
+    "check": "standby-nginx.conf.example syntax",
+    "result": "PASS with loopback/path/process substitutions"
+  },
+  {
+    "check": "standby-nginx.conf.example HTTPS/headers/A-B/cache304",
+    "result": "PASS; shared upstream state with two workers; validation enabled"
+  },
+  {
+    "check": "standby-nginx.conf.example test-https.sh",
+    "result": "PASS"
+  },
+  {
+    "check": "standby-nginx.conf.example test-load-balancing.sh",
+    "result": "PASS"
+  },
+  {
+    "check": "standby-nginx.conf.example test-http2.sh",
+    "result": "PASS"
+  }
+]

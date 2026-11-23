@@ -1,14 +1,14 @@
 # Private Network Service Platform — Team Scout Regiment
 
-Computer Networks course project, running locally on four Macs. Phase 1 was
-previously submitted. Phase 2 source and operating instructions are updated;
-**submission readiness still depends on the live evidence checklist below.**
-No missing experiment is represented as completed.
+Computer Networks course project on four local Macs. The finalized submission
+branch contains corrected code/configuration, both reports, architecture PDF and
+original main-branch screenshots alongside reviewed new terminal evidence.
 
-Start with **[member commands](docs/team-commands.md)**. Coordinate one round at a
-time. The [final 11-step runbook](docs/phase2-demo-runbook.md) is the evaluation
-sequence. [Closure status](docs/closure-status.md) maps all 22 audit findings to
-their corrections and remaining live checks.
+Start with **[SUBMISSION.md](SUBMISSION.md)** for package contents, verified results
+and the four disclosed evidence limits. Browse the **[screenshot gallery](docs/submission-evidence.html)**
+offline or use the [historical image index](evidence/phase2/INDEX.md) on GitHub.
+The [11-step runbook](docs/phase2-demo-runbook.md) covers evaluation; [member commands](docs/team-commands.md)
+are reference procedures for future setup. Further distributed collection has ended.
 
 | Member | Mac | Current IP | Services |
 |---|---|---|---|
@@ -83,7 +83,7 @@ keeps local backups, and documents rollback.
 | Phase 1 report | [phase1-report.md](reports/phase1-report.md), historical submitted baseline |
 | Phase 2 changes, results, troubleshooting and six learning paragraphs | [phase2-report.md](reports/phase2-report.md) |
 | Final demonstration and viva preparation | [11-step runbook](docs/phase2-demo-runbook.md), [viva notes](docs/viva-notes.md) |
-| Acceptance ledger | [verification-status.json](reports/verification-status.json) — open until real outputs are reviewed |
+| Acceptance ledger | [verification-status.json](reports/verification-status.json) — reviewed results and disclosed limits |
 
 Run `python3 scripts/submission-check.py` for the strict evidence gate. It must
 remain failing while mandatory evidence is pending. Passing a file-existence

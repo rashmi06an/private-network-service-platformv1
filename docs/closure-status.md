@@ -1,32 +1,32 @@
-# Audit finding closure and live acceptance
+# Source fixes and reviewed acceptance
 
-Source corrections are distinct from four-Mac live verification. The latter is
-tracked in [verification-status.json](../reports/verification-status.json).
+Final package review:23November2026. Collection ended at the team's request;
+[the ledger](../reports/verification-status.json) retains observed limits.
 
-| Audit ID | Correction | Remaining acceptance |
+| Audit ID | Implemented correction | Reviewed status |
 |---|---|---|
-| F01 | Direct-server TTL countdown claim removed; real caching resolver and synchronized schedule added | record actual natural expiry |
-| F02 | Separate manual-flush experiment; mandatory status retained | actual OLD→NEW before expiry |
-| F03 | Shared hosts-data format, exact assertions, fresh failover procedure | migrate both services; synchronize and capture fresh failover |
-| F04 | Both DNS operators scheduled; old/fresh/new and synchronized restore specified | execute cutover and restoration |
-| F05 | Reachable com.apple anchor verified; narrow rules match helper | execute on both backends; counters/allowed/denied |
-| F06 | Before-state backup and owned PF enable token; scoped rollback | save actual rollback/restored tests |
-| F07 | C rollback boundary explicit; optional temporary two-edge policy | demonstrate intended policy/state |
-| F08 | Single nginx location retains X-Edge everywhere | deploy and verify both edges |
-| F09 | Shared cache representation/ETag and correct endpoint; 304 asserted | restart both updated apps and capture HTTPS304 |
-| F10 | All shell helpers executable | fresh-clone invocation |
-| F11 | Assertions fail on wrong codes/identities/DNS answers | negative local checks and real stage outputs |
-| F12 | Capture commands and required saved-capture/packet-index gate | attach actual capture and frame guide |
-| F13 | Controlled trusted TLS 1.2 capture plus TLS 1.3 explanation | attach Certificate packet exhibit |
-| F14 | Completion claims reconciled; results tied to evidence ledger | finalize after actual evidence review |
-| F15 | Historical index describes actual image contents; no filename-only pass | new transcripts/captures indexed after review |
-| F16 | Four role-specific inventory/all-pairs ping checks | all four real logs |
-| F17 | Early Phase 1 DNS lease explicitly historical | effective wrong-client-resolver demo if required literally |
-| F18 | Explicit leaf filenames; publicCA-only trust; standby leaf distinction | confirm faculty CA approval and all-client trust |
-| F19 | Full-system notes including HTTP/2/3, TCP flow control, email/cache | actual HTTP/2 exhibit and personal viva |
-| F20 | Current 11-step role/firewall-aware runbook | full-team rehearsal and live challenge |
-| F21 | Werkzeug handles weak/list/wildcard cache validators | offline regression checks |
-| F22 | Print flow wraps, heading/page layout corrected; PDF regenerated | visual PDF inspection |
+| F01 | Real caching resolver and synchronized TTL schedule | Live natural expiry31.49s and restore verified |
+| F02 | Separate explicit before-expiry flush | Live manual flush5.25s and restore verified |
+| F03 | Synchronized DNS data, dual clients, outage/fresh lookup/receipt | Live controlled failover and restoration verified |
+| F04 | Scheduled old/fresh/new cutover and both-server restore | Standby trust/fresh-new/restore verified; concurrent cached-old/convergence incomplete |
+| F05 | Reachable narrow PF anchor and counters | Both hosts applied; edge allowed/client denied verified |
+| F06 | Owned PF token and unchanged-main-rule rollback | Both hosts restored; other owner's enabled PF preserved |
+| F07 | C rollback boundary / optional two-edge policy | Required C rollback verified before standby preflight |
+| F08 | X-Edge preserved for all endpoints | Primary/standby runtime headers verified |
+| F09 | Shared cache body/ETag and conditional304 | Both current backends and trusted edge304 verified |
+| F10 | Executable shell helpers | Source/executable checks; actual clone invocations observed |
+| F11 | Assertions reject wrong HTTP/identity/DNS | Regression fixtures and real failed attempts retained |
+| F12 | Capture guide and actual saved-file gate | Existing screenshots indexed; new binary not received |
+| F13 | Controlled TLS1.2 / TLS1.3 visibility explanation | New TLS1.2 curl trust/handshake supplied; binary Certificate frame unverified |
+| F14 | Completion claims tied to actual results | Reports distinguish verified, historical and incomplete |
+| F15 | Historical screenshots indexed by actual content | Original main PNGs retained; gallery and integrity report included |
+| F16 | Four current inventories / directed ping checks | All inventories supplied;9/12 directions pass; managed Mac1 restriction disclosed |
+| F17 | Historical leases / wrong-client DNS distinction | Direct public-dig exhibit retained; live effective-setting proof not supplied |
+| F18 | Explicit leaf paths and approved CA / client trust | Team faculty confirmation and all-four-client trust verified |
+| F19 | Full-system viva notes / actual HTTP2 | HTTP2 negotiated; viva remains live |
+| F20 | Eleven-step integrated runbook | Procedures complete; faculty challenge remains live |
+| F21 | Weak/list/wildcard validators via Werkzeug | Regression cases pass |
+| F22 | Printable architecture layout corrected | Four-page PDF preserved with wrapped flow and diagrams |
 
-An item's implementation correction is not a claim that its live requirement has
-already passed. Keep original failed experiments labeled as diagnostic/historical.
+Local source/config tests are distinct from a four-Mac network trial. No missing
+packet capture, ping response or timed cutover result is generated as evidence.

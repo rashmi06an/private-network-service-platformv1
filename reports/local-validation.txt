@@ -28,3 +28,12 @@ and permitted loopback access. These environment errors are not LAN test results
 Source package gate: scripts/submission-check.py --source-only exit0.
 Remaining reviewed LAN items: inventory, edge-cutover, packet-capture,
 failure-rehearsal. Faculty challenge/viva remain live evaluation tasks.
+
+FINAL PACKAGE REVIEW - 2026-11-23
+The later final-regression-tests.txt supersedes the preceding11-method suite:
+12methods now pass, including the cache-forwarding preflight refusal/cleanup case.
+All3 nginx templates pass native isolated TLS/header/A-B/304/HTTP2 checks; the
+Phase2 fixture passes A-down/B-only200 and recoveredA/B. These use temporary
+loopback substitutions, not additional four-Mac deployment experiments.
+See final-validation.json for source/package, original-screenshot integrity,
+visual layout and remaining measured-evidence limits.

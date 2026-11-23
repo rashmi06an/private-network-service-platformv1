@@ -1,0 +1,85 @@
+{
+  "scope": "Final repository/package QA. Native regression/nginx fixtures are isolated local tests, not new distributed LAN experiments.",
+  "review_utc": "2026-11-23T07:34:15.329691+00:00",
+  "branch": "samiksha/submission-readiness",
+  "tested_implementation_commit": "28533361b8fddf89e7d4852d2fb336604b3c9f94",
+  "main_screenshot_baseline": "3617c3ebdc6713ddbc36395bb2fc0aa447a3a130",
+  "source_regression": {
+    "status": "passed",
+    "test_methods": 12,
+    "actual_log": "reports/final-regression-tests.txt",
+    "observed": "Ran12 tests in15.033s; OK"
+  },
+  "nginx_integration": {
+    "status": "passed",
+    "templates": [
+      "nginx.conf.example",
+      "nginx-phase2.conf.example",
+      "standby-nginx.conf.example"
+    ],
+    "checks": "Syntax, trusted loopback HTTPS, X-Edge/X-Backend, A/B distribution, cross-backend304, realHTTP2; Phase2 A-down/B-only and recoveredA/B",
+    "actual_log": "reports/final-nginx-tests.txt",
+    "limit": "Temporary loopback addresses/ports/paths and a local test CA; no deployment configuration changed.",
+    "structured_results": "reports/final-nginx-validation.json"
+  },
+  "checkout_update_fixture": {
+    "status": "passed",
+    "cases": [
+      "Fast-forward preserves original colliding evidence bytes and unrelated active log",
+      "Tracked-edit refusal preserves contents",
+      "Wrong-branch refusal",
+      "Non-fast-forward refusal"
+    ]
+  },
+  "source_files": {
+    "python_compile_count": 14,
+    "executable_shell_syntax_count": 19,
+    "json_parse_count": 12,
+    "html_relative_links_checked": 127
+  },
+  "screenshots": {
+    "status": "passed",
+    "count": 61,
+    "all_unchanged_from_main": true,
+    "png_chunk_crc": "checked",
+    "manifest": "reports/screenshots-integrity.json"
+  },
+  "secrets": {
+    "status": "passed",
+    "scope": "Tracked and candidate package file paths and private-key PEM markers; does not claim a third-party credential audit."
+  },
+  "acceptance": {
+    "verified_items": 9,
+    "unverified_items": [
+      "inventory",
+      "edge-cutover",
+      "packet-capture",
+      "failure-rehearsal"
+    ],
+    "collection": "Ended at team request; strict gate not weakened.",
+    "live": "Faculty challenge and individual viva remain live assessment."
+  },
+  "package_status": "prepared_with_disclosed_evidence_limits",
+  "errors": [],
+  "source_gate": {
+    "exit_code": 0,
+    "output": "Pending pre-evaluation evidence: inventory, edge-cutover, packet-capture, failure-rehearsal\nLive evaluation: faculty-challenge: live, individual-viva: live\nPASS: source package checks",
+    "interpretation": "Source/package check"
+  },
+  "strict_live_evidence_gate": {
+    "exit_code": 1,
+    "output": "Pending pre-evaluation evidence: inventory, edge-cutover, packet-capture, failure-rehearsal\nLive evaluation: faculty-challenge: live, individual-viva: live\nNOT READY: source checks passed, but mandatory reviewed live evidence is pending.",
+    "interpretation": "Expected nonzero because four disclosed measured-evidence items are unverified."
+  },
+  "visual_qa": {
+    "architecture_pdf": "All4 existing A4 pages rendered and visually reviewed: no clipping/overlap. PDF unchanged.",
+    "gallery": "Headless browser screenshot inspected at1360x1000; cards, original-image links and captions render correctly."
+  },
+  "final_read_only_runtime_observation": {
+    "utc": "2026-11-23T07:33:24Z",
+    "primary_app_answer": "10.7.25.25",
+    "backup_app_answer": "10.7.25.25",
+    "active_temporary_cache_experiments": "No matching process observed",
+    "limit": "Read-only state observation; no further distributed failure experiments executed."
+  }
+}

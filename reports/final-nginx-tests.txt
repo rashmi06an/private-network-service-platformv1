@@ -1,0 +1,148 @@
+nginx.conf.example syntax PASS with loopback/path/process substitutions
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "GET /api/cache-demo HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+127.0.0.1 - - [23/Nov/2026 13:02:25] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+nginx.conf.example HTTPS/headers/A-B/cache304 PASS; shared upstream state with two workers; validation enabled
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/cache-demo HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+nginx.conf.example test-https.sh PASS
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+nginx.conf.example test-load-balancing.sh PASS
+127.0.0.1 - - [23/Nov/2026 13:02:26] "GET /api/status HTTP/1.1" 200 -
+nginx.conf.example test-http2.sh PASS
+nginx-phase2.conf.example syntax PASS with loopback/path/process substitutions
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/cache-demo HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+nginx-phase2.conf.example HTTPS/headers/A-B/cache304 PASS; shared upstream state with two workers; validation enabled
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/cache-demo HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+nginx-phase2.conf.example test-https.sh PASS
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+nginx-phase2.conf.example test-load-balancing.sh PASS
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/status HTTP/1.1" 200 -
+nginx-phase2.conf.example test-http2.sh PASS
+127.0.0.1 - - [23/Nov/2026 13:02:28] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:28] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:28] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:28] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:28] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:28] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:28] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:28] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:28] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:28] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:28] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:29] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:29] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:29] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:30] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:30] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:30] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:31] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:31] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:31] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:42] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:42] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:43] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:43] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:43] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:44] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:44] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:44] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:45] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:45] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:45] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:46] "GET /api/status HTTP/1.1" 200 -
+Phase2 A-down/restart/recovered PASS: 200 B only, then A/B return; helper assertions pass
+standby-nginx.conf.example syntax PASS with loopback/path/process substitutions
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/cache-demo HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+standby-nginx.conf.example HTTPS/headers/A-B/cache304 PASS; shared upstream state with two workers; validation enabled
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/cache-demo HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+standby-nginx.conf.example test-https.sh PASS
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+standby-nginx.conf.example test-load-balancing.sh PASS
+127.0.0.1 - - [23/Nov/2026 13:02:47] "GET /api/status HTTP/1.1" 200 -
+standby-nginx.conf.example test-http2.sh PASS
+PASS: all corrected nginx templates and HTTP helpers

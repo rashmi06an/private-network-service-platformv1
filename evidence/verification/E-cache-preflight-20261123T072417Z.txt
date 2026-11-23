@@ -1,0 +1,12 @@
+START_UTC=2026-11-23T07:24:17Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=28533361b8fddf89e7d4852d2fb336604b3c9f94
+COMMAND: python3 scripts/ttl-experiment.py cutover 1795418777 --preflight
+2026-11-23T07:24:18.145+00:00 server=10.7.27.145:53 app.team1.test.		30	IN	A	10.7.25.25
+2026-11-23T07:24:18.240+00:00 server=10.7.27.247:53 app.team1.test.		30	IN	A	10.7.25.25
+2026-11-23T07:24:18.269+00:00 server=10.7.25.25:53 app.team1.test.		30	IN	A	10.7.25.25
+PASS: cutover cache forwards correctly; system resolver and authoritative records unchanged
+PREFLIGHT CLEANUP: no authoritative records or system resolver were changed.
+
+EXIT_CODE=0
+END_UTC=2026-11-23T07:24:18Z

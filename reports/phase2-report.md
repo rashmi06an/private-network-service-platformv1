@@ -44,8 +44,8 @@ transcriptions and historical screenshots are distinguished in each artifact.
 | C — Isolation / rollback | Mac2 direct/cache/HTTPS checks pass while Mac1 direct ports time out and normal HTTPS still returns200. A counters allow76/drop3; B allow74/drop4. Rollback clears only project rules/references, verifies unchanged main filters and preserves each host's original PF mode. Mac1 directA/B and HTTPS then return200. [Operator timeline](../evidence/verification/2026-11-23-isolation-operator-evidence.json), [allowed edge](../evidence/verification/C-edge-allowed-20261123T062327Z.txt), [denied client](../evidence/verification/C-client-denied-20261123T062338Z.txt), [restored client](../evidence/verification/C-client-restored-20261123T063514Z.txt) |
 | D — Backend HA | ReadyA6/B6; confirmed A unavailable; twelve B-only200 responses; A restarted under manager; recoveredA6/B6. [Timeline](../evidence/verification/2026-11-23-ha-repair-and-recovery.json), [outage](../evidence/verification/D-a-down-20261123T060400Z.txt), [recovery](../evidence/verification/D-recovered-20261123T060959Z.txt) |
 | TLS approval / trust | Team confirms faculty approval of mkcert. Original primary certificate and normal HTTPS trusted on all four clients. [Approval](../evidence/verification/2026-11-23-faculty-mkcert-confirmation.txt), [Mac3](../evidence/verification/TLS-mac3-client-20261123T061208Z.txt), [Mac4](../evidence/verification/TLS-mac4-client-20261123T061225Z.txt) |
-| E — Standby preflight | Separate same-CA leaf installed on Mac3; trusted explicit-route checks pass on all four clients, with standbyA6/B6 and conditional304. These preflights do not establish authoritative DNS migration. Cached-old/fresh-new cutover, convergence and restoration remain pending. [Operator preflights](../evidence/verification/2026-11-23-standby-client-preflights.json), [Mac2 cache](../evidence/verification/E-standby-https-20261123T070252Z.txt), [Mac2 balance](../evidence/verification/E-standby-balanced-20261123T070254Z.txt) |
-| Saved capture / packet index | Pending actual binary pcap/pcapng and its derived frame index. Backup tcpdump text and historical screenshots do not replace that file. [Acquisition guide](../docs/packet-evidence.md) |
+| E — Standby preflight | Separate same-CA leaf installed on Mac3; trusted explicit-route checks pass on all four clients, with standbyA6/B6 and conditional304. These preflights do not establish authoritative DNS migration. The first timed cache attempt failed; freshMac1 standby200 and both-record restoration succeeded. A later local53 forwarding preflight passed; the complete cached-old/convergence retry is unrecorded. [Operator preflights](../evidence/verification/2026-11-23-standby-client-preflights.json), [Mac2 cache](../evidence/verification/E-standby-https-20261123T070252Z.txt), [Mac2 balance](../evidence/verification/E-standby-balanced-20261123T070254Z.txt) |
+| Saved capture / packet index | Existing packet screenshots now have a [reviewed partial frame index](../evidence/verification/packet-index.md). New Mac3 TLS1.2 curl output verifies trust and both HTTP versions. No new binary pcap/pcapng was received; screenshots/curl do not replace that file. |
 | Remaining failure rehearsal | Effective wrong-client-DNS configuration and remaining required failure/restore observations remain pending. Historical explicit dig to a public resolver is not an effective-client-setting demonstration. |
 
 ## Repairs and evidence limits
@@ -124,3 +124,14 @@ capture with its actual frame/stream index and use it in the demonstration.
 Each member explains the complete flow and extensions personally. Record the actual
 faculty challenge's fault, hypothesis, layer, fix/isolation and result after it occurs.
 The individual viva remains a live assessment.
+
+## Package finalization
+
+Further distributed collection ended at the team's request. All original main-branch
+screenshots are preserved and available through the [gallery](../docs/submission-evidence.html);
+[final source validation](final-validation.json) and [submission entry point](../SUBMISSION.md)
+describe the checked package. Nine acceptance items are verified; four measurement
+items retain disclosed limits. No future test result or capture file is synthesized.
+The first cutover's [failure/restoration timeline](../evidence/verification/E-attempt1-review.json)
+and successful [cache preflight](../evidence/verification/E-cache-preflight-20261123T072417Z.txt)
+are included as separate outcomes.

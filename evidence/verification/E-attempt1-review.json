@@ -1,0 +1,58 @@
+{
+  "provenance": "Structured review of actual operator-pasted output and original Mac2 recorder files. No missing recorder header/footer is reconstructed.",
+  "shared_epoch": 1795418391,
+  "scheduled_change_utc": "2026-11-23T07:19:51Z",
+  "operators_armed": {
+    "mac1": {
+      "start_utc": "2026-11-23T07:16:12Z",
+      "commit": "c95a791699d2719f301f4f69e50128eaa23776d0",
+      "armed": "10.7.27.145 app.team1.test -> 10.7.28.78"
+    },
+    "mac4": {
+      "start_utc": "2026-11-23T07:17:43Z",
+      "commit": "c95a791699d2719f301f4f69e50128eaa23776d0",
+      "armed": "10.7.27.247 app.team1.test -> 10.7.28.78"
+    }
+  },
+  "fresh_mac1_excerpt": {
+    "reported_filename": "E-fresh-mac1-20261123T071951Z.txt",
+    "end_utc": "2026-11-23T07:19:56Z",
+    "observed": [
+      "HTTP_AND_IP=200 10.7.28.78",
+      "X-Backend: A",
+      "X-Edge: standby-mac3",
+      "PASS within cached-old comparison window",
+      "EXIT_CODE=0"
+    ],
+    "limit": "Only the final result excerpt was supplied; it does not prove a concurrent cached-old HTTPS request."
+  },
+  "mac2_cache_failure": {
+    "original": "E-cache-cutover-20261123T071835Z.txt",
+    "exit_code": 1,
+    "end_utc": "2026-11-23T07:19:50Z",
+    "observed": "Owned cache reset before prime; dig to local LAN address on53 returned9. Scoped resolver restored and own daemon terminated. No successful OLD HTTPS or cached transition measured."
+  },
+  "restores": {
+    "mac4": {
+      "changed_utc": "2026-11-23T07:20:41Z",
+      "answer": "app.team1.test TTL30 10.7.25.25",
+      "exit_code": 0,
+      "reported_filename": "E-restore-mac4-20261123T072041Z.txt"
+    },
+    "mac1": {
+      "changed_utc": "2026-11-23T07:21:24Z",
+      "answer": "app.team1.test TTL30 10.7.25.25",
+      "exit_code": 0,
+      "filename_limit": "Pasted Saved output line ends in072124Z.; exact complete extension was not supplied."
+    }
+  },
+  "final_verification": {
+    "original": "E-attempt1-restored-20261123T072351Z.txt",
+    "end_utc": "2026-11-23T07:23:52Z",
+    "exit_code": 0,
+    "dns": "All6 app/api/ttl answers from both authorities10.7.25.25 TTL30",
+    "additional_tool_observation": "Native normal hostname curl07:23:52 UTC returnsHTTP2/200, connected10.7.25.25, X-Edge primary-mac2, X-Backend B."
+  },
+  "diagnosis": "Owned daemon log shows start, HUP and TERM; binding to LAN IP on unprivileged53536 succeeds, and real upstream forwarding from unprivileged cache succeeds for both servers. Port53 requires privilege. Root daemon did not answer its measured first query. Exact cause not yet established; next preflight uses invoking user after privileged bind, query logging and forwarding validation BEFORE any system resolver change.",
+  "acceptance": "Pending: repeat controlled cached-old/fresh-new/convergence and restore. Failed attempt is not a PASS."
+}

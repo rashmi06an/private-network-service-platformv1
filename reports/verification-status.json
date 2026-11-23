@@ -147,16 +147,29 @@
         "evidence/verification/E-new-leaf-native-trust-preflight.txt",
         "evidence/verification/2026-11-23-standby-client-preflights.json",
         "evidence/verification/E-standby-https-20261123T070252Z.txt",
-        "evidence/verification/E-standby-balanced-20261123T070254Z.txt"
+        "evidence/verification/E-standby-balanced-20261123T070254Z.txt",
+        "evidence/verification/E-cache-cutover-20261123T071835Z.txt",
+        "evidence/verification/E-attempt1-review.json",
+        "evidence/verification/E-attempt1-restored-20261123T072351Z.txt",
+        "evidence/verification/E-cache-preflight-20261123T072417Z.txt",
+        "evidence/phase2/edge-migration/E2-standby-https-xedge-and-dns-mac2.png",
+        "evidence/phase2/edge-migration/E2b-standby-https-both-backends-mac2.png"
       ],
-      "review_note": "Standby nginx applied on Mac3 at06:58:44 UTC with existing approved-CA leaf/key. Native Mac2 trusted preflight gives200/304 and twelve200 A6/B6. Operator preflights on Mac1/Mac3/Mac4 also give trusted HTTP2/200 with standby-mac3 and A/B identities. These use explicit --resolve, so they prove connectivity/trust only. Scheduled authoritative change, concurrent cached-old/fresh-new clients, convergence and restoration remain pending."
+      "review_note": "Standby nginx applied on Mac3 at06:58:44 UTC with existing approved-CA leaf/key. Native Mac2 trusted preflight gives200/304 and twelve200 A6/B6. Operator preflights on Mac1/Mac3/Mac4 also give trusted HTTP2/200 with standby-mac3 and A/B identities. These use explicit --resolve, so they prove connectivity/trust only. Scheduled authoritative change, concurrent cached-old/fresh-new clients, convergence and restoration remain pending. First scheduled trial07:19:51 UTC: freshMac1 reaches standby200 within5seconds, but Mac2 cache failed its initial dig before scheduled change and restored its resolver. Both authoritative records subsequently restored; six-record check and normal primary200 succeed07:23:52. Cached-old/convergence acceptance remains pending. Added preflight that validates local forwarding before touching system resolver; exact first-cache failure cause not yet established. Superseding cache preflight07:24:17\u201318 UTC at2853336 passes real authority and local53 forwarding checks, exits0 and cleans up without changing system resolver or authority data. Historical main-branch screenshot E2 shows both DNS/system standby and normal trusted standby200; E2b proves standbyA/B with explicit --resolve. These support migration components but do not supply the missing contemporaneous cached-old/convergence trial. Team ended further collection; full measured cutover remains unverified."
     },
     {
       "id": "packet-capture",
       "requirement": "Focused saved pcap/pcapng and actual frame/stream/port index including Certificate visibility explanation",
       "status": "pending",
-      "artifacts": [],
-      "review_note": ""
+      "artifacts": [
+        "evidence/verification/packet-index.md",
+        "evidence/verification/2026-11-23-tls12-client-observations.json",
+        "evidence/phase2/wireshark/dns-query-response-app-team1.png",
+        "evidence/phase2/wireshark/tls-handshake-clienthello-serverhello.png",
+        "evidence/wireshark/tcp-syn-detail.png",
+        "evidence/wireshark/tcp-tls-full-exchange.png"
+      ],
+      "review_note": "Existing main-branch screenshots reviewed and indexed by actual visible frame/port fields. Mac3 pasted normal hostname TLS1.2 requests with successful certificate verification and HTTP1.1/HTTP2 200 at07:23:14 UTC. The requested saved mac3-full-flow.pcap was not received in the task workspace. No binary capture or unseen Certificate frame is claimed. Collection ended at team request; strict saved-capture acceptance remains pending."
     },
     {
       "id": "cache-http2",
@@ -173,8 +186,18 @@
       "id": "failure-rehearsal",
       "requirement": "Layer-aware rehearsal plus effective wrong-client-DNS setting; remaining required failure outcomes and restore",
       "status": "pending",
-      "artifacts": [],
-      "review_note": ""
+      "artifacts": [
+        "evidence/failures/wrong-dns-record.png",
+        "evidence/failures/wrong-dns-record-restored.png",
+        "evidence/failures/both-down-502.png",
+        "evidence/failures/recovery-after-restart.png",
+        "evidence/failures/wrong-port.png",
+        "evidence/failures/wrong-dns-server.png",
+        "evidence/verification/D-a-down-20261123T060400Z.txt",
+        "evidence/verification/D-recovered-20261123T060959Z.txt",
+        "evidence/failures/INDEX.md"
+      ],
+      "review_note": "Reused and visually reviewed existing main-branch historical exhibits: wrong-record answer10.7.7.250 with curl28, both-down nginx502, wrong port9999 with curl7 despite2/2 IP ping; restoration exhibits retained. Current controlled A-down/B-only/recovered checks are separately verified. Public-resolver dig NXDOMAIN is only a direct query, not a changed effective client resolver. The corrected wrong-client-DNS helper passes local rollback/refusal tests but no live effective-setting run was supplied. Collection ended at team request; keep this remaining proof unverified."
     },
     {
       "id": "ca-approval",
@@ -202,5 +225,10 @@
       "status": "live",
       "requirement": "All four members explain full system personally"
     }
-  ]
+  ],
+  "collection_status": {
+    "state": "closed_at_team_request",
+    "date": "2026-11-23",
+    "scope": "Finalize the repository using supplied outputs and existing main-branch screenshots. No further distributed experiments are requested. Pending measurements remain disclosed; no success is inferred from filenames or expected output."
+  }
 }

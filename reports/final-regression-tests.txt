@@ -1,0 +1,24 @@
+test_background_lifecycle_and_idempotence (test_backend_service.BackendService.test_background_lifecycle_and_idempotence) ... ok
+test_foreign_process_registration_is_never_signalled (test_backend_service.BackendService.test_foreign_process_registration_is_never_signalled) ... ok
+test_wrong_machine_and_unregistered_port_are_refused (test_backend_service.BackendService.test_wrong_machine_and_unregistered_port_are_refused) ... ok
+test_cache_is_identical_and_validates_across_backends (test_backends.Backends.test_cache_is_identical_and_validates_across_backends) ... ok
+test_routes_and_status_are_not_cached (test_backends.Backends.test_routes_and_status_are_not_cached) ... ok
+test_wire_cache_responses_have_one_date_header (test_backends.Backends.test_wire_cache_responses_have_one_date_header) ... 127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/cache-demo HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "GET /api/cache-demo HTTP/1.1" 200 -
+127.0.0.1 - - [23/Nov/2026 13:02:27] "[36mGET /api/cache-demo HTTP/1.1[0m" 304 -
+ok
+test_forwarding_is_required_before_any_system_resolver_change (test_cutover_cache_preflight.CachePreflight.test_forwarding_is_required_before_any_system_resolver_change) ... PREFLIGHT CLEANUP: no authoritative records or system resolver were changed.
+PASS: cutover cache forwards correctly; system resolver and authoritative records unchanged
+PREFLIGHT CLEANUP: no authoritative records or system resolver were changed.
+ok
+test_route_identity_and_timing (test_fresh_cutover.FreshCutover.test_route_identity_and_timing) ... ok
+test_mixed_old_and_new_backend_deployment_is_rejected (test_helpers.Helpers.test_mixed_old_and_new_backend_deployment_is_rejected) ... ok
+test_wrong_http_dns_or_identity_does_not_pass (test_helpers.Helpers.test_wrong_http_dns_or_identity_does_not_pass) ... ok
+test_restore_pre_enabled_pf_without_disabling_other_owners (test_pf_rollback.PFRollback.test_restore_pre_enabled_pf_without_disabling_other_owners) ... ok
+test_effective_fault_rollback_and_unrelated_failures (test_wrong_dns_rehearsal.WrongDNS.test_effective_fault_rollback_and_unrelated_failures) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 15.033s
+
+OK

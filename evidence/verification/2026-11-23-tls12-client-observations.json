@@ -1,0 +1,43 @@
+{
+  "provenance": "Structured transcription of actual Mac3 curl verbose output pasted by the team. This is not a tcpdump recorder file or saved packet capture.",
+  "client": "Shubh1 / Mac3",
+  "hostname": "app.team1.test",
+  "connected_ip": "10.7.25.25",
+  "port": 8443,
+  "server_response_utc": "2026-11-23T07:23:14Z",
+  "requests": [
+    {
+      "curl_options": "--http1.1 --tlsv1.2 --tls-max 1.2 -v",
+      "negotiated_http": "http/1.1",
+      "status": 200,
+      "backend": "B"
+    },
+    {
+      "curl_options": "--http2 --tlsv1.2 --tls-max 1.2 -v",
+      "negotiated_http": "h2",
+      "status": 200,
+      "backend": "A"
+    }
+  ],
+  "common": {
+    "tls": "TLSv1.2",
+    "cipher": "ECDHE-RSA-AES256-GCM-SHA384",
+    "verification": "SSL certificate verify ok.",
+    "san": "app.team1.test matched",
+    "issuer": "existing mkcert development CA",
+    "certificate_dates": "Oct2,2026-Jan2,2029",
+    "x_edge": "primary-mac2",
+    "cache_control": "no-store"
+  },
+  "visible_verbose_events": [
+    "Client hello",
+    "Server hello",
+    "Certificate",
+    "Server key exchange",
+    "Server finished",
+    "Client key exchange",
+    "Change cipher spec",
+    "Finished"
+  ],
+  "limits": "No completed tcpdump summary or saved binary supplied. Curl handshake events do not establish packet/frame numbers."
+}

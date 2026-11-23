@@ -1,0 +1,38 @@
+START_UTC=2026-11-23T07:23:51Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=28533361b8fddf89e7d4852d2fb336604b3c9f94
+COMMAND: scripts/test-backup-dns.sh both-up
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 app.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+app.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 api.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+api.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 ttl.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+ttl.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 app.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+app.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 api.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+api.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 ttl.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+ttl.team1.test.		30	IN	A	10.7.25.25
+PASS: both-up (keep backup query receipt and primary-stop timeline as supporting evidence)
+
+EXIT_CODE=0
+END_UTC=2026-11-23T07:23:52Z
