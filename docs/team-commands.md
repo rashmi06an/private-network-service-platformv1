@@ -5,6 +5,10 @@ Mac 3 10.7.28.78, Mac 4 10.7.27.247. These are current assignments,
 not permanent DHCP reservations. Stop if a preflight finds another IP.
 
 Run one round, share its actual output, and check the results before moving on.
+Keep every laptop lid open throughout evaluation. On each Mac, use a separate
+terminal running `caffeinate -i` to prevent idle sleep; keep that terminal open and
+stop it with Ctrl+C after the demonstration. Background services still need an
+awake host. This temporary assertion does not change permanent power preferences.
 All commands below start from the new checkout root. Do not paste the whole
 document into a terminal; the steps deliberately change/fail/restore services.
 

@@ -14,7 +14,13 @@ header() { awk -F': *' -v name="$2" 'tolower($1)==tolower(name){sub(/\r$/, "", $
 fetch() {
     local url=$1 headers=$2
     shift 2
-    local args=(--noproxy '*' --connect-timeout 3 --max-time 10 -sS -D "$headers" -o /dev/null -w '%{http_code}')
+    local connect_timeout=3 max_time=10
+    # curl's connect budget also includes DNS; allow the OS time to try backup DNS.
+    case "$url" in
+      https://app.team1.test:*|https://app.team1.test/*|https://api.team1.test:*|https://api.team1.test/*)
+        connect_timeout=10; max_time=20;;
+    esac
+    local args=(--noproxy '*' --connect-timeout "$connect_timeout" --max-time "$max_time" -sS -D "$headers" -o /dev/null -w '%{http_code}')
     if [ -n "${TEAM_CA_CERT:-}" ]; then args+=(--cacert "$TEAM_CA_CERT"); fi
     "$TEAM_CURL" "${args[@]}" "$@" "$url"
 }

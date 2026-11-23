@@ -58,3 +58,13 @@ DNS failure means no usable name answer; TCP failure means no usable socket;
 TLS failure means transport works but identity/trust/handshake fails; 502 at a
 trusted reachable edge points to its upstream path. DNS may still resolve during
 an application outage. Confirm a hypothesis with the correct host and firewall state.
+
+### DNS timing and host availability
+
+Keep all four hosts awake (`caffeinate -i` in a dedicated terminal, lid open).
+If a hostname request times out, separately inspect current direct DNS answers,
+effective client settings, and service listeners before changing configuration.
+Private HTTPS checks allow10seconds for the combined DNS/connection phase and
+20seconds total so ordinary OS backup-resolver selection has time to complete.
+Direct-IP diagnostic probes retain3/10second limits. Timeout tuning does not
+replace restoring a primary DNS server expected to be online.

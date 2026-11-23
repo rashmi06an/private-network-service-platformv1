@@ -2,7 +2,7 @@
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
-args=(--noproxy '*' --connect-timeout 3 --max-time 10 --http2 -sS -D "$tmp/headers" -o /dev/null -w '%{http_code} %{http_version}')
+args=(--noproxy '*' --connect-timeout 10 --max-time 20 --http2 -sS -D "$tmp/headers" -o /dev/null -w '%{http_code} %{http_version}')
 if [ -n "${TEAM_CA_CERT:-}" ]; then args+=(--cacert "$TEAM_CA_CERT"); fi
 result=$("$TEAM_CURL" "${args[@]}" "$TEAM_URL/api/status")
 cat "$tmp/headers"; printf 'HTTP_CODE_AND_VERSION=%s\n' "$result"
