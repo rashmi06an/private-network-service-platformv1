@@ -1,0 +1,23 @@
+{
+  "scope": "Native Mac2 unprivileged port53536 controlled binding probe with reserved probe.invalid/192.0.2.1; not authoritative migration evidence.",
+  "results": [
+    {
+      "variant": "lan-only",
+      "returncode": 0,
+      "answer": "192.0.2.1",
+      "process_status": null
+    },
+    {
+      "variant": "lan-and-loopback",
+      "returncode": 0,
+      "answer": "192.0.2.1",
+      "process_status": null
+    },
+    {
+      "variant": "lan-filtered-wildcard",
+      "returncode": 0,
+      "answer": "192.0.2.1",
+      "process_status": null
+    }
+  ]
+}

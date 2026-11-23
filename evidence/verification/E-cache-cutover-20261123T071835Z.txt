@@ -1,0 +1,14 @@
+START_UTC=2026-11-23T07:18:35Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=1e2b11835ba5f76b74ee3d06f9491457e0701285
+COMMAND: python3 scripts/ttl-experiment.py cutover 1795418391
+2026-11-23T07:18:42.060+00:00 server=10.7.27.145:53 app.team1.test.		30	IN	A	10.7.25.25
+2026-11-23T07:18:42.149+00:00 server=10.7.27.247:53 app.team1.test.		30	IN	A	10.7.25.25
+2026-11-23T07:18:42.300+00:00 ARMED mode=cutover record=app.team1.test change_epoch=1795418391; cache is real dnsmasq on client Mac 2
+2026-11-23T07:19:48.228+00:00 PRE_PRIME_RESET: owned cache cleared before measured TTL interval
+RESTORED: previous macOS scoped DNS file
+NEXT: restore the changed record on BOTH DNS Macs with dns-record.sh; verify both-up before another test.
+FAIL: Command ['dig', '@10.7.25.25', '-p', '53', 'app.team1.test', 'A', '+time=2', '+tries=1', '+noall', '+answer'] returned non-zero exit status 9.
+
+EXIT_CODE=1
+END_UTC=2026-11-23T07:19:50Z

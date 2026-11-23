@@ -5,6 +5,7 @@ Both DNS Macs must schedule dns-record.sh for the SAME future epoch first.
 expiry/flush use ttl.team1.test. cutover uses app.team1.test and normal HTTPS.
 """
 import argparse
+import getpass
 from datetime import datetime, timezone
 from pathlib import Path
 import shutil
@@ -22,7 +23,9 @@ ROOT=Path(__file__).resolve().parents[1]
 def stamp():return datetime.now(timezone.utc).isoformat(timespec='milliseconds')
 def run(args,**kwargs):return subprocess.run(args,check=True,text=True,**kwargs)
 def answer(server,port,name):
-    r=run(['dig','@'+server,'-p',str(port),name,'A','+time=2','+tries=1','+noall','+answer'],capture_output=True)
+    command=['dig','@'+server,'-p',str(port),name,'A','+time=2','+tries=1','+noall','+answer']
+    r=subprocess.run(command,capture_output=True,text=True)
+    if r.returncode:raise RuntimeError(f'DNS query to {server}:{port} failed: {r.stdout.strip()} {r.stderr.strip()}')
     for line in r.stdout.splitlines():
         cols=line.split()
         if len(cols)>=5 and cols[0]==name+'.' and cols[3]=='A':
@@ -53,7 +56,9 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('mode',choices=['expiry','flush','cutover'])
     p.add_argument('epoch',type=int,help='Same future Unix epoch scheduled on BOTH DNS Macs')
+    p.add_argument('--preflight',action='store_true',help='Test the cutover cache and clean up without changing the system resolver or DNS records')
     args=p.parse_args()
+    if args.preflight and args.mode!='cutover':raise RuntimeError('--preflight is for cutover only')
     if not 12<args.epoch-time.time()<=600:raise RuntimeError('Start 12 seconds to 10 minutes before the scheduled change')
     actual=run(['ipconfig','getifaddr','en0'],capture_output=True).stdout.strip()
     if actual!=OLD:raise RuntimeError('Run the client experiment on Mac 2 (10.7.25.25)')
@@ -83,7 +88,7 @@ def main():
             run(['sudo','-v'])
             listeners=subprocess.run(['sudo','-n','lsof','-t','-nP',f'-iUDP@{OLD}:53',f'-iTCP@{OLD}:53'],capture_output=True,text=True)
             if listeners.stdout.strip():raise RuntimeError('Mac 2 port 53 already occupied; do not stop an unrelated DNS process')
-            run(['sudo','-n',dnsmasq,'--conf-file='+str(config),'--pid-file='+str(state/'cache.pid'),'--log-facility='+str(state/'daemon-log.txt')])
+            run(['sudo','-n',dnsmasq,'--user='+getpass.getuser(),'--log-queries=extra','--conf-file='+str(config),'--pid-file='+str(state/'cache.pid'),'--log-facility='+str(state/'daemon-log.txt')])
             daemon_pid=int((state/'cache.pid').read_text().strip())
         else:
             process=subprocess.Popen([dnsmasq,'--keep-in-foreground','--conf-file='+str(config),'--pid-file='+str(state/'cache.pid')],stdout=logfile,stderr=subprocess.STDOUT)
@@ -91,6 +96,11 @@ def main():
             if process.poll() is not None:raise RuntimeError('Temporary cache could not start; inspect '+str(state/'cache-process.txt'))
         expected(PRIMARY,53,name,OLD);expected(BACKUP,53,name,OLD)
         if args.mode=='cutover':
+            # Prove this listener forwards before routing system DNS through it.
+            expected(cache_host,cache_port,name,OLD)
+            if args.preflight:
+                print('PASS: cutover cache forwards correctly; system resolver and authoritative records unchanged',flush=True)
+                return
             if before is not None:(state/'resolver.before').write_bytes(before)
             else:(state/'resolver.was-absent').touch()
             scoped=state/'resolver.cache';scoped.write_text(f'nameserver {cache_host}\n')
@@ -157,7 +167,7 @@ def main():
                 try:process.wait(timeout=4)
                 except subprocess.TimeoutExpired:process.kill();process.wait()
             logfile.close()
-            print('NEXT: restore the changed record on BOTH DNS Macs with dns-record.sh; verify both-up before another test.',flush=True)
+            print('PREFLIGHT CLEANUP: no authoritative records or system resolver were changed.' if args.preflight else 'NEXT: restore the changed record on BOTH DNS Macs with dns-record.sh; verify both-up before another test.',flush=True)
 
 if __name__=='__main__':
     try:main()
