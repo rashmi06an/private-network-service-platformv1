@@ -1,0 +1,13 @@
+START_UTC=2026-11-23T04:48:18Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=2d3366aa6ee5dc10ccc959805a6fb23fc5b51382
+COMMAND: scripts/apply-edge.sh primary
+nginx: the configuration file /Users/samikshajangid0207/Documents/CN-submission/.local-state/edge-primary-20261123T044818Z/candidate.conf syntax is ok
+nginx: configuration file /Users/samikshajangid0207/Documents/CN-submission/.local-state/edge-primary-20261123T044818Z/candidate.conf test is successful
+nginx: the configuration file /opt/homebrew/etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /opt/homebrew/etc/nginx/nginx.conf test is successful
+PASS: primary config applied. Original configs: .local-state/edge-primary-20261123T044818Z
+Now run the trusted HTTPS and load-balancing checks; applying a config is not live proof.
+
+EXIT_CODE=0
+END_UTC=2026-11-23T04:48:19Z

@@ -108,7 +108,8 @@ scripts/record-evidence.sh R1-balanced scripts/test-load-balancing.sh
 ```
 
 Share all results. Expected: all three DNS records on both servers point to
-10.7.25.25; both backends 200; X-Edge primary-mac2; 304 through HTTPS.
+10.7.25.25; both backends have no-store and shared team1-cache-v2 with direct304;
+X-Edge primary-mac2 and conditional304 through trusted HTTPS.
 
 ## Round 2 — backup DNS failover (Extension A)
 

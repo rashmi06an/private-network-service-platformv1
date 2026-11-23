@@ -1,0 +1,25 @@
+START_UTC=2026-11-23T04:48:22Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=2d3366aa6ee5dc10ccc959805a6fb23fc5b51382
+COMMAND: scripts/test-backends.sh
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.14.8
+Date: Mon, 23 Nov 2026 04:48:22 GMT
+Content-Type: application/json
+Content-Length: 30
+X-Backend: A
+Connection: close
+
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.14.6
+Date: Mon, 23 Nov 2026 04:48:22 GMT
+Content-Type: application/json
+Content-Length: 30
+Cache-Control: no-store
+X-Backend: B
+Connection: close
+
+PASS: both direct backend endpoints returned 200 and the correct identity
+
+EXIT_CODE=0
+END_UTC=2026-11-23T04:48:22Z

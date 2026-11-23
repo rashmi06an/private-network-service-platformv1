@@ -1,0 +1,234 @@
+  done
+done
+DNS SERVER: 10.7.27.145
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 app.team1.test +noall +answer +time=2 +tries=1
+; (1 server found)
+;; global options: +cmd
+app.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 api.team1.test +noall +answer +time=2 +tries=1
+; (1 server found)
+;; global options: +cmd
+api.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 ttl.team1.test +noall +answer +time=2 +tries=1
+; (1 server found)
+;; global options: +cmd
+ttl.team1.test.		30	IN	A	10.7.28.78
+DNS SERVER: 10.7.27.247
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 app.team1.test +noall +answer +time=2 +tries=1
+; (1 server found)
+;; global options: +cmd
+app.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 api.team1.test +noall +answer +time=2 +tries=1
+; (1 server found)
+;; global options: +cmd
+api.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 ttl.team1.test +noall +answer +time=2 +tries=1
+; (1 server found)
+;; global options: +cmd
+ttl.team1.test.		30	IN	A	10.7.25.25
+samikshajangid0207@samikshas-MacBook-Pro ~ % sudo dscacheutil -flushcache
+sudo killall -HUP mDNSResponder
+
+dscacheutil -q host -a name app.team1.test
+
+/usr/bin/curl --noproxy '*' \
+  --connect-timeout 3 --max-time 10 \
+  -i https://app.team1.test:8443/api/status
+Password:
+Sorry, try again.
+Password:
+name: app.team1.test
+ip_address: 10.7.25.25
+
+HTTP/1.1 200 OK
+Server: nginx/1.31.6
+Date: Mon, 23 Nov 2026 03:35:57 GMT
+Content-Type: application/json
+Content-Length: 30
+Connection: keep-alive
+X-Backend: A
+
+{"backend":"A","status":"ok"}
+samikshajangid0207@samikshas-MacBook-Pro ~ % clear
+
+samikshajangid0207@samikshas-MacBook-Pro ~ % if [ ! -d "$HOME/Documents/CN-submission/.git" ]; then
+  git clone --branch samiksha/submission-readiness https://github.com/rashmi06an/private-network-service-platformv1.git "$HOME/Documents/CN-submission"
+fi
+
+cd "$HOME/Documents/CN-submission" &&
+git fetch origin samiksha/submission-readiness &&
+mkdir -p .local-state &&
+git show FETCH_HEAD:scripts/update-checkout.py > .local-state/update-checkout.py &&
+python3 .local-state/update-checkout.py --role mac2
+Cloning into '/Users/samikshajangid0207/Documents/CN-submission'...
+remote: Enumerating objects: 488, done.
+remote: Counting objects: 100% (157/157), done.
+remote: Compressing objects: 100% (131/131), done.
+remote: Total 488 (delta 64), reused 114 (delta 26), pack-reused 331 (from 1)
+Receiving objects: 100% (488/488), 53.59 MiB | 6.40 MiB/s, done.
+Resolving deltas: 100% (159/159), done.
+From https://github.com/rashmi06an/private-network-service-platformv1
+ * branch            samiksha/submission-readiness -> FETCH_HEAD
+ROLE=mac2 IP=10.7.25.25
+From https://github.com/rashmi06an/private-network-service-platformv1
+ * branch            samiksha/submission-readiness -> FETCH_HEAD
+Already up to date.
+PASS: checkout updated; original colliding logs remain in the printed local backup
+samikshajangid0207@samikshas-MacBook-Pro CN-submission % cd "$HOME/Documents/CN-submission" &&
+scripts/record-evidence.sh R1-mac2-client-dns scripts/client-dns.sh install &&
+scripts/record-evidence.sh R1-edge-apply scripts/apply-edge.sh primary
+START_UTC=2026-11-23T04:48:08Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=2d3366aa6ee5dc10ccc959805a6fb23fc5b51382
+COMMAND: scripts/client-dns.sh install
+Password:
+nameserver 10.7.27.145
+nameserver 10.7.27.247
+  domain   : team1.test
+  nameserver[0] : 10.7.27.145
+  nameserver[1] : 10.7.27.247
+  flags    : Request A records
+  reach    : 0x00020002 (Reachable,Directly Reachable Address)
+
+DNS configuration (for scoped queries)
+
+resolver #1
+PASS: scoped DNS install; normal internet resolver settings were not overwritten
+
+EXIT_CODE=0
+END_UTC=2026-11-23T04:48:18Z
+
+Saved actual output: evidence/verification/R1-mac2-client-dns-20261123T044808Z.txt
+START_UTC=2026-11-23T04:48:18Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=2d3366aa6ee5dc10ccc959805a6fb23fc5b51382
+COMMAND: scripts/apply-edge.sh primary
+nginx: the configuration file /Users/samikshajangid0207/Documents/CN-submission/.local-state/edge-primary-20261123T044818Z/candidate.conf syntax is ok
+nginx: configuration file /Users/samikshajangid0207/Documents/CN-submission/.local-state/edge-primary-20261123T044818Z/candidate.conf test is successful
+nginx: the configuration file /opt/homebrew/etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /opt/homebrew/etc/nginx/nginx.conf test is successful
+PASS: primary config applied. Original configs: .local-state/edge-primary-20261123T044818Z
+Now run the trusted HTTPS and load-balancing checks; applying a config is not live proof.
+
+EXIT_CODE=0
+END_UTC=2026-11-23T04:48:19Z
+
+Saved actual output: evidence/verification/R1-edge-apply-20261123T044818Z.txt
+samikshajangid0207@samikshas-MacBook-Pro CN-submission % cd "$HOME/Documents/CN-submission" &&
+scripts/record-evidence.sh R1-dns-sync scripts/test-backup-dns.sh both-up &&
+scripts/record-evidence.sh R1-backends scripts/test-backends.sh &&
+scripts/record-evidence.sh R1-https-cache scripts/test-https.sh &&
+scripts/record-evidence.sh R1-balanced scripts/test-load-balancing.sh &&
+scripts/record-evidence.sh R1-http2 scripts/test-http2.sh
+START_UTC=2026-11-23T04:48:21Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=2d3366aa6ee5dc10ccc959805a6fb23fc5b51382
+COMMAND: scripts/test-backup-dns.sh both-up
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 app.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+app.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 api.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+api.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 ttl.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+ttl.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 app.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+app.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 api.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+api.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.247 ttl.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+ttl.team1.test.		30	IN	A	10.7.25.25
+PASS: both-up (keep backup query receipt and primary-stop timeline as supporting evidence)
+
+EXIT_CODE=0
+END_UTC=2026-11-23T04:48:22Z
+
+Saved actual output: evidence/verification/R1-dns-sync-20261123T044821Z.txt
+START_UTC=2026-11-23T04:48:22Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=2d3366aa6ee5dc10ccc959805a6fb23fc5b51382
+COMMAND: scripts/test-backends.sh
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.14.8
+Date: Mon, 23 Nov 2026 04:48:22 GMT
+Content-Type: application/json
+Content-Length: 30
+X-Backend: A
+Connection: close
+
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.14.6
+Date: Mon, 23 Nov 2026 04:48:22 GMT
+Content-Type: application/json
+Content-Length: 30
+Cache-Control: no-store
+X-Backend: B
+Connection: close
+
+PASS: both direct backend endpoints returned 200 and the correct identity
+
+EXIT_CODE=0
+END_UTC=2026-11-23T04:48:22Z
+
+Saved actual output: evidence/verification/R1-backends-20261123T044822Z.txt
+START_UTC=2026-11-23T04:48:22Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=2d3366aa6ee5dc10ccc959805a6fb23fc5b51382
+COMMAND: scripts/test-https.sh
+HTTP/2 200 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 04:48:23 GMT
+content-type: application/json
+content-length: 30
+x-backend: A
+x-edge: primary-mac2
+
+HTTP/2 200 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 04:48:23 GMT
+content-type: application/json
+content-length: 46
+cache-control: public, max-age=60
+etag: "team1-cache-v2"
+x-backend: B
+x-edge: primary-mac2
+
+HTTP/2 200 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 04:48:23 GMT
+content-type: application/json
+content-length: 48
+cache-control: public, max-age=60
+etag: "backend-a-v1"
+x-backend: A
+x-edge: primary-mac2
+
+FAIL: Expected HTTP 304, got 200
+
+EXIT_CODE=1
+END_UTC=2026-11-23T04:48:23Z
+
+Saved actual output: evidence/verification/R1-https-cache-20261123T044822Z.txt
+samikshajangid0207@samikshas-MacBook-Pro CN-submission % 

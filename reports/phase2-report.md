@@ -111,3 +111,27 @@ At 03:50:00–03:50:09 UTC on 23 November, Rashmi ran the canonical primary setu
 ### Backup canonical configuration applied
 
 Ankit supplied the [backup setup log](../evidence/verification/R1-backup-setup-20261123T041652Z.txt) for 04:16:52–04:16:56 UTC on 23 November, commit16ff0bd. It is copied from the team transcript with formatting normalized. The canonical backup setup saved prior config, passed syntax validation, restarted the managed service and checked app/api/ttl at 10.7.25.25 TTL30, with exit0. Both canonical DNS setup stages are now observed successful; the full cross-client primary-outage/fresh-lookup experiment is still pending.
+
+### Current edge baseline: mixed backend deployment detected
+
+The [Mac2 Round1 transcript](../evidence/verification/2026-11-23-mac2-round1-transcript.txt)
+is copied verbatim from the user-supplied terminal text, including older scrollback.
+The five new recorder files retain their exact START/END blocks from that transcript.
+At04:48 UTC, the current results are:
+
+| Check | Observed result |
+|---|---|
+| Scoped client DNS on Mac2 | Both private DNS servers installed and effective; a second client's settings remain pending |
+| Canonical primary edge | Config validation and apply succeeded; trusted responses carry X-Edge primary-mac2 |
+| Both DNS datasets from Mac2 | All six app/api/ttl answers match10.7.25.25 with TTL30; the earlier scrollback TTL mismatch is superseded |
+| Direct backend health | Both200/identity checks passed the old helper, but A lacked no-store and was serving the old runtime |
+| HTTPS cache validation | Failed: B returned team1-cache-v2, then A returned backend-a-v1 with200 instead of the required304 |
+| HTTP/2 | Actual trusted HTTP/2 responses observed; the separate HTTP2 command was skipped after the cache failure |
+| Load-balancing command | Not executed because the preceding HTTPS check failed in the && chain |
+
+The earlier local updated-A response is retained as historical evidence, but current
+runtime acceptance remains open. The direct checker now requires no-store, the shared
+v2 ETag, cache policy and conditional304 independently from both backends. Its
+regression fixtures reject old A, old B, an old validator with otherwise new status,
+and a broken conditional response, while accepting both updated backends. Identify
+the active Mac3 process and relaunch the corrected A before repeating the baseline.

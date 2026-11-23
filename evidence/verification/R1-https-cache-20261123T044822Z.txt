@@ -1,0 +1,36 @@
+START_UTC=2026-11-23T04:48:22Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=2d3366aa6ee5dc10ccc959805a6fb23fc5b51382
+COMMAND: scripts/test-https.sh
+HTTP/2 200 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 04:48:23 GMT
+content-type: application/json
+content-length: 30
+x-backend: A
+x-edge: primary-mac2
+
+HTTP/2 200 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 04:48:23 GMT
+content-type: application/json
+content-length: 46
+cache-control: public, max-age=60
+etag: "team1-cache-v2"
+x-backend: B
+x-edge: primary-mac2
+
+HTTP/2 200 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 04:48:23 GMT
+content-type: application/json
+content-length: 48
+cache-control: public, max-age=60
+etag: "backend-a-v1"
+x-backend: A
+x-edge: primary-mac2
+
+FAIL: Expected HTTP 304, got 200
+
+EXIT_CODE=1
+END_UTC=2026-11-23T04:48:23Z

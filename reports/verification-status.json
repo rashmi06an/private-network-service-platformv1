@@ -20,16 +20,21 @@
         "evidence/verification/2026-11-23-mac3-updated-backend-a.txt",
         "evidence/verification/2026-11-23-mac3-misrouted-backend-b-attempt.txt",
         "evidence/verification/2026-11-23-checkout-recovery-and-backend-b-conflict.txt",
-        "evidence/verification/2026-11-23-mac4-updated-backend-b.txt"
+        "evidence/verification/2026-11-23-mac4-updated-backend-b.txt",
+        "evidence/verification/R1-edge-apply-20261123T044818Z.txt",
+        "evidence/verification/R1-backends-20261123T044822Z.txt",
+        "evidence/verification/R1-https-cache-20261123T044822Z.txt"
       ],
-      "review_note": "23 Nov Mac2: flushed system lookup resolves 10.7.25.25; normal verified HTTPS gives HTTP200 Backend A. Updated application cache/edge-header deployment still pending. Mac3 04:25 UTC: updated dependencies installed, but new A launch exit1 (port3001 in use); existing listener returns old backend-a-v1 ETag and no status no-store. Old A must be stopped before corrected deployment can pass. Subsequent retry at 04:27:46 UTC succeeded; Mac3 direct HTTP200 checks at04:27:58 show no-store and shared team1-cache-v2/version2. A deployment subcheck now passes; B and updated edge integration still pending. TLS bytes sent to A HTTP port generated400; client source unknown. At04:31 UTC B steps ran on Mac3; pull aborted on an untracked evidence collision, so venv creation was skipped and launch exit127. Remote B still serves backend-b-v1. Added role-checked evidence-preserving checkout updater; actual B deployment on Mac4 remains pending. At04:36/04:41 UTC evidence-preserving updates passed on Mac3 and Mac4. Mac4 dependencies installed, but corrected B launch exit1: port3002 occupied; old backend-b-v1 responses persist. Identify and stop old B before retry. Mac4 corrected B retry started04:45:20 UTC; direct HTTP200 checks04:45:50 confirm no-store, team1-cache-v2 and identical version2 representation. Both per-host updated backend subchecks now pass; Mac2 cross-host and updated trusted edge integration remain pending."
+      "review_note": "23 Nov Mac2: flushed system lookup resolves 10.7.25.25; normal verified HTTPS gives HTTP200 Backend A. Updated application cache/edge-header deployment still pending. Mac3 04:25 UTC: updated dependencies installed, but new A launch exit1 (port3001 in use); existing listener returns old backend-a-v1 ETag and no status no-store. Old A must be stopped before corrected deployment can pass. Subsequent retry at 04:27:46 UTC succeeded; Mac3 direct HTTP200 checks at04:27:58 show no-store and shared team1-cache-v2/version2. A deployment subcheck now passes; B and updated edge integration still pending. TLS bytes sent to A HTTP port generated400; client source unknown. At04:31 UTC B steps ran on Mac3; pull aborted on an untracked evidence collision, so venv creation was skipped and launch exit127. Remote B still serves backend-b-v1. Added role-checked evidence-preserving checkout updater; actual B deployment on Mac4 remains pending. At04:36/04:41 UTC evidence-preserving updates passed on Mac3 and Mac4. Mac4 dependencies installed, but corrected B launch exit1: port3002 occupied; old backend-b-v1 responses persist. Identify and stop old B before retry. Mac4 corrected B retry started04:45:20 UTC; direct HTTP200 checks04:45:50 confirm no-store, team1-cache-v2 and identical version2 representation. Both per-host updated backend subchecks now pass; Mac2 cross-host and updated trusted edge integration remain pending. Mac2 04:48:08-04:48:23 UTC: canonical client DNS and edge apply exit0. Direct old health-only backend check exit0, but A is again Python3.14.8 without no-store; trusted HTTP2 cache responses show B team1-cache-v2 then A backend-a-v1 and conditional HTTP200 instead of304. Current mixed deployment fails acceptance; earlier local A success does not establish current runtime. LB and separate HTTP2 commands skipped by && after HTTPS failure. Require identified A process repair and stricter recheck."
     },
     {
       "id": "dns-clients",
       "requirement": "At least two effective private-zone client resolver settings showing both DNS servers",
       "status": "pending",
-      "artifacts": [],
-      "review_note": ""
+      "artifacts": [
+        "evidence/verification/R1-mac2-client-dns-20261123T044808Z.txt"
+      ],
+      "review_note": " Mac2 scoped resolver install04:48 UTC exit0; effective team1.test resolver lists both10.7.27.145 and10.7.27.247. Second client settings still pending."
     },
     {
       "id": "dns-failover",
@@ -39,9 +44,10 @@
         "evidence/verification/2026-11-23-mac4-backup-dns-restored.txt",
         "evidence/verification/2026-11-23-mac2-dns-https-baseline.txt",
         "evidence/verification/R1-primary-setup-20261123T035000Z.txt",
-        "evidence/verification/R1-backup-setup-20261123T041652Z.txt"
+        "evidence/verification/R1-backup-setup-20261123T041652Z.txt",
+        "evidence/verification/R1-dns-sync-20261123T044821Z.txt"
       ],
-      "review_note": "Primary canonical setup passed 23 Nov 03:50 UTC; backup canonical setup passed 04:16:52-04:16:56 UTC at commit16ff0bd. Both local setup checks show app/api/ttl=10.7.25.25 TTL30 and exit0, with config backups. Post-migration cross-client parity/settings, controlled primary outage, fresh client resolution/HTTPS, backup query receipt and restoration remain pending."
+      "review_note": "Primary canonical setup passed 23 Nov 03:50 UTC; backup canonical setup passed 04:16:52-04:16:56 UTC at commit16ff0bd. Both local setup checks show app/api/ttl=10.7.25.25 TTL30 and exit0, with config backups. Post-migration cross-client parity/settings, controlled primary outage, fresh client resolution/HTTPS, backup query receipt and restoration remain pending. Mac2 both-up check04:48:21-04:48:22 UTC exit0: all six app/api/ttl A answers match10.7.25.25 TTL30 after canonical migrations. This supersedes older primary ttl mismatch in the pasted transcript. Controlled outage/fresh client/backup receipt/restore still pending."
     },
     {
       "id": "ttl-expiry",
@@ -89,8 +95,10 @@
       "id": "cache-http2",
       "requirement": "Trusted hostname cache-demo200/304 and real HTTP2 where supported",
       "status": "pending",
-      "artifacts": [],
-      "review_note": ""
+      "artifacts": [
+        "evidence/verification/R1-https-cache-20261123T044822Z.txt"
+      ],
+      "review_note": " Mac2 trusted HTTP/2 responses observed04:48:23 UTC with X-Edge primary-mac2. Conditional cache check FAILED exit1: B supplied shared v2 ETag, A supplied old backend-a-v1 with200 instead of304. Separate HTTP2 script not executed after failure; cache acceptance remains pending."
     },
     {
       "id": "failure-rehearsal",
