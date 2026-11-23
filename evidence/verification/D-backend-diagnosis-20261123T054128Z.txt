@@ -1,0 +1,37 @@
+START_UTC=2026-11-23T05:41:28Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=fc96bb54fafed6d534bfcc8e604f68307e06fc35
+COMMAND: scripts/test-backends.sh
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.15.2
+Date: Mon, 23 Nov 2026 05:41:29 GMT
+Content-Type: application/json
+Content-Length: 30
+Cache-Control: no-store
+X-Backend: A
+Connection: close
+
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.15.2
+Date: Mon, 23 Nov 2026 05:41:29 GMT
+Content-Type: application/json
+Content-Length: 46
+Cache-Control: public, max-age=60
+ETag: "team1-cache-v2"
+Date: Mon, 23 Nov 2026 05:41:29 GMT
+X-Backend: A
+Connection: close
+
+HTTP/1.1 304 NOT MODIFIED
+Server: Werkzeug/3.1.9 Python/3.15.2
+Date: Mon, 23 Nov 2026 05:41:29 GMT
+Cache-Control: public, max-age=60
+ETag: "team1-cache-v2"
+Date: Mon, 23 Nov 2026 05:41:29 GMT
+X-Backend: A
+Connection: close
+
+curl: (7) Failed to connect to 10.7.27.247 port 3002 after 1012 ms: Couldn't connect to server
+
+EXIT_CODE=7
+END_UTC=2026-11-23T05:41:30Z

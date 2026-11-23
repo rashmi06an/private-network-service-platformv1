@@ -1,0 +1,18 @@
+START_UTC=2026-11-23T05:35:19Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=8ae2cd82b005a5c5ba4c0d3b1697731803b5d5f6
+COMMAND: python3 scripts/ttl-experiment.py flush 1795412219
+2026-11-23T05:35:20.322+00:00 server=10.7.27.145:53 ttl.team1.test.		30	IN	A	10.7.25.25
+2026-11-23T05:35:20.446+00:00 server=10.7.27.247:53 ttl.team1.test.		30	IN	A	10.7.25.25
+2026-11-23T05:35:20.446+00:00 ARMED mode=flush record=ttl.team1.test change_epoch=1795412219; cache is real dnsmasq on client Mac 2
+2026-11-23T05:36:56.057+00:00 server=127.0.0.1:53535 ttl.team1.test.		30	IN	A	10.7.25.25
+2026-11-23T05:37:01.020+00:00 server=10.7.27.145:53 ttl.team1.test.		30	IN	A	10.7.28.78
+2026-11-23T05:37:01.033+00:00 server=10.7.27.247:53 ttl.team1.test.		30	IN	A	10.7.28.78
+2026-11-23T05:37:01.038+00:00 server=127.0.0.1:53535 ttl.team1.test.		25	IN	A	10.7.25.25
+2026-11-23T05:37:01.038+00:00 MANUAL_FLUSH: SIGHUP only to temporary client-cache PID 85419
+2026-11-23T05:37:01.311+00:00 server=127.0.0.1:53535 ttl.team1.test.		30	IN	A	10.7.28.78
+PASS: manual cache flush changed OLD -> NEW before TTL expiry; elapsed=5.25s
+NEXT: restore the changed record on BOTH DNS Macs with dns-record.sh; verify both-up before another test.
+
+EXIT_CODE=0
+END_UTC=2026-11-23T05:37:01Z

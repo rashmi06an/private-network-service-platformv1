@@ -33,6 +33,8 @@ def cache_demo():
     response.headers["Cache-Control"] = "public, max-age=60"
     response.set_etag("team1-cache-v2")
     response.make_conditional(request)
+    # Werkzeug serving supplies the wire Date header; avoid a duplicate Date.
+    response.headers.pop("Date", None)
     return response
 
 if __name__ == "__main__":

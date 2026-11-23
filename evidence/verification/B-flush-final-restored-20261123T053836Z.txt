@@ -1,0 +1,23 @@
+START_UTC=2026-11-23T05:38:36Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=8ae2cd82b005a5c5ba4c0d3b1697731803b5d5f6
+COMMAND: scripts/test-backup-dns.sh both-up
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 app.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+app.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 api.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+api.team1.test.		30	IN	A	10.7.25.25
+
+; <<>> DiG 9.10.6 <<>> @10.7.27.145 ttl.team1.test A +time=2 +tries=1 +noall +answer
+; (1 server found)
+;; global options: +cmd
+ttl.team1.test.		30	IN	A	10.7.28.78
+FAIL: 10.7.27.145: ttl.team1.test must resolve to 10.7.25.25 with TTL 30
+
+EXIT_CODE=1
+END_UTC=2026-11-23T05:38:36Z

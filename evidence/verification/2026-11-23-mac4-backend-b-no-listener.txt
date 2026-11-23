@@ -1,0 +1,8 @@
+SOURCE: User-pasted fresh Mac4 inspection after Mac2 B3002 connectivity failure.
+COMMAND: ipconfig getifaddr en0
+10.7.27.247
+COMMAND: lsof -nP -iTCP:3002 -sTCP:LISTEN
+(no listener rows)
+
+REVIEW: B has no local listening process at this observation. Startup recovery is
+required; the original reason the process stopped was not established.

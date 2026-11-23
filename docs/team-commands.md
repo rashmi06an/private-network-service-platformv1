@@ -52,19 +52,20 @@ Record each Mac's inventory and all three outbound pings:
 
 ## Round 1 — normal services (all backends and DNS up)
 
-**Shubhaang / Mac 3:** stop the old Backend A in its original terminal using Ctrl+C.
-In a new terminal, keep this updated backend running:
+**Shubhaang / Mac3 and Ankit / Mac4:** prepare the assigned backend's `.venv`
+and requirements per [A](../backend-a/README.md) or [B](../backend-b/README.md).
+Stop only an identified previous foreground instance first. Start the corrected
+checkout using its terminal-independent manager:
 
-```bash
-cd "$HOME/Documents/CN-submission/backend-a"
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python app.py
-```
+| Mac | Start command from checkout root |
+|---|---|
+| Mac3 | `python3 scripts/backend-service.py a start` |
+| Mac4 | `python3 scripts/backend-service.py b start` |
 
-**Ankit / Mac 4:** stop the old Backend B with Ctrl+C, then use the same block
-with `backend-b`. Keep its backend terminal open.
+Use the same command with `status` to check its registered process/application,
+or `stop` for a controlled outage. A successful start prints the exact app/log
+paths. Unknown occupied ports are refused; closing the launcher terminal is safe.
+A logout/reboot or unexpected app exit still needs a new start command.
 
 **Rashmi / Mac 1:** install the primary DNS config:
 
@@ -145,11 +146,15 @@ Complete and restore the expiry test before starting the manual-flush test.
 ## Round 4 — backend HA (Extension D)
 
 Mac 2: `scripts/record-evidence.sh D-balanced scripts/test-ha-failover.sh balanced`.
-Mac 3 stops **only Backend A** using Ctrl+C and records that :3001 has no listener.
+Mac3 stops **only Backend A** with `python3 scripts/backend-service.py a stop`
+if it is managed. During initial migration, stop a known foreground A with Ctrl+C
+in its own terminal instead. Record that :3001 has no listener.
 Mac 2: `scripts/record-evidence.sh D-a-down scripts/test-ha-failover.sh a-down`.
-Mac 3 restarts updated Backend A with the Round 1 launch block.
+Mac3 restarts updated A with `python3 scripts/backend-service.py a start`.
 Wait 11 seconds for the failed upstream's suppression period, then Mac 2:
 `scripts/record-evidence.sh D-recovered scripts/test-ha-failover.sh recovered`.
+Recheck `scripts/test-backends.sh` and `scripts/test-https.sh` so a restarted old
+checkout cannot pass only by returning A/B identities.
 
 For the Phase 1 both-down case, stop B too, prove HTTPS returns 502 at the edge,
 then restore both and rerun HTTPS/balancing. Do this only as its own controlled test.

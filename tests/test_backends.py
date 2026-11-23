@@ -2,6 +2,10 @@
 from pathlib import Path
 import importlib.util
 import unittest
+import threading
+import urllib.error
+import urllib.request
+from werkzeug.serving import make_server
 
 ROOT=Path(__file__).resolve().parents[1]
 def load(label):
@@ -31,5 +35,27 @@ class Backends(unittest.TestCase):
                 self.assertEqual(checked.headers['ETag'],r.headers['ETag'])
         self.assertEqual(b.get('/api/cache-demo',headers={'If-None-Match':'"different"'}).status_code,200)
         self.assertEqual(b.head('/api/cache-demo').data,b'')
+
+
+    def test_wire_cache_responses_have_one_date_header(self):
+        opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        for label in 'AB':
+            server=make_server('127.0.0.1',0,load(label))
+            thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
+            try:
+                url='http://127.0.0.1:%s/api/cache-demo' % server.server_port
+                with opener.open(url,timeout=2) as response:
+                    self.assertEqual(len(response.headers.get_all('Date')),1)
+                    tag=response.headers['ETag']
+                request=urllib.request.Request(url,headers={'If-None-Match':tag})
+                try:
+                    opener.open(request,timeout=2)
+                    self.fail('Expected conditional304')
+                except urllib.error.HTTPError as response:
+                    self.assertEqual(response.code,304)
+                    self.assertEqual(len(response.headers.get_all('Date')),1)
+                    response.close()
+            finally:
+                server.shutdown();server.server_close();thread.join(timeout=2)
 
 if __name__=='__main__':unittest.main()

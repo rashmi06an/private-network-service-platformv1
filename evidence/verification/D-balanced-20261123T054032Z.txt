@@ -1,0 +1,20 @@
+START_UTC=2026-11-23T05:40:32Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=fc96bb54fafed6d534bfcc8e604f68307e06fc35
+COMMAND: scripts/test-ha-failover.sh balanced
+stage=balanced request=1 HTTP=200 X-Backend=A
+stage=balanced request=2 HTTP=200 X-Backend=A
+stage=balanced request=3 HTTP=200 X-Backend=A
+stage=balanced request=4 HTTP=200 X-Backend=A
+stage=balanced request=5 HTTP=200 X-Backend=A
+stage=balanced request=6 HTTP=200 X-Backend=A
+stage=balanced request=7 HTTP=200 X-Backend=A
+stage=balanced request=8 HTTP=200 X-Backend=A
+stage=balanced request=9 HTTP=200 X-Backend=A
+stage=balanced request=10 HTTP=200 X-Backend=A
+stage=balanced request=11 HTTP=200 X-Backend=A
+stage=balanced request=12 HTTP=200 X-Backend=A
+FAIL: Both backends not observed: A=12 B=0
+
+EXIT_CODE=1
+END_UTC=2026-11-23T05:40:39Z

@@ -20,7 +20,7 @@
     {
       "id": "baseline",
       "requirement": "Both updated backends, trusted by-name HTTPS, both backend identities and stable cache validator",
-      "status": "verified",
+      "status": "pending",
       "artifacts": [
         "evidence/verification/2026-11-23-mac2-dns-https-baseline.txt",
         "evidence/verification/R1-backend-a-20261123T042514Z.txt",
@@ -35,9 +35,12 @@
         "evidence/verification/2026-11-23-mac3-stale-a-process-identified.txt",
         "evidence/verification/R1-backends-recheck-20261123T045542Z.txt",
         "evidence/verification/R1-https-cache-recheck-20261123T045543Z.txt",
-        "evidence/verification/R1-balanced-recheck-20261123T045544Z.txt"
+        "evidence/verification/R1-balanced-recheck-20261123T045544Z.txt",
+        "evidence/verification/D-balanced-20261123T054032Z.txt",
+        "evidence/verification/D-backend-diagnosis-20261123T054128Z.txt",
+        "evidence/verification/2026-11-23-mac4-backend-b-no-listener.txt"
       ],
-      "review_note": "23 Nov Mac2: flushed system lookup resolves 10.7.25.25; normal verified HTTPS gives HTTP200 Backend A. Updated application cache/edge-header deployment still pending. Mac3 04:25 UTC: updated dependencies installed, but new A launch exit1 (port3001 in use); existing listener returns old backend-a-v1 ETag and no status no-store. Old A must be stopped before corrected deployment can pass. Subsequent retry at 04:27:46 UTC succeeded; Mac3 direct HTTP200 checks at04:27:58 show no-store and shared team1-cache-v2/version2. A deployment subcheck now passes; B and updated edge integration still pending. TLS bytes sent to A HTTP port generated400; client source unknown. At04:31 UTC B steps ran on Mac3; pull aborted on an untracked evidence collision, so venv creation was skipped and launch exit127. Remote B still serves backend-b-v1. Added role-checked evidence-preserving checkout updater; actual B deployment on Mac4 remains pending. At04:36/04:41 UTC evidence-preserving updates passed on Mac3 and Mac4. Mac4 dependencies installed, but corrected B launch exit1: port3002 occupied; old backend-b-v1 responses persist. Identify and stop old B before retry. Mac4 corrected B retry started04:45:20 UTC; direct HTTP200 checks04:45:50 confirm no-store, team1-cache-v2 and identical version2 representation. Both per-host updated backend subchecks now pass; Mac2 cross-host and updated trusted edge integration remain pending. Mac2 04:48:08-04:48:23 UTC: canonical client DNS and edge apply exit0. Direct old health-only backend check exit0, but A is again Python3.14.8 without no-store; trusted HTTP2 cache responses show B team1-cache-v2 then A backend-a-v1 and conditional HTTP200 instead of304. Current mixed deployment fails acceptance; earlier local A success does not establish current runtime. LB and separate HTTP2 commands skipped by && after HTTPS failure. Require identified A process repair and stricter recheck. Follow-up Mac3 process inspection identifies stale A as PID19055/PPID207 with cwd Desktop/private-network-service-platformv1/backend-a. Corrected relaunch and repeat strict baseline still required. Superseding recheck04:55:42-04:55:45 UTC atdedf0d9: strict direct checks pass for both no-store/v2 validators/304; trusted normal hostname HTTPS returns200/304 with X-Edge primary-mac2; 12 requests showA6/B6 all200. Original Mac2 recorder files copied byte-for-byte from its CN-submission checkout. Earlier failed attempts remain historical evidence; current baseline passes."
+      "review_note": "23 Nov Mac2: flushed system lookup resolves 10.7.25.25; normal verified HTTPS gives HTTP200 Backend A. Updated application cache/edge-header deployment still pending. Mac3 04:25 UTC: updated dependencies installed, but new A launch exit1 (port3001 in use); existing listener returns old backend-a-v1 ETag and no status no-store. Old A must be stopped before corrected deployment can pass. Subsequent retry at 04:27:46 UTC succeeded; Mac3 direct HTTP200 checks at04:27:58 show no-store and shared team1-cache-v2/version2. A deployment subcheck now passes; B and updated edge integration still pending. TLS bytes sent to A HTTP port generated400; client source unknown. At04:31 UTC B steps ran on Mac3; pull aborted on an untracked evidence collision, so venv creation was skipped and launch exit127. Remote B still serves backend-b-v1. Added role-checked evidence-preserving checkout updater; actual B deployment on Mac4 remains pending. At04:36/04:41 UTC evidence-preserving updates passed on Mac3 and Mac4. Mac4 dependencies installed, but corrected B launch exit1: port3002 occupied; old backend-b-v1 responses persist. Identify and stop old B before retry. Mac4 corrected B retry started04:45:20 UTC; direct HTTP200 checks04:45:50 confirm no-store, team1-cache-v2 and identical version2 representation. Both per-host updated backend subchecks now pass; Mac2 cross-host and updated trusted edge integration remain pending. Mac2 04:48:08-04:48:23 UTC: canonical client DNS and edge apply exit0. Direct old health-only backend check exit0, but A is again Python3.14.8 without no-store; trusted HTTP2 cache responses show B team1-cache-v2 then A backend-a-v1 and conditional HTTP200 instead of304. Current mixed deployment fails acceptance; earlier local A success does not establish current runtime. LB and separate HTTP2 commands skipped by && after HTTPS failure. Require identified A process repair and stricter recheck. Follow-up Mac3 process inspection identifies stale A as PID19055/PPID207 with cwd Desktop/private-network-service-platformv1/backend-a. Corrected relaunch and repeat strict baseline still required. Superseding recheck04:55:42-04:55:45 UTC atdedf0d9: strict direct checks pass for both no-store/v2 validators/304; trusted normal hostname HTTPS returns200/304 with X-Edge primary-mac2; 12 requests showA6/B6 all200. Original Mac2 recorder files copied byte-for-byte from its CN-submission checkout. Earlier failed attempts remain historical evidence; current baseline passes. Reopened at05:40/05:41 UTC: HA baseline gives12A/0B, direct A v2/304 works but B3002 connect fails. Ankit fresh lsof shows no listener with IP unchanged10.7.27.247. Restore B and repeat baseline; role-checked detached-process manager added/tested to remove foreground-terminal dependence."
     },
     {
       "id": "dns-clients",
@@ -85,9 +88,13 @@
     {
       "id": "ttl-flush",
       "requirement": "Separate real manual cache flush changes OLD to NEW before natural expiry; both servers restored",
-      "status": "pending",
-      "artifacts": [],
-      "review_note": ""
+      "status": "verified",
+      "artifacts": [
+        "evidence/verification/B-manual-flush-20261123T053519Z.txt",
+        "evidence/verification/B-flush-final-restored-20261123T053836Z.txt",
+        "evidence/verification/B-flush-restored-recheck-20261123T054126Z.txt"
+      ],
+      "review_note": "Actual agent-run Mac2 manual-flush case at8ae2cd8 passed. Real cache OLD/TTL30 primed05:36:56.057; both real authorities NEW05:37:01; cache stillOLD/TTL25; explicit SIGHUP to owned cache PID85419 at05:37:01.038 produced NEW05:37:01.311 after5.25seconds, before natural30s expiry; exit0. Cleanup check05:38:36 still found primary ttl NEW; keep item pending until both post-experiment restores and passing both-up check. Superseding cleanup: user supplied primary restore05:38:49 and backup restore05:40:37. Agent final both-up check05:41:26 returns all6 normal records/TTL30 with exit0. Separate manual-flush and restoration now verified."
     },
     {
       "id": "isolation",
@@ -100,8 +107,12 @@
       "id": "ha",
       "requirement": "A/B baseline; A stopped, B-onlyHTTP200; A restarted, A/B return",
       "status": "pending",
-      "artifacts": [],
-      "review_note": ""
+      "artifacts": [
+        "evidence/verification/D-balanced-20261123T054032Z.txt",
+        "evidence/verification/D-backend-diagnosis-20261123T054128Z.txt",
+        "evidence/verification/2026-11-23-mac4-backend-b-no-listener.txt"
+      ],
+      "review_note": "First actual baseline05:40:32-39 fails12A/0B; diagnosis05:41:28-30 finds B port3002 unreachable, and user confirms no local3002 listener on Mac4. This demonstrates current degradation, not a completed required A-down/B-only/recovery trial. Restore B before controlled trial."
     },
     {
       "id": "edge-cutover",

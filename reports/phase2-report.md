@@ -215,3 +215,38 @@ Ankit supplied a new restore at05:30:48 and Rashmi at05:31:07. The agent then ra
 [the actual final Mac2 both-up check](../evidence/verification/B-expiry-final-restored-20261123T053310Z.txt)
 at05:33:10–05:33:11, obtaining all six normal records/TTL30 and exit0. Natural expiry
 and its restoration are verified; the distinct manual-flush case remains pending.
+
+### Separate manual-flush client case passed; cleanup under review
+
+The agent ran [the live Mac2 manual-flush helper](../evidence/verification/B-manual-flush-20261123T053519Z.txt)
+against the two operators' shared epoch1795412219. At05:37:01 UTC both authorities
+served NEW while the client retained OLD/TTL25. The explicit SIGHUP to its owned
+cache PID85419 immediately obtained NEW at05:37:01.311, only5.25seconds after
+priming, with exit0. This is separate from the31.49-second natural-expiry run.
+The [first cleanup check](../evidence/verification/B-flush-final-restored-20261123T053836Z.txt)
+at05:38:36 still found primary ttl pointing to NEW, so the full manual-flush ledger
+item remains pending until post-experiment restores and a passing final check.
+
+### Manual-flush restoration verified; B availability gap found separately
+
+User supplied primary restore05:38:49 UTC and backup restore05:40:37. The
+[final Mac2 check](../evidence/verification/B-flush-restored-recheck-20261123T054126Z.txt)
+at05:41:26 passes all six normal answers/TTL30, completing manual-flush acceptance.
+
+A separate [HA baseline](../evidence/verification/D-balanced-20261123T054032Z.txt)
+at05:40:32–05:40:39 found12 successful A responses and no B. The
+[direct diagnosis](../evidence/verification/D-backend-diagnosis-20261123T054128Z.txt)
+confirmed current A v2/304 and failed B3002 connectivity; Ankit then supplied an
+unchanged10.7.27.247 address and empty port3002 listener listing. Baseline is reopened
+until B is restored. A new role-checked backend manager starts the fixed checkout
+in a detached session, checks current application behavior, logs locally, and checks
+UID/PID/birth/app path before stopping its own process. It refuses other listeners.
+Real isolated-process tests cover start/status/idempotence/stop/restart, wrong Mac,
+occupied port and unrelated PID refusal. Live B deployment and required controlled
+A-down/B-only/recovery evidence remain pending.
+
+The cache routes also omit the application-generated Date after conditional
+processing, allowing the serving layer to emit one wire Date. Native loopback
+checks of both apps'200 and304 responses now assert exactly one Date header.
+The complete regression suite currently passes nine test methods, including
+background process lifecycle/refusal and effective wrong-DNS rollback fixtures.
