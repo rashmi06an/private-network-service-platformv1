@@ -1,14 +1,9 @@
 # Phase 2 report — Harden, Recover and Troubleshoot
 
-<<<<<<< HEAD
 Team Scout Regiment · Current review: 23 November 2026.
 The [verification ledger](verification-status.json) records reviewed evidence and
 remaining work. The actual faculty challenge and individual viva remain live
 assessment tasks; rehearsal does not certify those outcomes.
-=======
-**Prepared:** 20 November 2026
-**Document status:** Final. Evidence for Extensions A–E is captured and filed under [../evidence/phase2/](../evidence/phase2/) — see the labeled map in [../evidence/phase2/INDEX.md](../evidence/phase2/INDEX.md) and the manifest in [../evidence/phase2/EVIDENCE-CHECKLIST.md](../evidence/phase2/EVIDENCE-CHECKLIST.md). Extension F (faculty-injected fault) is diagnosed live during Review 2 and cannot be pre-captured.
->>>>>>> ac742fe (Fixed report duality)
 
 ## System
 
@@ -59,23 +54,12 @@ stopped primary/listener absence, fresh system lookup, normal HTTPS and a query
 received by the backup to one timeline, then restores primary DNS. An application
 outage differs because the name can resolve even when no healthy app is available.
 
-<<<<<<< HEAD
 **B — TTL.** TTL is cache freshness, not an automatic broadcast that forces all
 clients to change destinations. A genuine temporary client caching resolver makes
 remaining TTL visible while forwarding to the real project DNS pair. Separate
 natural-expiry and before-expiry manual-flush experiments distinguish the two
 behaviors. Scheduled changes on both resolvers avoid confusing inconsistent DNS
 with caching. This models controlled service migration and cutover delays.
-=======
-| Extension | Work and observable results | Evidence status |
-|---|---|---|
-| **A — Backup DNS** | Mac 1 and Mac 4 both returned `10.7.25.25` for `app.team1.test`. Mac 4 logs record DNS queries from Mac 2 and Mac 3. With the primary stopped, the backup answered and client HTTPS requests succeeded after cache flush. | **Verified; captured** → [../evidence/phase2/backup-dns/](../evidence/phase2/backup-dns/) |
-| **B — TTL and record change** | Primary dnsmasq served a 30-second TTL. While authoritative record `ttl.team1.test` changed from `10.7.25.25` to `10.7.28.78`, Mac 3 retained the older cached answer. After ~35 seconds, client lookup returned the updated IP. | **Verified; captured.** Manual-flush → immediate-change is also shown under Extension E. → [../evidence/phase2/ttl/](../evidence/phase2/ttl/) |
-| **C — Backend service isolation** | PF project anchors on Mac 3 and Mac 4 loaded rules permitting only Mac 2 to access ports 3001 and 3002. Mac 1's direct connections to both ports timed out (`curl (28) … Timeout`), while Mac 2 got `HTTP 200` from both. Clearing rules and releasing PF enable references restored access from Mac 1. | **Verified PASS; captured** → [../evidence/phase2/isolation/](../evidence/phase2/isolation/) |
-| **D — Backend failover** | With Backend A down, Mac 2 recorded ten successful HTTP 200 requests with `X-Backend: B`. After restarting A, both `X-Backend: A` and `B` returned. | **Verified PASS; captured** → [../evidence/phase2/ha-failover/](../evidence/phase2/ha-failover/) |
-| **E — Standby edge migration** | A separate nginx instance was configured on Mac 3 (`X-Edge: standby-mac3`); config syntax check passed, start returned without fatal error. Standby HTTPS returned `200` with `X-Backend: A`/`B`; DNS cutover repointed `app.team1.test` to `10.7.28.78`, then was restored to `10.7.25.25`. | **Verified PASS; captured** → [../evidence/phase2/edge-migration/](../evidence/phase2/edge-migration/) |
-| **F — Faculty-injected troubleshooting** | Prepared to check in order DNS → TCP → TLS → application. Historical Phase 1 failure evidence includes wrong resolver, wrong destination address, one/both backends down and wrong port. | **Final live faculty-injected challenge cannot be certified before it is administered.** → [../evidence/phase2/troubleshooting/](../evidence/phase2/troubleshooting/) |
->>>>>>> ac742fe (Fixed report duality)
 
 **C — Isolation.** Backend ports are filtered at their hosts so ordinary clients
 cannot bypass the TLS edge. A positive edge request, denied client request and

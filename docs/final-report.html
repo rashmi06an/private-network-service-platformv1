@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CN Final Report — Private Network Service Platform</title>
+<style>
+  *{box-sizing:border-box;}
+  html{font-size:11pt;}
+  body{
+    font-family:"Times New Roman",Georgia,serif;
+    color:#000; line-height:1.45; margin:0;
+  }
+  @page{ size:A4; margin:18mm 17mm; }
+
+  h1,h2,h3,h4{line-height:1.25; margin:0 0 .35em; font-weight:bold;}
+  h2{font-size:15pt; border-bottom:1px solid #000; padding-bottom:3px; margin-top:4px;}
+  h3{font-size:12.5pt; margin-top:14px;}
+  h4{font-size:11pt; margin-top:10px; font-style:italic; font-weight:bold;}
+  p{margin:.3em 0 .55em;}
+  a{color:#000; text-decoration:none;}
+  code,.mono{font-family:"Courier New",monospace; font-size:.9em;}
+  small{font-size:.85em;}
+
+  .section{page-break-before:always;}
+  figure{margin:9px 0 13px; page-break-inside:avoid; text-align:center;}
+  figure img{max-width:100%; max-height:112mm; border:1px solid #888;}
+  figcaption{font-size:.82em; margin-top:4px; text-align:center;}
+  .figrow{display:flex; gap:10px; align-items:flex-start; justify-content:center;}
+  .figrow figure{flex:1; margin:7px 0;}
+  .figrow img{max-height:66mm;}
+
+  table{border-collapse:collapse; width:100%; margin:.5em 0 1em; font-size:.92em;}
+  th,td{border:1px solid #777; padding:4px 7px; text-align:left; vertical-align:top;}
+  th{background:#ececec; font-weight:bold;}
+  caption{caption-side:bottom; font-size:.82em; padding-top:4px; text-align:left; color:#333;}
+
+  ul,ol{margin:.25em 0 .7em; padding-left:1.3em;}
+  li{margin:.15em 0;}
+  pre{background:#f4f4f4; border:1px solid #ccc; padding:9px 11px; font-family:"Courier New",monospace;
+      font-size:.82em; line-height:1.4; overflow:auto; page-break-inside:avoid; white-space:pre-wrap;}
+  .note{border-left:3px solid #999; padding:4px 10px; margin:9px 0; font-size:.93em;}
+
+  /* plain cover */
+  .cover{height:260mm; display:flex; flex-direction:column; justify-content:center;
+         text-align:center; page-break-after:always;}
+  .cover .course{font-size:12pt; letter-spacing:1px; text-transform:uppercase;}
+  .cover h1{font-size:28pt; margin:18px 0 6px; border:0;}
+  .cover .sub{font-size:13pt; font-style:italic; margin-bottom:26px;}
+  .cover hr{border:0; border-top:1px solid #000; width:60%; margin:14px auto;}
+  .cover table{width:80%; margin:18px auto; font-size:11pt;}
+  .cover .foot{margin-top:28px; font-size:11pt;}
+  .toc table{font-size:.95em;}
+  .toc td:last-child{text-align:right; width:12%;}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="cover">
+  <div class="course">Computer Networks — Course Project</div>
+  <h1>Private Network Service Platform</h1>
+  <div class="sub">A two-phase, fully local private service on four macOS laptops.</div>
+  <hr>
+  <div>Client &rarr; Private DNS (Mac 1) &rarr; HTTPS edge + TLS + load balancer (Mac 2) &rarr; Backend A (Mac 3) / Backend B (Mac 4)</div>
+  <hr>
+  <table>
+    <tr><th>Member</th><th>Enrolment No.</th><th>Machine role</th></tr>
+    <tr><td>Rashmi Anand</td><td>2401010374</td><td>Mac 1 — Primary DNS + client</td></tr>
+    <tr><td>Samiksha Jangid</td><td>2401010410</td><td>Mac 2 — nginx edge, HTTPS/TLS, load balancer</td></tr>
+    <tr><td>Shubhaang Kataruka</td><td>2401010450</td><td>Mac 3 — Backend A + standby edge</td></tr>
+    <tr><td>Ankit Raj Singh</td><td>2401010075</td><td>Mac 4 — Backend B + backup DNS</td></tr>
+  </table>
+  <div class="foot">
+    Team Scout Regiment (Team 1) &nbsp;·&nbsp; Final Report (Phase 1 + Phase 2)<br>
+    Private domain: app.team1.test &nbsp;·&nbsp; LAN 10.7.0.0/19
+  </div>
+</section>
+
+<!-- TOC + SUMMARY -->
+<section>
+  <h2>Contents</h2>
+  <div class="toc">
+  <table>
+    <tr><td>1. Executive summary</td><td>2</td></tr>
+    <tr><td>2. Objectives and course-topic mapping</td><td>3</td></tr>
+    <tr><td>3. System architecture, topology and addressing</td><td>4</td></tr>
+    <tr><td>4. Request flow — layer by layer</td><td>5</td></tr>
+    <tr><td>5. Phase 1 — Build and Observe (Tasks A–G)</td><td>6</td></tr>
+    <tr><td>6. Phase 1 — Required failure demonstrations</td><td>9</td></tr>
+    <tr><td>7. Phase 2 — Harden, Recover and Troubleshoot (Ext A–F)</td><td>10</td></tr>
+    <tr><td>8. Protocol and packet analysis (saved capture)</td><td>13</td></tr>
+    <tr><td>9. Verification and QA summary</td><td>14</td></tr>
+    <tr><td>10. Final demonstration sequence</td><td>15</td></tr>
+    <tr><td>11. Learning summary and conclusion</td><td>15</td></tr>
+    <tr><td>12. Deliverables, evidence index and configuration appendix</td><td>16</td></tr>
+  </table>
+  </div>
+
+  <h2 style="margin-top:20px;">1. Executive summary</h2>
+  <p>We designed and built a complete private web service that runs entirely on four MacBooks sharing one
+  private Wi-Fi/LAN, with no cloud and no pre-configured servers. A client types the private domain
+  <code>https://app.team1.test:8443</code>; the name is resolved by our own DNS server, a TCP connection and
+  TLS handshake are established to an nginx reverse proxy, and the request is load-balanced to one of two REST
+  backends. Every protocol layer (DNS, TCP, TLS, HTTP) is proven with <code>dig</code>, <code>curl</code> and a
+  saved Wireshark capture. Phase 2 then hardens the same network with a backup DNS resolver, a measured
+  30-second TTL cutover, backend firewall isolation, passive high-availability failover and a standby edge.</p>
+
+  <table>
+    <tr><th>Metric</th><th>Result</th></tr>
+    <tr><td>Machines on one private LAN</td><td>4 macOS laptops</td></tr>
+    <tr><td>Pre-evaluation acceptance items verified</td><td>13 of 13</td></tr>
+    <tr><td>Saved packet capture</td><td>57 packets, frame-indexed (<code>mac3-full-flow.pcap</code>)</td></tr>
+    <tr><td>Backend unit tests</td><td>12 of 12 pass (15.0 s)</td></tr>
+    <tr><td>Screenshots (integrity-checked)</td><td>61</td></tr>
+  </table>
+
+  <p class="note"><b>Scope note.</b> Every result in this report is backed by a timestamped artifact in
+  <code>evidence/verification/</code> and the 13-item ledger <code>reports/verification-status.json</code>.
+  The faculty-injected fault (Extension F) and the individual viva are live assessment tasks; they are
+  rehearsed, not pre-certified.</p>
+</section>
+
+<!-- 2 OBJECTIVES -->
+<section class="section">
+  <h2>2. Objectives and course-topic mapping</h2>
+  <p>Every build task maps directly to a lecture topic. The guiding principle is: the application stays
+  simple, the network is the project.</p>
+  <table>
+    <tr><th style="width:34%">Course topic</th><th>Where it is demonstrated</th></tr>
+    <tr><td>Moving data through the core</td><td>A client request crosses the LAN to the edge and back; captured end-to-end in Wireshark.</td></tr>
+    <tr><td>OSI vs TCP/IP model</td><td>DNS/HTTP = Application; TLS = Session/Transport; TCP/UDP = Transport; IP = Network; Ethernet/Wi-Fi = Link.</td></tr>
+    <tr><td>Devices, topologies, cloud concepts</td><td>Local Mac 1–4 topology mapped to cloud roles (Route 53, cloud load balancer / CDN edge, app instances).</td></tr>
+    <tr><td>HTTP/1.1, HTTP/2, REST</td><td>REST API on both backends; HTTP/1.1 and real HTTP/2 (ALPN h2) negotiated at the edge.</td></tr>
+    <tr><td>HTTPS and TLS</td><td>TLS terminated at nginx; handshake, certificate (SANs) and cipher captured and explained.</td></tr>
+    <tr><td>Transport layer, ports, TCP/UDP</td><td>Service ports and the TCP three-way handshake identified (53/UDP, 8443/TCP, 3001/3002).</td></tr>
+    <tr><td>Reliable data transfer, TCP flow control</td><td>SEQ/ACK numbers and the receive window read from actual SYN/SYN-ACK/ACK frames.</td></tr>
+    <tr><td>CDNs and caching (email = theory only)</td><td><code>Cache-Control</code> + <code>ETag</code> with a conditional <code>304 Not Modified</code>.</td></tr>
+    <tr><td>Cloud load balancing</td><td>nginx round-robin plus passive HA failover across two backends.</td></tr>
+    <tr><td>DNS and Route 53 concepts</td><td>Private <code>.test</code> zone, backup resolver, measured TTL cutover, DNS-driven edge migration.</td></tr>
+  </table>
+  <h3>Learning outcomes achieved</h3>
+  <ul>
+    <li>Translated classroom theory into a working, running network configuration.</li>
+    <li>Showed where DNS, TCP, TLS, HTTP, caching and load balancing each fit in a single request.</li>
+    <li>Proved behaviour with tools (<code>dig</code>, <code>curl -v</code>, <code>tshark</code>/Wireshark), not assertions.</li>
+    <li>Diagnosed failures by isolating layers (DNS, TCP, TLS, application).</li>
+  </ul>
+</section>
+
+<!-- 3 ARCHITECTURE -->
+<section class="section">
+  <h2>3. System architecture, topology and addressing</h2>
+  <p>This is a network topology, not a software architecture: each machine takes a distinct network role.
+  The LAN is <code>10.7.0.0/19</code>, gateway <code>10.7.0.1</code>, interface <code>en0</code>. Because the
+  project ran across two DHCP sessions, the LAN IPs changed between phases, but the domain names and MAC
+  addresses did not, which is precisely why DNS exists.</p>
+
+  <div class="figrow">
+    <figure><img src="../evidence/network/topology-diagram.png" alt="Phase 1 topology">
+      <figcaption>Phase 1 topology — four roles on one private LAN.</figcaption></figure>
+    <figure><img src="../evidence/network/topology-phase2.png" alt="Phase 2 topology">
+      <figcaption>Phase 2 hardened topology — backup DNS, standby edge, firewall isolation, HA, DNS cutover.</figcaption></figure>
+  </div>
+
+  <h3>3.1 Machine roles, addressing and cloud equivalents</h3>
+  <table>
+    <tr><th>Machine</th><th>Member (Enrol.)</th><th>Role</th><th>Phase 1 IPv4</th><th>Phase 2 IPv4</th><th>MAC</th><th>Cloud analogy</th></tr>
+    <tr><td>Mac 1</td><td>Rashmi Anand (2401010374)</td><td>Primary DNS (dnsmasq) + test client</td><td>10.7.17.21:53</td><td>10.7.27.145:53</td><td>fe:cf:32:29:21:34</td><td>Managed DNS (Route 53)</td></tr>
+    <tr><td>Mac 2</td><td>Samiksha Jangid (2401010410)</td><td>nginx edge — HTTPS/TLS + load balancer</td><td>10.7.7.9:8443</td><td>10.7.25.25:8443</td><td>8e:f2:4f:b4:75:a5</td><td>Cloud load balancer / CDN edge</td></tr>
+    <tr><td>Mac 3</td><td>Shubhaang Kataruka (2401010450)</td><td>Backend A (Flask REST) + standby edge (P2)</td><td>10.7.21.15:3001</td><td>10.7.28.78:3001</td><td>12:53:0c:44:d1:cb</td><td>App server instance A</td></tr>
+    <tr><td>Mac 4</td><td>Ankit Raj Singh (2401010075)</td><td>Backend B (Flask REST) + backup DNS (P2)</td><td>10.7.23.47:3002</td><td>10.7.27.247:3002</td><td>d2:f7:e1:53:a7:1f</td><td>App server instance B</td></tr>
+    <caption>All machines: prefix /19, gateway 10.7.0.1, interface en0. IP leases change between sessions; MACs and names do not.</caption>
+  </table>
+
+  <h3>3.2 Service map and DNS records</h3>
+  <table>
+    <tr><th>Service</th><th>Host</th><th>Phase 1 IP:Port</th><th>Phase 2 IP:Port</th></tr>
+    <tr><td>Primary DNS (dnsmasq)</td><td>Mac 1</td><td>10.7.17.21:53</td><td>10.7.27.145:53</td></tr>
+    <tr><td>Backup DNS (dnsmasq)</td><td>Mac 4</td><td>not in Phase 1</td><td>10.7.27.247:53</td></tr>
+    <tr><td>nginx edge (HTTPS/TLS/LB)</td><td>Mac 2</td><td>10.7.7.9:8443</td><td>10.7.25.25:8443</td></tr>
+    <tr><td>Standby edge (nginx)</td><td>Mac 3</td><td>not in Phase 1</td><td>10.7.28.78:8443</td></tr>
+    <tr><td>Backend A (Flask REST)</td><td>Mac 3</td><td>10.7.21.15:3001</td><td>10.7.28.78:3001</td></tr>
+    <tr><td>Backend B (Flask REST)</td><td>Mac 4</td><td>10.7.23.47:3002</td><td>10.7.27.247:3002</td></tr>
+  </table>
+  <table>
+    <tr><th>DNS record</th><th>Phase 1 resolves to</th><th>Phase 2 resolves to</th><th>Notes</th></tr>
+    <tr><td><code>app.team1.test</code></td><td>10.7.7.9 (Mac 2)</td><td>10.7.25.25 (Mac 2)</td><td>Main entry point</td></tr>
+    <tr><td><code>api.team1.test</code></td><td>10.7.7.9 (Mac 2)</td><td>10.7.25.25 (Mac 2)</td><td>Same edge</td></tr>
+    <tr><td><code>ttl.team1.test</code></td><td>not in Phase 1</td><td>10.7.25.25 (Mac 2)</td><td>Phase 2 TTL / cutover demo, 30 s TTL</td></tr>
+  </table>
+
+  <h3>3.3 Inter-machine reachability (ping matrix, 23 Nov)</h3>
+  <table>
+    <tr><th>source \ dest</th><th>Mac 1</th><th>Mac 2</th><th>Mac 3</th><th>Mac 4</th></tr>
+    <tr><td><b>Mac 1</b></td><td>self</td><td>2/2</td><td>2/2</td><td>2/2</td></tr>
+    <tr><td><b>Mac 2</b></td><td>2/2</td><td>self</td><td>2/2</td><td>2/2</td></tr>
+    <tr><td><b>Mac 3</b></td><td>2/2</td><td>2/2</td><td>self</td><td>2/2</td></tr>
+    <tr><td><b>Mac 4</b></td><td>2/2</td><td>2/2</td><td>2/2</td><td>self</td></tr>
+    <caption>All 12 directed paths verified. Paths toward Mac 1 initially failed because macOS stealth mode / ICMP filtering was on; after turning stealth off, every direction recovered to 2/2, 0% loss.</caption>
+  </table>
+</section>
+
+<!-- 4 REQUEST FLOW -->
+<section class="section">
+  <h2>4. Request flow — one request, layer by layer</h2>
+  <pre># A single GET https://app.team1.test:8443/api/status
+
+1. DNS    Client --> Mac 1 dnsmasq      UDP/53    "app.team1.test = ?"  --> 10.7.25.25 (edge)
+2. TCP    Client --> Mac 2 :8443        SYN --> SYN-ACK --> ACK   (three-way handshake)
+3. TLS    Client <-> Mac 2              ClientHello --> ServerHello --> Certificate --> Finished
+4. HTTP   Client --> Mac 2              GET /api/status   (payload now encrypted in TLS records)
+5. LB     Mac 2 nginx --> Backend A :3001  OR  Backend B :3002   (round-robin)
+6. RESP   Backend --> Mac 2 --> Client  JSON + X-Backend:A|B + Cache-Control   (inside TLS)</pre>
+
+  <table>
+    <tr><th>Layer</th><th>Protocol</th><th>Addressing / identifier</th><th>Role in this project</th></tr>
+    <tr><td>Application</td><td>DNS, HTTP(S)</td><td>port 53/UDP, 8443/TCP</td><td>Name lookup; REST request/response</td></tr>
+    <tr><td>Session / Transport</td><td>TLS</td><td>over 8443/TCP</td><td>Confidentiality, server-certificate trust</td></tr>
+    <tr><td>Transport</td><td>TCP / UDP</td><td>ports 8443, 3001/3002, 53</td><td>Reliable byte stream (TCP); DNS datagram (UDP)</td></tr>
+    <tr><td>Network</td><td>IP</td><td>10.7.x.x (no ports here)</td><td>Host-to-host delivery across the LAN</td></tr>
+    <tr><td>Link</td><td>Ethernet / Wi-Fi</td><td>MAC addresses (no ports here)</td><td>Local frame delivery on the shared segment</td></tr>
+  </table>
+  <p class="note"><b>Key idea.</b> These layers are independent. DNS is only a directory (name to IP over
+  UDP/53); it does not open the connection. TCP opens the connection, TLS secures it, and only then does HTTP
+  carry the request. This independence is exactly what our failure demonstrations prove — DNS can fail while
+  the network is fine, a backend can die while the edge stays up, and a wrong port fails even when the host is
+  reachable.</p>
+</section>
+
+<!-- 5 PHASE 1 -->
+<section class="section">
+  <h2>5. Phase 1 — Build and Observe</h2>
+  <p>All seven mandatory build tasks were completed and demonstrated end-to-end.</p>
+  <table>
+    <tr><th>Task</th><th>What it proves</th><th>Status</th><th>Primary evidence</th></tr>
+    <tr><td>A</td><td>Private LAN + topology + ping between all Macs</td><td>Done</td><td><code>evidence/network/</code></td></tr>
+    <tr><td>B</td><td>Private DNS resolves the domain; two client resolvers</td><td>Done</td><td><code>evidence/dns/</code></td></tr>
+    <tr><td>C</td><td>Two REST backends with <code>X-Backend: A/B</code> header</td><td>Done</td><td><code>evidence/backends/</code></td></tr>
+    <tr><td>D</td><td>nginx round-robin load balancing</td><td>Done</td><td><code>evidence/nginx/</code></td></tr>
+    <tr><td>E</td><td>HTTPS/TLS termination with a trusted certificate (no <code>-k</code>)</td><td>Done</td><td><code>evidence/tls/</code></td></tr>
+    <tr><td>F</td><td>HTTP caching — <code>Cache-Control</code> + <code>ETag</code> + <code>304</code></td><td>Done</td><td><code>evidence/caching/</code></td></tr>
+    <tr><td>G</td><td>Wireshark: DNS, TCP handshake, TLS, encrypted data</td><td>Done</td><td><code>evidence/wireshark/</code> + <code>.pcap</code></td></tr>
+  </table>
+
+  <h3>Task A — Private LAN and reachability</h3>
+  <figure><img src="../evidence/network/mac1-ifconfig-ping.png" alt="ifconfig + ping">
+    <figcaption>Mac 1 <code>ifconfig en0</code> (IP/MAC/prefix) and successful <code>ping</code> to the other machines.</figcaption></figure>
+
+  <h3>Task B — Private DNS server (dnsmasq) and client resolvers</h3>
+  <p>Mac 1 runs dnsmasq serving the <code>.test</code> zone. At least two other Macs use Mac 1 as their
+  resolver via a scoped <code>/etc/resolver/team1.test</code> entry, so the app is always reached by name,
+  never by IP.</p>
+  <div class="figrow">
+    <figure><img src="../evidence/dns/dig-app-team1.png" alt="dig app.team1.test">
+      <figcaption><code>dig app.team1.test</code> resolves to the edge IP via the team DNS server.</figcaption></figure>
+    <figure><img src="../evidence/dns/dnsmasq-config.png" alt="dnsmasq config">
+      <figcaption>dnsmasq <code>address=/app.team1.test/...</code> records.</figcaption></figure>
+  </div>
+
+  <h3>Task C — Two REST backends (<code>X-Backend</code> identity)</h3>
+  <p>Each Flask backend answers <code>GET /</code>, <code>GET /api/status</code>
+  (<code>{"backend":"A|B","status":"ok"}</code>) and <code>GET /api/cache-demo</code>, and stamps an
+  <code>X-Backend: A|B</code> header so load balancing is visible. Both bind <code>0.0.0.0</code>
+  (LAN-reachable) on fixed ports 3001 / 3002.</p>
+  <div class="figrow">
+    <figure><img src="../evidence/backends/backend-a-status.png" alt="backend A status">
+      <figcaption>Backend A — <code>/api/status</code> with <code>X-Backend: A</code>.</figcaption></figure>
+    <figure><img src="../evidence/backends/backend-b-status.png" alt="backend B status">
+      <figcaption>Backend B — <code>/api/status</code> with <code>X-Backend: B</code>.</figcaption></figure>
+  </div>
+
+  <h3>Task D — Edge reverse proxy and round-robin load balancer</h3>
+  <p>Mac 2 nginx is the single public entry point; clients never contact backends directly. The
+  <code>upstream</code> pool holds both backends and nginx distributes requests round-robin, so repeated
+  requests to the same name alternate <code>X-Backend: A</code> / <code>B</code> (see
+  <code>evidence/nginx/https-load-balancing.txt</code> and the HA figure in Section 7). The client never needs
+  the backend IPs — the edge hides them behind one name and one certificate.</p>
+
+  <h3>Task E — HTTPS / TLS termination (trusted certificate)</h3>
+  <p>A certificate for <code>app.team1.test</code> / <code>api.team1.test</code> was issued with a local CA
+  (mkcert, faculty-approved) and added to every client's trust store, so the final demo needs no <code>-k</code>
+  bypass. nginx terminates TLS 1.2/1.3 on 8443; the internal backend leg is plain HTTP on the LAN.</p>
+  <figure><img src="../evidence/tls/https-by-name.png" alt="trusted HTTPS by name">
+    <figcaption><code>curl https://app.team1.test:8443/api/status</code> returns 200 with a trusted certificate, no <code>-k</code>.</figcaption></figure>
+
+  <h3>Task F — HTTP caching (Cache-Control and conditional 304)</h3>
+  <p><code>/api/cache-demo</code> returns <code>Cache-Control: public, max-age=60</code> and an
+  <code>ETag</code>; a repeat request carrying <code>If-None-Match</code> receives <code>304 Not Modified</code>
+  with no body — demonstrating a validated conditional request versus a full fresh response.</p>
+  <div class="figrow">
+    <figure><img src="../evidence/caching/cache-headers.png" alt="cache headers">
+      <figcaption><code>curl -I</code> showing <code>Cache-Control</code> and <code>ETag</code>.</figcaption></figure>
+    <figure><img src="../evidence/caching/cache-304.png" alt="304 not modified">
+      <figcaption>Conditional request returns <code>304 Not Modified</code>.</figcaption></figure>
+  </div>
+
+  <h3>Task G — Full protocol flow in Wireshark</h3>
+  <div class="figrow">
+    <figure><img src="../evidence/wireshark/wireshark-dns.png" alt="DNS capture">
+      <figcaption>DNS query/response for <code>app.team1.test</code> (UDP/53).</figcaption></figure>
+    <figure><img src="../evidence/wireshark/tcp-syn-detail.png" alt="TCP SYN">
+      <figcaption>TCP SYN — SEQ 0, window, MSS, options.</figcaption></figure>
+  </div>
+  <div class="figrow">
+    <figure><img src="../evidence/wireshark/tcp-tls-handshake.png" alt="TCP + TLS handshake">
+      <figcaption>Three-way handshake followed by the TLS handshake.</figcaption></figure>
+    <figure><img src="../evidence/wireshark/tls-client-hello.png" alt="TLS Client Hello">
+      <figcaption>TLS ClientHello (SNI = app.team1.test); payload then encrypted.</figcaption></figure>
+  </div>
+</section>
+
+<!-- 6 FAILURES -->
+<section class="section">
+  <h2>6. Phase 1 — Required failure demonstrations</h2>
+  <p>We deliberately broke the system in five ways and explained each observation, proving we understand the
+  layers rather than only the setup steps.</p>
+  <table>
+    <tr><th>#</th><th>We broke...</th><th>Observation and what it proves</th><th>Evidence</th></tr>
+    <tr><td>1</td><td>Wrong DNS server (queried 8.8.8.8)</td><td>NXDOMAIN — the name fails although the host still pings. DNS and IP are independent.</td><td><code>wrong-dns-server.png</code></td></tr>
+    <tr><td>2</td><td>DNS record to a wrong IP</td><td>Resolves fine but the connection times out. DNS is a directory, not a connection.</td><td><code>wrong-dns-record.png</code></td></tr>
+    <tr><td>3</td><td>Stopped Backend A</td><td>Service continues — all requests served by Backend B.</td><td><code>backend-a-down.png</code></td></tr>
+    <tr><td>4</td><td>Stopped both backends</td><td>DNS/TLS still fine; nginx returns 502 Bad Gateway. Where the edge ends and the backend begins.</td><td><code>both-down-502.png</code></td></tr>
+    <tr><td>5</td><td>Wrong destination port</td><td>Host reachable, but the TCP connection to the service port fails. Ports and IPs are separate identifiers.</td><td><code>wrong-port.png</code></td></tr>
+  </table>
+  <div class="figrow">
+    <figure><img src="../evidence/failures/wrong-dns-server.png" alt="wrong dns server">
+      <figcaption>(1) Wrong resolver returns NXDOMAIN.</figcaption></figure>
+    <figure><img src="../evidence/failures/both-down-502.png" alt="502">
+      <figcaption>(4) Both backends down — 502 at the edge.</figcaption></figure>
+    <figure><img src="../evidence/failures/wrong-port.png" alt="wrong port">
+      <figcaption>(5) Wrong port — connection fails.</figcaption></figure>
+  </div>
+</section>
+
+<!-- 7 PHASE 2 -->
+<section class="section">
+  <h2>7. Phase 2 — Harden, Recover and Troubleshoot</h2>
+  <p>Phase 2 extends the same network; it is not rebuilt. What changed:</p>
+  <table>
+    <tr><th>Area</th><th>Phase 1</th><th>Phase 2</th></tr>
+    <tr><td>DNS</td><td>single resolver (Mac 1)</td><td>plus backup resolver (Mac 4); 30 s TTL; <code>ttl.team1.test</code> record</td></tr>
+    <tr><td>Edge</td><td>round-robin, no failover</td><td>passive health checks (<code>max_fails</code> / <code>proxy_next_upstream</code>); standby edge (Mac 3)</td></tr>
+    <tr><td>Backends</td><td>open on the LAN</td><td><code>pf</code>-isolated — only the edge 10.7.25.25 may reach :3001/:3002</td></tr>
+    <tr><td>Resilience</td><td>single points everywhere</td><td>survives primary DNS down, one backend down, edge migrated</td></tr>
+  </table>
+
+  <h3>Verified Phase 2 results (23 Nov 2026)</h3>
+  <table>
+    <tr><th>Ext</th><th>What it adds</th><th>Observed result (from timestamped evidence)</th><th>Status</th></tr>
+    <tr><td>A</td><td>Backup DNS resolver + client failover</td><td>With the primary stopped, a fresh system lookup and HTTPS 200 succeeded via the backup; the backup received the query; primary restored.</td><td>Verified</td></tr>
+    <tr><td>B</td><td>30 s TTL + controlled record change</td><td>Real client held the OLD answer until 31.49 s, then saw NEW (natural expiry); a separate manual flush obtained NEW at 5.25 s (before the 30 s). Both authorities restored.</td><td>Verified</td></tr>
+    <tr><td>C</td><td>Backend firewall isolation (edge-only)</td><td>Edge 10.7.25.25 allowed to :3001/:3002 (200); client Mac denied (curl 28 timeout); PF counters shown; owned rules + enable-token rolled back; direct access restored.</td><td>Verified</td></tr>
+    <tr><td>D</td><td>HA failover (passive health checks)</td><td>Balanced A/B baseline; with A down, 12 consecutive requests all 200 + <code>X-Backend: B</code>; after A restarts, A/B alternation resumes.</td><td>Verified</td></tr>
+    <tr><td>E</td><td>Controlled edge migration (DNS cutover)</td><td>Standby on Mac 3 presents the same trusted name (<code>X-Edge: standby-mac3</code>); synchronized DNS change sends fresh lookups to standby while cached clients briefly keep the primary; 31.44 s convergence; both DNS servers restored.</td><td>Verified</td></tr>
+    <tr><td>F</td><td>Faculty-injected troubleshooting</td><td>Method rehearsed (DNS, TCP, TLS, application); the actual fault, layer and fix are produced live.</td><td>Live</td></tr>
+  </table>
+
+  <h3>Extension A — Backup DNS resolver</h3>
+  <figure><img src="../evidence/phase2/backup-dns/A3-primary-down-backup-answers-mac2.png" alt="backup dns failover">
+    <figcaption>Primary DNS stopped: the primary query times out, the backup (10.7.27.247) answers, and the system resolver still resolves the name.</figcaption></figure>
+
+  <h3>Extension B — DNS TTL and controlled record change</h3>
+  <div class="figrow">
+    <figure><img src="../evidence/phase2/ttl/B1-ttl30-record-countdown-mac1.png" alt="ttl 30">
+      <figcaption><code>ttl.team1.test</code> served with TTL = 30.</figcaption></figure>
+    <figure><img src="../evidence/phase2/ttl/B3-mac1-app-and-ttl-records.png" alt="records">
+      <figcaption>Authoritative records: <code>app</code> = .25.25, <code>ttl</code> repointed to .28.78.</figcaption></figure>
+  </div>
+
+  <h3>Extension C — Backend service isolation (<code>pf</code>)</h3>
+  <div class="figrow">
+    <figure><img src="../evidence/phase2/isolation/C3-client-blocked-mac1.png" alt="client blocked">
+      <figcaption>Ordinary client to :3001/:3002 is blocked (curl 28 timeout).</figcaption></figure>
+    <figure><img src="../evidence/phase2/isolation/C4-edge-reaches-backends-mac2.png" alt="edge allowed">
+      <figcaption>The edge (permitted source) reaches both backends: 200 + <code>X-Backend</code>.</figcaption></figure>
+  </div>
+
+  <h3>Extension D — HA failover and Extension E — standby edge cutover</h3>
+  <div class="figrow">
+    <figure><img src="../evidence/phase2/ha-failover/D2-all-B-then-recovered.png" alt="HA failover">
+      <figcaption>Backend A down: all 200 via B; A restarts: A/B alternate again.</figcaption></figure>
+    <figure><img src="../evidence/phase2/edge-migration/E2-standby-https-xedge-and-dns-mac2.png" alt="standby edge">
+      <figcaption>Standby edge serves trusted HTTPS 200 with <code>X-Edge: standby-mac3</code> after the DNS cutover.</figcaption></figure>
+  </div>
+  <p class="note"><b>Remaining single point of failure.</b> The primary nginx edge still requires an operator
+  DNS cutover on failure. Full automatic edge redundancy would need an always-on second edge and a floating
+  VIP / automatic DNS mechanism — noted and explained, not hidden.</p>
+
+  <h3>Extension F — Faculty-injected troubleshooting (live) and failure matrix</h3>
+  <table>
+    <tr><th>Injected fault</th><th>Expected observation — the layer it isolates</th></tr>
+    <tr><td>Wrong DNS server on a client</td><td>Lookup fails though IP connectivity is fine — DNS vs IP independent.</td></tr>
+    <tr><td>DNS record to a wrong IP</td><td>Resolves but reaches the wrong host — DNS is a directory, not a connection.</td></tr>
+    <tr><td>One backend stopped</td><td>Edge keeps serving via the healthy backend (HA failover).</td></tr>
+    <tr><td>Both backends stopped</td><td>DNS/TLS fine; edge returns 502 — edge vs backend boundary.</td></tr>
+    <tr><td>Wrong destination port</td><td>Host reachable but the service-port connection fails — ports are not IPs.</td></tr>
+    <caption>Diagnosis order on demo day: name resolution, then TCP connectivity, then TLS trust, then application — narrating the reasoning at each layer.</caption>
+  </table>
+</section>
+
+<!-- 8 PACKET -->
+<section class="section">
+  <h2>8. Protocol and packet analysis (saved capture)</h2>
+  <p>A real capture <code>evidence/verification/mac3-full-flow.pcap</code> (Mac 3 to edge, AirDropped to
+  Mac 2) preserves the full path: 57 packets, 9 772 bytes, 23 Nov 2026 07:23:14 UTC, SHA-256
+  <code>99c854...aceca</code>. Frame numbers below are from <code>tshark</code> with 8443 decoded as TLS.</p>
+  <div class="figrow">
+    <figure><img src="../evidence/phase2/wireshark/dns-query-response-app-team1.png" alt="dns pcap">
+      <figcaption>DNS query + response for the project name (UDP/53).</figcaption></figure>
+    <figure><img src="../evidence/phase2/wireshark/tls-handshake-clienthello-serverhello.png" alt="tls pcap">
+      <figcaption>TLS ClientHello, ServerHello, Change Cipher Spec, encrypted Application Data.</figcaption></figure>
+  </div>
+  <table>
+    <tr><th>Layer / event</th><th>Actual frames and fields</th></tr>
+    <tr><td>DNS A query and answer</td><td>Frame 1: Mac 3 <code>:64943</code> to DNS <code>10.7.27.145:53/UDP</code>, txn <code>0x4d79</code>, <code>app.team1.test</code>. Frame 3: answer <code>A 10.7.25.25</code>.</td></tr>
+    <tr><td>TCP three-way handshake (HTTP/1.1 stream 0)</td><td>SYN 6, SYN-ACK 7, ACK 8; ephemeral <code>:58645</code> to <code>10.7.25.25:8443</code>.</td></tr>
+    <tr><td>TCP handshake (HTTP/2 stream 1)</td><td>SYN 31, SYN-ACK 33, ACK 34; ephemeral <code>:58648</code>.</td></tr>
+    <tr><td>TLS ClientHello / ServerHello + Certificate</td><td>Stream 0: CH 9 (ALPN http/1.1), SH+Cert 13. Stream 1: CH 35 (offers h2), SH+Cert 38 (ALPN h2).</td></tr>
+    <tr><td>Key exchange / ChangeCipherSpec / Finished</td><td>Stream 0: 14, 16 (client CCS+Finished), 18 (server CCS+Finished). Encrypted Application Data: client 20, server 22.</td></tr>
+    <tr><td>Negotiated version and cipher</td><td>TLS 1.2 (<code>0x0303</code>), <code>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384</code>; certificate SANs include <code>app.team1.test</code>, <code>api.team1.test</code>.</td></tr>
+    <tr><td>TCP reliability / flow control</td><td>SYN 6: relative SEQ 0, window 65535, MSS 1460, SACK permitted; SYN-ACK 7: SEQ 0/ACK 1; ACK 8: SEQ 1/ACK 1. Receive window 2059 x scale 64 = 131 776 B (receiver flow control, distinct from congestion control).</td></tr>
+    <caption>Open in Wireshark with filters <code>dns.id==0x4d79</code>, <code>tcp.stream==0/1</code>, <code>tls.handshake.type==11</code>, <code>frame.number==13</code>. Port 443 is conventional HTTPS; this project uses the permitted 8443. HTTP/2 is independently confirmed by ALPN h2 in the ServerHello.</caption>
+  </table>
+</section>
+
+<!-- 9 VERIFICATION -->
+<section class="section">
+  <h2>9. Verification and QA summary</h2>
+  <p>Beyond screenshots, the submission was gated by an explicit verification ledger
+  (<code>reports/verification-status.json</code>, 13 items) and an automated QA pass
+  (<code>reports/final-validation.json</code>).</p>
+  <table>
+    <tr><th>Check</th><th>Result</th></tr>
+    <tr><td>Pre-evaluation acceptance items</td><td>13 of 13 reviewed and verified; 0 unverified</td></tr>
+    <tr><td>Backend source regression (unit tests)</td><td>12 methods, OK in 15.03 s</td></tr>
+    <tr><td>nginx integration (3 config templates)</td><td>Passed — syntax, trusted HTTPS 200/304, X-Edge/X-Backend, A/B distribution, cross-backend 304, real HTTP/2, A-down to B-only to recovered</td></tr>
+    <tr><td>Source hygiene</td><td>14 Python compiled, 19 shell syntax-checked, 19 JSON parsed, 127 HTML links checked</td></tr>
+    <tr><td>Screenshot integrity</td><td>61 images, PNG CRC checked, all unchanged from main baseline</td></tr>
+    <tr><td>Secrets scan</td><td>Passed — no private-key PEM committed; <code>.gitignore</code> covers <code>*.pem/*.key/*.crt</code></td></tr>
+    <tr><td>Final restoration</td><td>Normal DNS restored on both servers; primary connected 10.7.25.25; trusted 200/304; no temporary cache left</td></tr>
+    <tr><td>Live-only items</td><td>Faculty-injected fault and individual viva (by design)</td></tr>
+  </table>
+</section>
+
+<!-- 10 DEMO + 11 LEARNING -->
+<section class="section">
+  <h2>10. Final demonstration sequence (11 steps)</h2>
+  <ol>
+    <li>Show topology, the four current IPs, and the active ports/services map.</li>
+    <li>Confirm all Macs on the private LAN — ping between machines.</li>
+    <li>From a client, resolve <code>app.team1.test</code> to the edge via the team DNS server.</li>
+    <li>Open <code>https://app.team1.test:8443</code> — trusted cert, no warnings, no IP in the URL.</li>
+    <li>Repeated requests show <code>X-Backend: A</code> and <code>B</code> alternating.</li>
+    <li>Open the saved Wireshark capture — DNS query/answer, TCP SYN/SYN-ACK/ACK, TLS ClientHello/ServerHello.</li>
+    <li>Show <code>Cache-Control</code> headers and a <code>304 Not Modified</code> / cache hit.</li>
+    <li>Stop Backend A — all requests still succeed via Backend B; restart A and verify rebalancing.</li>
+    <li>Demonstrate Phase 2 resilience — backup DNS, TTL cache behaviour, and the standby-edge cutover.</li>
+    <li>Diagnose the live faculty-injected fault layer by layer (DNS, TCP, TLS, HTTP).</li>
+    <li>Individual viva — each member explains any component from personal understanding.</li>
+  </ol>
+
+  <h2 style="margin-top:18px;">11. Learning summary and conclusion</h2>
+  <p><b>A — Backup DNS.</b> A second resolver adds resilience only if clients actually list it and both
+  servers agree on records; a cached hit is not proof of backup use. A name-service failure differs from an
+  application outage (the name can resolve even when no healthy app exists).</p>
+  <p><b>B — TTL.</b> TTL is cache freshness, not a broadcast that forces clients to move. Natural-expiry and
+  manual-flush experiments distinguish the two behaviours and model real service migration / cutover delay.</p>
+  <p><b>C — Isolation.</b> Filtering backend ports to the edge only prevents clients bypassing the TLS edge;
+  a positive edge request, a denied client request and rule counters must be shown together, then rolled back.</p>
+  <p><b>D — HA failover.</b> Passive nginx detection retries eligible traffic to a healthy upstream and
+  suppresses the failed peer; it protects against backend failure but not edge failure (the remaining SPOF).</p>
+  <p><b>E — Edge migration.</b> A trusted standby under the same name plus a synchronized DNS change is a
+  controlled manual cutover, not automatic failover; old-cache clients converge after the TTL.</p>
+  <p><b>F — Diagnosis.</b> Different faults (wrong DNS, wrong port, trust failure, upstream 502) have
+  different causes; each hypothesis needs supporting evidence and an appropriate recovery check.</p>
+  <p class="note"><b>Conclusion.</b> The team delivered a complete, resilient, fully local private service and
+  proved every layer of a single request with real tools and a saved packet capture, meeting all Phase 1 build
+  tasks and all Phase 2 hardening extensions, with the faculty fault and viva reserved as live assessment.</p>
+</section>
+
+<!-- 12 DELIVERABLES / APPENDIX -->
+<section class="section">
+  <h2>12. Deliverables, evidence index and configuration appendix</h2>
+  <table>
+    <tr><th>Deliverable</th><th>Location in repository</th></tr>
+    <tr><td>Architecture document (topology, roles, request flow)</td><td><code>docs/architecture-document.pdf</code>, <code>docs/architecture.md</code></td></tr>
+    <tr><td>Network inventory (IP / MAC / service, P1+P2)</td><td><code>docs/network-inventory.md</code></td></tr>
+    <tr><td>Configuration bundle</td><td><code>dns/</code>, <code>edge/</code>, <code>firewall/</code> (+ TLS setup notes)</td></tr>
+    <tr><td>Backend source + tests</td><td><code>backend-a/</code>, <code>backend-b/</code></td></tr>
+    <tr><td>Test scripts (P1 + P2)</td><td><code>scripts/</code></td></tr>
+    <tr><td>Phase 1 / Phase 2 reports</td><td><code>reports/phase1-report.md</code>, <code>reports/phase2-report.md</code></td></tr>
+    <tr><td>Evidence (screenshots, per layer)</td><td><code>evidence/</code>, <code>evidence/phase2/</code> (+ <code>INDEX.md</code>)</td></tr>
+    <tr><td>Verified proof set + saved capture</td><td><code>evidence/verification/</code> (+ <code>mac3-full-flow.pcap</code>, <code>packet-index.md</code>)</td></tr>
+    <tr><td>Acceptance and QA ledgers</td><td><code>reports/verification-status.json</code>, <code>reports/final-validation.json</code></td></tr>
+  </table>
+
+  <h3>Appendix — key configuration excerpts</h3>
+  <h4>dnsmasq — primary (Mac 1), Phase 2</h4>
+  <pre># /opt/homebrew/etc/dnsmasq.conf
+listen-address=127.0.0.1,10.7.27.145
+no-resolv
+local-ttl=30                              # Ext B — visible 30 s TTL
+address=/app.team1.test/10.7.25.25
+address=/api.team1.test/10.7.25.25
+address=/ttl.team1.test/10.7.25.25        # repointed to .28.78 during the cutover demo</pre>
+
+  <h4>nginx — edge (Mac 2): HTTPS + LB + HA failover</h4>
+  <pre>upstream team1_backends {
+    server 10.7.28.78:3001 max_fails=2 fail_timeout=10s;   # passive health checks
+    server 10.7.27.247:3002 max_fails=2 fail_timeout=10s;
+}
+server {
+    listen 8443 ssl;  http2 on;  server_name app.team1.test api.team1.test;
+    include /opt/homebrew/etc/nginx/tls.conf;              # TLS 1.2/1.3, mkcert leaf
+    add_header X-Edge "primary-mac2" always;
+    location / {
+        proxy_pass http://team1_backends;
+        proxy_next_upstream error timeout http_502 http_503 http_504;   # Ext D failover
+    }
+}</pre>
+
+  <h4>pf — backend isolation (Mac 3, Ext C)</h4>
+  <pre>set skip on lo0
+pass  in quick proto tcp from 10.7.25.25 to any port 3001   # edge only
+block in quick proto tcp from any to any port 3001          # everyone else denied
+pass in all
+pass out all</pre>
+
+  <p style="margin-top:12px;"><small>Report compiled 23 November 2026. Team Scout Regiment. All results
+  traceable to <code>evidence/verification/</code> and <code>reports/verification-status.json</code>. The
+  faculty-injected fault and individual viva are live assessment tasks.</small></p>
+</section>
+
+</body>
+</html>
