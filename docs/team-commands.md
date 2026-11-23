@@ -13,7 +13,7 @@ document into a terminal; the steps deliberately change/fail/restore services.
 On each Mac, create this separate checkout once; it preserves the old submission:
 
 ```bash
-git clone --branch codex/submission-readiness https://github.com/rashmi06an/private-network-service-platformv1.git "$HOME/Documents/CN-submission"
+git clone --branch samiksha/submission-readiness https://github.com/rashmi06an/private-network-service-platformv1.git "$HOME/Documents/CN-submission"
 cd "$HOME/Documents/CN-submission"
 git status --short
 git rev-parse --short HEAD
