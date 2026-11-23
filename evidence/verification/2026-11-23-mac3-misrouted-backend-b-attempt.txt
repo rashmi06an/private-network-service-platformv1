@@ -1,0 +1,55 @@
+SOURCE: User-pasted Mac3 terminal output; excerpts normalized; no successful B deployment claimed.
+MACHINE: Shubh1 (Shubhaang / Mac3, assigned Backend A)
+
+PULL FAILURE:
+From https://github.com/rashmi06an/private-network-service-platformv1
+   180d73f..74d1b55 samiksha/submission-readiness -> origin/samiksha/submission-readiness
+Updating 180d73f..74d1b55
+error: The following untracked working tree files would be overwritten by merge:
+    evidence/verification/R1-backend-a-20261123T042514Z.txt
+Please move or remove them before you merge.
+Aborting
+
+RECORDER FAILURE:
+START_UTC=2026-11-23T04:31:01Z
+MACHINE=Shubh1.local
+COMMIT=180d73fb916c477f606e0921e7e2204bddc8a7c4
+COMMAND: backend-b/.venv/bin/python -u backend-b/app.py
+scripts/record-evidence.sh: line 14: backend-b/.venv/bin/python: No such file or directory
+
+EXIT_CODE=127
+END_UTC=2026-11-23T04:31:01Z
+
+REMOTE B RESPONSES:
+COMMAND: /usr/bin/curl --noproxy '*' --connect-timeout 3 --max-time 8 -i http://10.7.27.247:3002/api/status
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.14.6
+Date: Mon, 23 Nov 2026 04:31:13 GMT
+Content-Type: application/json
+Content-Length: 30
+X-Backend: B
+Connection: close
+
+{"backend":"B","status":"ok"}
+
+COMMAND: /usr/bin/curl --noproxy '*' --connect-timeout 3 --max-time 8 -i http://10.7.27.247:3002/api/cache-demo
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.14.6
+Date: Mon, 23 Nov 2026 04:31:13 GMT
+Content-Type: application/json
+Content-Length: 48
+Cache-Control: public, max-age=60
+ETag: "backend-b-v1"
+X-Backend: B
+Connection: close
+
+{"backend":"B","message":"Cache demonstration"}
+
+COMMAND: lsof -nP -iTCP:3002 -sTCP:LISTEN
+(no listener rows on Mac3)
+
+REVIEW: B preparation ran on Mac3 instead of assigned Mac4. Pull aborted before
+venv creation because a locally generated recorder file shared a newly tracked path.
+Remote B remains reachable with the old validator and no status no-store header.
+Keep corrected A running. Use update-checkout.py to archive only colliding untracked
+verification files, then fast-forward. Deploy B only after Mac4 IP role check passes.

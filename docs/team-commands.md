@@ -19,8 +19,28 @@ git status --short
 git rev-parse --short HEAD
 ```
 
-For subsequent updates in this same branch: `git pull --ff-only`.
-Do not run that over uncommitted evidence without saving it first.
+For subsequent updates in this same branch, run `python3 scripts/update-checkout.py`
+from the checkout root. Add `--role mac1`, `--role mac2`, `--role mac3` or
+`--role mac4` to verify the operator's assigned IP first. The helper refuses
+tracked edits or diverged history; colliding untracked verification logs are moved
+into a unique ignored `.local-state/evidence-before-update-*` backup before the
+fast-forward. Other untracked files, including open server logs without a collision,
+stay in place. Keep the printed backup; it preserves the original local evidence.
+
+If an older checkout cannot pull because this helper is not available yet, bootstrap
+it from the fetched submission branch, using the correct role in the final command:
+
+```bash
+cd "$HOME/Documents/CN-submission" &&
+git fetch origin samiksha/submission-readiness &&
+mkdir -p .local-state &&
+git show FETCH_HEAD:scripts/update-checkout.py > .local-state/update-checkout.py &&
+python3 .local-state/update-checkout.py --role mac3
+```
+
+**Backend A runs on Shubhaang/Mac3 only. Backend B runs on Ankit/Mac4 only.**
+A remote curl response proves reachability, not that this Mac owns that backend.
+Check `ipconfig getifaddr en0` before installing or starting either service.
 Record each Mac's inventory and all three outbound pings:
 
 | Member | Command |
