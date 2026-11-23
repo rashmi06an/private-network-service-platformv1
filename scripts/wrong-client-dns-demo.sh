@@ -9,6 +9,13 @@ state=".local-state/wrong-dns-$(date -u '+%Y%m%dT%H%M%SZ')"
 mkdir -p "$state"; chmod 700 .local-state "$state"
 target=/etc/resolver/team1.test
 if [ -e "$target" ]; then sudo cp -p "$target" "$state/original"; else touch "$state/original-absent"; fi
+# A LAN address on normal DNS port53 is honored by current macOS scoped DNS.
+# Refuse any existing DNS listener; never redirect to or stop an unrelated service.
+sudo -v
+if sudo lsof -nP "-iUDP@$actual:53" "-iTCP@$actual:53"; then
+ die 'This client already has a port53 socket; finish other DNS experiments first'
+fi
+scripts/test-https.sh
 changed=0
 restore() {
  if [ "$changed" = 1 ]; then
@@ -19,15 +26,23 @@ restore() {
  fi
 }
 trap restore EXIT
-printf 'nameserver 127.0.0.1\nport 65534\ntimeout 1\n' > "$state/wrong.resolver"
-sudo install -m 644 "$state/wrong.resolver" "$target"; changed=1
+printf 'nameserver %s\ntimeout 1\n' "$actual" > "$state/wrong.resolver"
+changed=1
+sudo install -m 644 "$state/wrong.resolver" "$target"
 sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
 echo 'INTENTIONAL WRONG EFFECTIVE CLIENT DNS:'; cat "$target"
 scutil --dns | sed -n '/domain *: team1.test/,+8p'
 ping -c 2 -W 2000 "$TEAM_EDGE_IP"
-if "$TEAM_CURL" --noproxy '*' --connect-timeout 3 --max-time 8 -sS "$TEAM_URL/api/status" > "$state/unexpected-response.txt"; then
+set +e
+"$TEAM_CURL" --noproxy '*' --connect-timeout 3 --max-time 8 -sS "$TEAM_URL/api/status" > "$state/unexpected-response.txt" 2> "$state/curl-error.txt"
+rc=$?
+set -e
+cat "$state/curl-error.txt"
+if [ "$rc" = 0 ]; then
  die 'Hostname request unexpectedly succeeded: investigate other resolvers/caches; this is not a valid failure exhibit'
 fi
+case "$rc" in 6|28) ;; *) die "Failure was not a DNS-resolution error (curl exit$rc)";; esac
+grep -Eq 'Could not resolve|Resolving timed out' "$state/curl-error.txt" || die 'Curl did not report a resolution failure'
 echo 'OBSERVED: normal hostname request fails while direct edge IP remains reachable'
 restore; changed=0
 scripts/test-https.sh

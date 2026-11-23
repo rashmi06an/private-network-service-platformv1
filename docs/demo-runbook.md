@@ -19,3 +19,16 @@ only a diagnostic comparison, not a changed client configuration.
 
 Do failure experiments as separate stages; restore baseline after each. Never use
 old IPs from historical commands as the present service map.
+
+### Effective wrong-client DNS rehearsal
+
+`scripts/wrong-client-dns-demo.sh` first requires a passing trusted HTTPS/cache
+baseline. It checks that the client's own LAN IP has no DNS port53 socket, then
+uses that address on standard DNS port53 as the deliberately wrong scoped resolver.
+It avoids current macOS ignoring localhost overrides on nonstandard ports. The
+helper backs up the scoped file, flushes caches, proves IP reachability, requires
+an actual curl resolution error, restores the prior file, and rechecks HTTPS/304.
+A TLS/app failure is not accepted as a DNS-failure exhibit. Do not run it while a
+cutover cache occupies the client's port53. Isolated OS-command fixtures cover
+resolution failure/timeout and rollback, occupied-port refusal, unrelated TLS error,
+and failed configuration installation. The actual live rehearsal remains pending.
