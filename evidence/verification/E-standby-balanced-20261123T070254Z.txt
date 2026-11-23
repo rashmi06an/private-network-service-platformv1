@@ -1,0 +1,20 @@
+START_UTC=2026-11-23T07:02:54Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=805b48cf4fe6db9004add7a56be71c296a64fc1c
+COMMAND: env TEAM_CURL=/Users/samikshajangid0207/Documents/Codex/2026-11-22/https-github-com-rashmi06an-private-network/work/repo/.local-state/curl-standby scripts/test-load-balancing.sh
+request=1 HTTP=200 X-Backend=B
+request=2 HTTP=200 X-Backend=A
+request=3 HTTP=200 X-Backend=B
+request=4 HTTP=200 X-Backend=A
+request=5 HTTP=200 X-Backend=B
+request=6 HTTP=200 X-Backend=A
+request=7 HTTP=200 X-Backend=B
+request=8 HTTP=200 X-Backend=A
+request=9 HTTP=200 X-Backend=B
+request=10 HTTP=200 X-Backend=A
+request=11 HTTP=200 X-Backend=B
+request=12 HTTP=200 X-Backend=A
+PASS: A=6 B=6 (other concurrent traffic can affect strict alternation)
+
+EXIT_CODE=0
+END_UTC=2026-11-23T07:02:55Z

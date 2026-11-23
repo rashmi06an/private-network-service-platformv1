@@ -11,3 +11,20 @@ Ran 3 tests in 0.877s
 OK
 
 EXIT_CODE=0
+
+SUPERSEDING SOURCE REGRESSION REVIEW — 2026-11-23
+Environment: workspace work/audit-venv with project requirements installed.
+Command: work/audit-venv/bin/python -m unittest discover -s tests -v
+Execution: native isolated loopback/process tests, with sandbox network permission.
+Observed result: Ran 11 tests in 8.364s; OK; exit0.
+Coverage: backend status/cache/conditional304 and single wire Date; detached
+service lifecycle/idempotence/foreign-process refusal/wrong-host and occupied-port
+refusal; strict mixed-version rejection and HTTP/DNS/identity failures; scoped PF
+rollback mode preservation; wrong-client-DNS rollback and unrelated-failure refusal;
+scheduled fresh cutover identity, route, host and timing rejection cases.
+The initial system-Python/default-sandbox attempt lacked Werkzeug and could not
+bind loopback sockets. The superseding run used the prepared project environment
+and permitted loopback access. These environment errors are not LAN test results.
+Source package gate: scripts/submission-check.py --source-only exit0.
+Remaining reviewed LAN items: inventory, edge-cutover, packet-capture,
+failure-rehearsal. Faculty challenge/viva remain live evaluation tasks.

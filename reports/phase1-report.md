@@ -2,6 +2,12 @@
 
 **Private Network Service Platform · Build & Observe**
 
+This report describes the earlier Phase1 session and its recorded screenshots.
+Current acceptance and outstanding proof are tracked separately in the
+[Phase2 ledger](verification-status.json). An explicit dig to8.8.8.8 demonstrates
+a direct query failure; it does not establish a changed effective client resolver.
+Historical Wireshark images do not replace the required current saved binary capture.
+
 ## 1. What we built
 
 A fully local private service, running only on four MacBooks on the same Wi-Fi —
@@ -11,7 +17,7 @@ no cloud. A client types **`https://app.team1.test:8443`**, and the request trav
 Client → Private DNS (Mac 1) → nginx HTTPS edge (Mac 2) → Backend A (Mac 3) / Backend B (Mac 4)
 ```
 
-Everything works end to end: the name resolves through our own DNS, connects over
+The historical demonstration showed the end-to-end path: the name resolves through our own DNS, connects over
 HTTPS with a trusted certificate, and is load-balanced across two backend servers —
 and we captured every protocol layer in Wireshark.
 
@@ -28,7 +34,7 @@ Domain: `app.team1.test` and `api.team1.test` → `10.7.7.9` (Mac 2).
 Full details in [docs/network-inventory.md](../docs/network-inventory.md) and
 [docs/architecture.md](../docs/architecture.md).
 
-## 3. Build tasks — all complete
+## 3. Historical build-task evidence
 
 | Task | What it shows | Status | Evidence |
 |------|---------------|--------|----------|
@@ -40,7 +46,7 @@ Full details in [docs/network-inventory.md](../docs/network-inventory.md) and
 | F | HTTP caching: `Cache-Control` + `304` | Done | `evidence/caching/` (headers + 304) |
 | G | Wireshark: DNS, TCP, TLS, encrypted data | Done | `evidence/wireshark/` (DNS, SYN, handshake, Client Hello) |
 
-## 4. Failure demonstrations — all complete
+## 4. Historical failure demonstrations
 
 We deliberately broke the system to prove we understand each layer.
 

@@ -1,0 +1,57 @@
+{
+  "provenance": "Structured transcription of actual operator-pasted output; original filenames retained. Mac2 preflight recorder files are copied originals. Explicit --resolve is connectivity/trust preflight and does not establish DNS migration.",
+  "apply": {
+    "host": "Shubh1.local",
+    "commit": "f5e12989a2e07d08fada43e7504b3d25a4408510",
+    "log": "E-standby-apply-20261123T065844Z.txt",
+    "start_utc": "2026-11-23T06:58:44Z",
+    "end_utc": "2026-11-23T06:58:44Z",
+    "exit_code": 0,
+    "observed": "Candidate and installed nginx configs syntax-valid; standby applied; prior files backed up."
+  },
+  "clients": [
+    {
+      "role": "mac1",
+      "machine": "Rashmis-MacBook-Pro.local",
+      "log": "E-standby-client-mac1-20261123T070703Z.txt",
+      "start_utc": "2026-11-23T07:07:03Z",
+      "end_utc": "2026-11-23T07:07:03Z",
+      "commit": "6ca73ebc20f94a897b23ce96c87a0a5d4b3a0731",
+      "backend": "B"
+    },
+    {
+      "role": "mac3",
+      "machine": "Shubh1.local",
+      "log": "E-standby-client-mac3-20261123T070534Z.txt",
+      "start_utc": "2026-11-23T07:05:34Z",
+      "end_utc": "2026-11-23T07:05:34Z",
+      "commit": "f5e12989a2e07d08fada43e7504b3d25a4408510",
+      "backend": "A"
+    },
+    {
+      "role": "mac4",
+      "machine": "Ankits-MacBook-Pro-7.local",
+      "log": "E-standby-client-mac4-20261123T070522Z.txt",
+      "start_utc": "2026-11-23T07:05:22Z",
+      "end_utc": "2026-11-23T07:05:22Z",
+      "commit": "f5e12989a2e07d08fada43e7504b3d25a4408510",
+      "backend": "B"
+    }
+  ],
+  "common_client_observation": {
+    "command_options": "/usr/bin/curl --noproxy * --resolve app.team1.test:8443:10.7.28.78 --connect-timeout 10 --max-time 20 -i https://app.team1.test:8443/api/status",
+    "http_version": 2,
+    "http_status": 200,
+    "server": "nginx/1.31.9",
+    "cache_control": "no-store",
+    "x_edge": "standby-mac3",
+    "body_status": "ok",
+    "exit_code": 0,
+    "tls_validation": "Enabled; no -k or --cacert supplied."
+  },
+  "mac2_originals": [
+    "E-standby-https-20261123T070252Z.txt",
+    "E-standby-balanced-20261123T070254Z.txt"
+  ],
+  "review": "New standby leaf is trusted on all four clients. Standby serves both A and B, including A6/B6 across twelve Mac2 requests. No authoritative record change or cached-old/fresh-new migration is claimed by these preflights."
+}

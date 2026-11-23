@@ -1,47 +1,72 @@
 # Phase 2 report — Harden, Recover and Troubleshoot
 
-Team Scout Regiment. Current implementation and operating procedures updated on
-22 November 2026. **Live acceptance remains open** until the actual outputs in
-[verification-status.json](verification-status.json) are reviewed. This report
-does not certify pending experiments or the not-yet-administered faculty challenge.
+Team Scout Regiment · Current review: 23 November 2026.
+The [verification ledger](verification-status.json) records reviewed evidence and
+remaining work. The actual faculty challenge and individual viva remain live
+assessment tasks; rehearsal does not certify those outcomes.
 
-## System and changes since Phase 1
+## System
 
-| Machine | Role | Current service address |
-|---|---|---|
-| Mac 1 Rashmi | primary DNS + client |10.7.27.145:53|
-| Mac 2 Samiksha | primary edge/TLS/LB |10.7.25.25:8443|
-| Mac 3 Shubhaang | Backend A + standby |10.7.28.78:3001 and :8443|
-| Mac 4 Ankit | Backend B + backup DNS |10.7.27.247:3002 and :53|
+| Machine | Member | Role | Address |
+|---|---|---|---|
+| Mac1 | Rashmi | Primary DNS and client | 10.7.27.145:53 |
+| Mac2 | Samiksha | Primary HTTPS edge and load balancer | 10.7.25.25:8443 |
+| Mac3 | Shubhaang | Backend A and standby edge | 10.7.28.78:3001 / :8443 |
+| Mac4 | Ankit | Backend B and backup DNS | 10.7.27.247:3002 / :53 |
 
-Phase 1's same backend/DNS/edge roles are retained. Phase 2 adds a second resolver,
-short TTL with synchronized record changes, narrow backend isolation, explicit
-passive-backend retry/suppression and a second controlled edge. Historical Phase 1
-already demonstrated default nginx retry around a stopped backend; Phase 2 makes
-the policy and recovery measurement explicit, rather than claiming no prior failover.
-See [inventory](../docs/network-inventory.md) for old/current addresses and
-[architecture](../docs/architecture.md) for layer-by-layer flows.
+Normal app/api/ttl.team1.test records point to Mac2 with TTL30. All four clients
+have the two current private resolvers in the scoped team1.test configuration.
+The existing public resolver configuration is separate. Mac4's obsolete global
+private DNS address was removed and its final readback is8.8.8.8.
+See [inventory](../docs/network-inventory.md) and [architecture](../docs/architecture.md).
 
-The corrected source also supplies stable cross-backend cache representation/ETag,
-X-Edge on every endpoint, assertions with meaningful exit status, scoped-DNS setup,
-owned-anchor rollback, per-member commands and a truthful evidence ledger.
+Phase2 adds synchronized backup DNS, measured TTL experiments, scoped backend
+isolation and rollback, explicit passive upstream failure handling, and controlled
+standby migration. The applications share cache content and ETag team1-cache-v2,
+return no-store on status, support conditional304, and expose backend identity.
+Nginx exposes primary/standby identity with X-Edge and uses shared upstream state.
+The role-checked detached backend manager avoids dependence on a foreground terminal;
+it validates ownership before stopping a process. It is not a reboot service.
 
-## Results and traceability
+## Reviewed results
 
-Existing screenshots are historical and indexed by [actual content](../evidence/phase2/INDEX.md).
-They support several successful components, but do not establish all required
-current experiments. Some images show DNS divergence and unsuccessful cache flush;
-these are retained as diagnostic findings. The ledger is the authoritative place
-for reviewed new artifact paths/results. Mandatory pre-review proof remains pending
-until populated; the full source fix alone is not a completed network experiment.
+All times below are UTC on23November. Original recorder files, structured operator
+transcriptions and historical screenshots are distinguished in each artifact.
 
-Actual baseline received22 November: Mac 2 IP10.7.25.25; after starting nginx,
-trusted by-name HTTPS returned200 fromB. Direct A:3001 failed; direct B:3002 returned200.
-Primary DNS answered.25.25, backup answered.28.78. Mac 4 process inspection established
-that its backup was running a different manual config file with app/api pointing
-at standby and no TTL answer. These observations explain the repair order; they
-are not represented as final acceptance. Updated/repaired results will be linked
-as the team provides them.
+| Requirement | Reviewed outcome and evidence |
+|---|---|
+| Current inventories / LAN | All four IP/MAC/interface/prefix/gateway inventories supplied. Nine of12 directed ping probes pass; three inbound-to-Mac1 probes fail. Managed Mac1 stealth remains ON and rejects the CLI change. This restriction remains open; DNS/TCP service success does not prove ICMP success. [Observations](../evidence/verification/2026-11-23-three-mac-inventory-observations.json), [policy readback](../evidence/verification/2026-11-23-managed-stealth-and-dns-rechecks.json) |
+| Baseline / cache / HTTP2 | Both current backends have correct identity/no-store/shared validator/direct304. Normal hostname HTTPS is trusted and negotiatesHTTP2. Twelve requests returnA6/B6. [Backend check](../evidence/verification/D-recovered-apps-20261123T061004Z.txt), [HTTPS/cache](../evidence/verification/D-recovered-https-20261123T061004Z.txt), [HTTP2](../evidence/verification/R1-http2-recheck-20261123T045545Z.txt) |
+| Dual client DNS | Canonical scoped settings verified on all four clients; [Mac2](../evidence/verification/R1-mac2-client-dns-20261123T044808Z.txt), [Mac3](../evidence/verification/R2-mac3-client-dns-20261123T050122Z.txt), [Mac1](../evidence/verification/R2-mac1-client-dns-20261123T050558Z.txt), [Mac4](../evidence/verification/R2-mac4-client-dns-20261123T050617Z.txt) |
+| A — Backup DNS | Primary stopped05:15:26–34. Fresh Mac2 lookup and trusted HTTPS200 succeed through the backup; normal resolver transaction38321 is received/replied05:15:51. Primary restored05:16:40–41 and both datasets verified. [Down test](../evidence/verification/A-primary-down-20261123T051545Z.txt), [backup receipt](../evidence/verification/A-backup-receipt-20261123T051432Z.txt), [restored](../evidence/verification/A-restored-20261123T051653Z.txt) |
+| B — Natural expiry | Real client cache retains OLD while both authorities serve NEW; TTL declines to1 and NEW appears31.49seconds after priming. Both authorities subsequently restored and checked. [Client log](../evidence/verification/B-expiry-20261123T052539Z.txt), [timeline](../evidence/verification/2026-11-23-ttl-expiry-timeline.json), [final restore check](../evidence/verification/B-expiry-final-restored-20261123T053310Z.txt) |
+| B — Separate manual flush | Cache stillOLD/TTL25; explicit owned-cache flush obtains NEW after5.25seconds, before natural30second expiry. Both authorities subsequently restored. [Client log](../evidence/verification/B-manual-flush-20261123T053519Z.txt), [final restore check](../evidence/verification/B-flush-restored-recheck-20261123T054126Z.txt) |
+| C — Isolation / rollback | Mac2 direct/cache/HTTPS checks pass while Mac1 direct ports time out and normal HTTPS still returns200. A counters allow76/drop3; B allow74/drop4. Rollback clears only project rules/references, verifies unchanged main filters and preserves each host's original PF mode. Mac1 directA/B and HTTPS then return200. [Operator timeline](../evidence/verification/2026-11-23-isolation-operator-evidence.json), [allowed edge](../evidence/verification/C-edge-allowed-20261123T062327Z.txt), [denied client](../evidence/verification/C-client-denied-20261123T062338Z.txt), [restored client](../evidence/verification/C-client-restored-20261123T063514Z.txt) |
+| D — Backend HA | ReadyA6/B6; confirmed A unavailable; twelve B-only200 responses; A restarted under manager; recoveredA6/B6. [Timeline](../evidence/verification/2026-11-23-ha-repair-and-recovery.json), [outage](../evidence/verification/D-a-down-20261123T060400Z.txt), [recovery](../evidence/verification/D-recovered-20261123T060959Z.txt) |
+| TLS approval / trust | Team confirms faculty approval of mkcert. Original primary certificate and normal HTTPS trusted on all four clients. [Approval](../evidence/verification/2026-11-23-faculty-mkcert-confirmation.txt), [Mac3](../evidence/verification/TLS-mac3-client-20261123T061208Z.txt), [Mac4](../evidence/verification/TLS-mac4-client-20261123T061225Z.txt) |
+| E — Standby preflight | Separate same-CA leaf installed on Mac3; trusted explicit-route checks pass on all four clients, with standbyA6/B6 and conditional304. These preflights do not establish authoritative DNS migration. Cached-old/fresh-new cutover, convergence and restoration remain pending. [Operator preflights](../evidence/verification/2026-11-23-standby-client-preflights.json), [Mac2 cache](../evidence/verification/E-standby-https-20261123T070252Z.txt), [Mac2 balance](../evidence/verification/E-standby-balanced-20261123T070254Z.txt) |
+| Saved capture / packet index | Pending actual binary pcap/pcapng and its derived frame index. Backup tcpdump text and historical screenshots do not replace that file. [Acquisition guide](../docs/packet-evidence.md) |
+| Remaining failure rehearsal | Effective wrong-client-DNS configuration and remaining required failure/restore observations remain pending. Historical explicit dig to a public resolver is not an effective-client-setting demonstration. |
+
+## Repairs and evidence limits
+
+Earlier failures remain in the ledger and evidence directory. They include stale
+manual backup-DNS data, old backend processes serving incompatible ETags, a colliding
+untracked evidence file that blocked checkout updates, and a later stopped B process.
+The corrected role-checked checkout updater preserves original colliding logs before
+fast-forwarding. Runtime/cache checks reject the old application instead of relying
+only on a200 status. The background manager starts only the intended application.
+Subsequent controlled successful runs in the table supersede those failed baselines.
+
+The first TTL restore-labelled check predates its scheduled change, so it is retained
+as a pre-change baseline. Later genuine post-change restores and checks establish
+cleanup. An initial manual-flush cleanup check failed and is also retained; the later
+passing check supplies acceptance. All timing claims derive from actual outputs.
+
+Keep host lids open and use a temporary caffeinate assertion for the lab. A primary
+DNS non-answer coincided with an availability issue; current diagnostics and later
+success do not establish its definitive cause. The managed ICMP limitation must be
+disclosed. No broad firewall disable or invented successful ping is used.
 
 ## Six extension learning summaries
 
@@ -88,222 +113,14 @@ causes. Each hypothesis needs supporting evidence and an appropriate recovery
 check. Rehearsal can be recorded beforehand, but the faculty's actual fault, layer,
 reasoning, fix/isolation and outcome are written only after the challenge occurs.
 
-## Final demonstration and report completion
+## Demonstration and completion
 
-Follow all 11 [demonstration steps](../docs/phase2-demo-runbook.md). Every member
-participates and explains the complete system personally. After reviewing actual
-new outputs, fill artifact paths/results in the ledger and add a concise factual
-test-result table here. Keep the live challenge and individual viva correctly
-identified until performed. Do not replace missing results with expected outputs.
+Use the [11-step final runbook](../docs/phase2-demo-runbook.md). Before submission,
+finish the pending rows and run the strict artifact gate. Local regression checks
+are described in [local validation](local-validation.txt); isolated loopback tests
+prove implementation behavior, not four-Mac LAN acceptance. Keep the saved binary
+capture with its actual frame/stream index and use it in the demonstration.
 
-## 23 November repair observation
-
-Ankit supplied [backup restart/query output](../evidence/verification/2026-11-23-mac4-backup-dns-restored.txt): new manual dnsmasq process 87561, app and ttl names returning 10.7.25.25 with TTL 30 from localhost and its own LAN address. This corrects the prior stale-answer observation for those queries. Cross-Mac reachability, API parity and a fresh system lookup during a controlled primary outage remain pending. The acceptance ledger stays open.
-
-### Cross-Mac follow-up
-
-[Mac 2 comparison and HTTPS](../evidence/verification/2026-11-23-mac2-dns-https-baseline.txt) now establishes backup reachability over the LAN, matching app/api answers, and a normal HTTPS 200 response from A after system-cache flush. The TTL record still differs between primary and backup. X-Edge is absent, and shared cache validation/new-config deployment remain unverified. This is partial baseline progress, not a completed failover/TTL experiment.
-
-### Primary canonical configuration applied
-
-At 03:50:00–03:50:09 UTC on 23 November, Rashmi ran the canonical primary setup at commit cec41e5. The [recorded setup output](../evidence/verification/R1-primary-setup-20261123T035000Z.txt), copied from the team-supplied transcript with formatting normalized, shows saved pre-change configuration, syntax validation, service restart, all three records at 10.7.25.25 TTL30, and exit0. This supersedes the earlier primary-local TTL mismatch observation. Backup canonical migration and the complete fresh-client failover experiment remain pending.
-
-### Backup canonical configuration applied
-
-Ankit supplied the [backup setup log](../evidence/verification/R1-backup-setup-20261123T041652Z.txt) for 04:16:52–04:16:56 UTC on 23 November, commit16ff0bd. It is copied from the team transcript with formatting normalized. The canonical backup setup saved prior config, passed syntax validation, restarted the managed service and checked app/api/ttl at 10.7.25.25 TTL30, with exit0. Both canonical DNS setup stages are now observed successful; the full cross-client primary-outage/fresh-lookup experiment is still pending.
-
-### Current edge baseline: mixed backend deployment detected
-
-The [Mac2 Round1 transcript](../evidence/verification/2026-11-23-mac2-round1-transcript.txt)
-is copied verbatim from the user-supplied terminal text, including older scrollback.
-The five new recorder files retain their exact START/END blocks from that transcript.
-At04:48 UTC, the current results are:
-
-| Check | Observed result |
-|---|---|
-| Scoped client DNS on Mac2 | Both private DNS servers installed and effective; a second client's settings remain pending |
-| Canonical primary edge | Config validation and apply succeeded; trusted responses carry X-Edge primary-mac2 |
-| Both DNS datasets from Mac2 | All six app/api/ttl answers match10.7.25.25 with TTL30; the earlier scrollback TTL mismatch is superseded |
-| Direct backend health | Both200/identity checks passed the old helper, but A lacked no-store and was serving the old runtime |
-| HTTPS cache validation | Failed: B returned team1-cache-v2, then A returned backend-a-v1 with200 instead of the required304 |
-| HTTP/2 | Actual trusted HTTP/2 responses observed; the separate HTTP2 command was skipped after the cache failure |
-| Load-balancing command | Not executed because the preceding HTTPS check failed in the && chain |
-
-The earlier local updated-A response is retained as historical evidence, but current
-runtime acceptance remains open. The direct checker now requires no-store, the shared
-v2 ETag, cache policy and conditional304 independently from both backends. Its
-regression fixtures reject old A, old B, an old validator with otherwise new status,
-and a broken conditional response, while accepting both updated backends. Identify
-the active Mac3 process and relaunch the corrected A before repeating the baseline.
-
-### Baseline restored and verified at04:55 UTC
-
-Shubhaang supplied a successful corrected-A startup at04:55:26 UTC from
-`Documents/CN-submission`, commitdedf0d9. The subsequent Mac2 rechecks supersede
-the mixed-deployment failure above. The following original recorder files were
-copied byte-for-byte from Mac2's CN-submission checkout, rather than reconstructed
-from expected output:
-
-| Actual check | Observed result |
-|---|---|
-| [Both updated backends](../evidence/verification/R1-backends-recheck-20261123T045542Z.txt) | Both200 with correct identity, no-store, shared team1-cache-v2 and direct304; exit0 |
-| [Trusted hostname HTTPS/cache](../evidence/verification/R1-https-cache-recheck-20261123T045543Z.txt) | HTTP2 status200, cache200 fromA followed by304 fromB with the shared ETag and primary-mac2; exit0 |
-| [Load balancing](../evidence/verification/R1-balanced-recheck-20261123T045544Z.txt) | Twelve200 responses, A6/B6; exit0 |
-| [Explicit HTTP2](../evidence/verification/R1-http2-recheck-20261123T045545Z.txt) | HTTP_CODE_AND_VERSION=200 2; exit0 |
-
-Baseline and cache/HTTP2 ledger items are now verified. Controlled DNS failover,
-a second client's resolver settings, TTL experiments, isolation/rollback, backend
-HA, standby cutover, saved capture/index, remaining inventory/rehearsal and CA
-approval evidence are still separate pending items. Live faculty challenge and
-individual viva remain live evaluation tasks.
-
-### Client settings verified; inventory corrections still open
-
-Mac3's [dual-DNS installation](../evidence/verification/R2-mac3-client-dns-20261123T050122Z.txt)
-at05:01:22-05:01:26 UTC passes, verifying the two-client setting requirement with
-Mac2. [Three further inventories](../evidence/verification/2026-11-23-three-mac-inventory-observations.json)
-confirm the remaining assigned addresses and hardware/network fields. Nine of the
-twelve directed ping results pass; three fail toward Mac1, whose recorded stealth
-mode is ON. The change/retest outcome is not yet supplied. Mac4 also still uses
-the old private resolver10.7.17.21, while Mac1 uses localhost only; canonical client
-DNS installation on both remains pending. Controlled primary-outage evidence is
-still a separate required experiment.
-
-### Managed policy prevents the ICMP correction
-
-At05:05:58 UTC the Mac1 stealth setter reported that managed Macs cannot modify
-this setting from the command line, despite exit0. Its readback still says ON.
-The [recorded observations](../evidence/verification/2026-11-23-managed-stealth-and-dns-rechecks.json)
-retain this unresolved acceptance gap; a permitted IT/faculty change or explicit
-assessment exception is needed. Current private-zone DNS installs now pass on all
-four Macs. Mac4's separate Wi-Fi DNS list retains the old primary address and needs
-cleanup with original-list backup/readback. DNS failover remains unverified until
-a controlled outage, fresh system lookup/HTTPS, backup receipt and restoration are
-captured; script timestamps now distinguish direct-dig checks from normal lookup.
-
-### Extension A verified: controlled primary outage and restoration
-
-| UTC on23November | Actual evidence |
-|---|---|
-| 05:15:26–05:15:34 | [Rashmi stopped primary DNS](../evidence/verification/A-primary-stop-20261123T051526Z.txt); the accompanying port53 listing had no listener rows |
-| 05:15:45–05:15:53 | [Mac2 after cache flush](../evidence/verification/A-primary-down-20261123T051545Z.txt): primary non-answer, backup's three correct answers, system lookup10.7.25.25 and normal trusted HTTP2/200 with primary-mac2 |
-| 05:15:51.712912–05:15:51.716443 | [Ankit's actual backup receipt](../evidence/verification/A-backup-receipt-20261123T051432Z.txt): normal resolver A query ID38321 fromMac2 UDP50756 to backup53, followed by10.7.25.25 answer |
-| 05:16:40–05:16:41 | [Primary restored](../evidence/verification/A-primary-restore-20261123T051640Z.txt) |
-| 05:16:53–05:16:54 | [Both datasets checked fromMac4](../evidence/verification/A-restored-20261123T051653Z.txt), all six names/IP/TTL checks pass |
-
-The backup receipt also contains the three earlier explicit-dig requests at05:15:48;
-those are separated from the later normal resolver A transaction above. The native
-Mac2 recorder file was copied directly; other files are faithful transcriptions of
-actual team-pasted output. The supplied receipt excerpt has no completed capture
-exit-code footer, so no such code is invented. This text receipt proves Extension A
-but does not replace the separate mandatory saved binary packet capture/frame index.
-The DNS-failover ledger item is now verified. [Fresh Mac4 service readback](../evidence/verification/2026-11-23-mac4-wifi-dns-final-readback.txt)
-at05:18:49 UTC is only8.8.8.8, confirming stale service DNS cleanup.
-
-### Extension B natural expiry verified and restored
-
-The [original live Mac2 recorder](../evidence/verification/B-expiry-20261123T052539Z.txt)
-shows priming at05:29:01.066 UTC with30seconds and OLD10.7.25.25. Both real DNS
-servers returned NEW10.7.28.78 at05:29:06 while the real client cache still returned
-OLD/TTL25. Its remaining TTL declined25,23,...,1; NEW/TTL30 appeared at05:29:32.553,
-31.49seconds after priming, without a manual flush. The client exited0.
-
-[Timeline/provenance](../evidence/verification/2026-11-23-ttl-expiry-timeline.json)
-retains the early user restores at05:26 and the05:27 both-up file, but these predate
-the scheduled05:29:04 change and do not prove final restoration. After completion,
-Ankit supplied a new restore at05:30:48 and Rashmi at05:31:07. The agent then ran
-[the actual final Mac2 both-up check](../evidence/verification/B-expiry-final-restored-20261123T053310Z.txt)
-at05:33:10–05:33:11, obtaining all six normal records/TTL30 and exit0. Natural expiry
-and its restoration are verified; the distinct manual-flush case remains pending.
-
-### Separate manual-flush client case passed; cleanup under review
-
-The agent ran [the live Mac2 manual-flush helper](../evidence/verification/B-manual-flush-20261123T053519Z.txt)
-against the two operators' shared epoch1795412219. At05:37:01 UTC both authorities
-served NEW while the client retained OLD/TTL25. The explicit SIGHUP to its owned
-cache PID85419 immediately obtained NEW at05:37:01.311, only5.25seconds after
-priming, with exit0. This is separate from the31.49-second natural-expiry run.
-The [first cleanup check](../evidence/verification/B-flush-final-restored-20261123T053836Z.txt)
-at05:38:36 still found primary ttl pointing to NEW, so the full manual-flush ledger
-item remains pending until post-experiment restores and a passing final check.
-
-### Manual-flush restoration verified; B availability gap found separately
-
-User supplied primary restore05:38:49 UTC and backup restore05:40:37. The
-[final Mac2 check](../evidence/verification/B-flush-restored-recheck-20261123T054126Z.txt)
-at05:41:26 passes all six normal answers/TTL30, completing manual-flush acceptance.
-
-A separate [HA baseline](../evidence/verification/D-balanced-20261123T054032Z.txt)
-at05:40:32–05:40:39 found12 successful A responses and no B. The
-[direct diagnosis](../evidence/verification/D-backend-diagnosis-20261123T054128Z.txt)
-confirmed current A v2/304 and failed B3002 connectivity; Ankit then supplied an
-unchanged10.7.27.247 address and empty port3002 listener listing. Baseline is reopened
-until B is restored. A new role-checked backend manager starts the fixed checkout
-in a detached session, checks current application behavior, logs locally, and checks
-UID/PID/birth/app path before stopping its own process. It refuses other listeners.
-Real isolated-process tests cover start/status/idempotence/stop/restart, wrong Mac,
-occupied port and unrelated PID refusal. Live B deployment and required controlled
-A-down/B-only/recovery evidence remain pending.
-
-The cache routes also omit the application-generated Date after conditional
-processing, allowing the serving layer to emit one wire Date. Native loopback
-checks of both apps'200 and304 responses now assert exactly one Date header.
-The complete regression suite currently passes nine test methods, including
-background process lifecycle/refusal and effective wrong-DNS rollback fixtures.
-
-### Extension D verified: ready baseline, A outage and recovery
-
-[Full timeline/provenance](../evidence/verification/2026-11-23-ha-repair-and-recovery.json)
-retains the earlier B outage and subsequent DNS non-answer rather than representing
-those failed checks as passes. B was restored under the background manager with
-PID82111. Mac1 later reported healthy local DNS and began a temporary keep-awake
-assertion; all six live DNS records and committed trusted HTTPS checks passed again.
-No definitive cause of the earlier intermittent primary non-answer is asserted.
-
-| Controlled stage | Actual result |
-|---|---|
-| [Ready baseline](../evidence/verification/D-balanced-ready-20261123T055933Z.txt) | 05:59:33-38 UTC: A6/B6, twelveHTTP200 |
-| [A unavailable](../evidence/verification/D-a-unavailable-20261123T060359Z.txt) | Guarded user stop of PID22992; Mac2 direct3001 connection refused |
-| [A-down](../evidence/verification/D-a-down-20261123T060400Z.txt) | 06:04:00-07 UTC: A0/B12, allHTTP200 |
-| [Restart A](../evidence/verification/D-a-restart-20261123T060845Z.txt) | 06:08:45 UTC: fixed checkout background PID24638, exit0 |
-| [Recovered](../evidence/verification/D-recovered-20261123T060959Z.txt) | 06:09:59-06:10:04 UTC: A6/B6, allHTTP200 |
-| [Current apps](../evidence/verification/D-recovered-apps-20261123T061004Z.txt) | Both no-store, shared-v2 ETag, direct304 and single wireDate |
-| [Trusted edge](../evidence/verification/D-recovered-https-20261123T061004Z.txt) | Normal hostname HTTP2/200 and304, primary-mac2 |
-
-The edge remains a single point of failure until the separate standby exercise;
-this controlled backend recovery is not automatic edge failover. Baseline and HA
-ledger items are verified again. The team also [confirmed faculty mkcert permission](../evidence/verification/2026-11-23-faculty-mkcert-confirmation.txt);
-public certificate identity is valid, while the remaining clients' trust checks
-are still required separately.
-
-### All-client trust verified and isolation baseline captured
-
-The team confirmed faculty permission for the existing mkcert method. Mac2 already
-has multiple trusted200/304 proofs. [Mac1's pre-isolation check](../evidence/verification/C-before-isolation-20261123T061158Z.txt)
-confirms both direct backend ports currently return200 and normal hostname HTTPS
-works without a trust bypass. [Mac3](../evidence/verification/TLS-mac3-client-20261123T061208Z.txt)
-and [Mac4](../evidence/verification/TLS-mac4-client-20261123T061225Z.txt) each then
-passed trusted hostname200/304. These are faithful transcriptions of team-pasted
-recorder blocks, with formatting normalized. Certificate-method approval and all
-four client trust checks are now verified. Firewall apply/denial/counters/rollback
-still need their actual controlled trial. The apply helper now records pre-PF info
-and requires a filter-anchor call, rather than accidentally matching a scrub anchor.
-
-### Extension C verified and safely rolled back
-
-[Operator apply/counter/rollback observations](../evidence/verification/2026-11-23-isolation-operator-evidence.json)
-retain actual rule addresses, matching packet counters and original log filenames.
-After the pre-isolation Mac1 success, both hosts applied the named project anchor.
-At06:23:27–28 UTC [Mac2 direct and cache checks](../evidence/verification/C-edge-allowed-20261123T062327Z.txt)
-and [trusted edge checks](../evidence/verification/C-edge-https-20261123T062327Z.txt)
-passed. At06:23:38–44 [Mac1 direct probes timed out while HTTPS200 still worked](../evidence/verification/C-client-denied-20261123T062338Z.txt).
-Real matching packet counters showed A allow76/drop3 and B allow74/drop4.
-
-Both rollback commands exited0 at06:31:31/33, cleared only project rules/references
-and verified unchanged main filter rules. Mac3 PF ended Disabled; Mac4 preserved
-its other reference and remained Enabled. [Mac1's final restored check](../evidence/verification/C-client-restored-20261123T063514Z.txt)
-then returned both direct200 and trusted hostnameHTTPS200 at06:35:14–15. Isolation
-and its rollback are verified. A separate standby certificate/key has been prepared
-under the same CA and verified by an isolated native-client TLS preflight; this is
-not yet live standby deployment/cutover evidence. The current system curl's optional
-TLS1.3 flag is unsupported; the required saved packet flow will use validated TLS1.2.
+Each member explains the complete flow and extensions personally. Record the actual
+faculty challenge's fault, hypothesis, layer, fix/isolation and result after it occurs.
+The individual viva remains a live assessment.

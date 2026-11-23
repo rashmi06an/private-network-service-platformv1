@@ -144,9 +144,12 @@
       "status": "pending",
       "artifacts": [
         "evidence/verification/E-standby-certificate-prepared.txt",
-        "evidence/verification/E-new-leaf-native-trust-preflight.txt"
+        "evidence/verification/E-new-leaf-native-trust-preflight.txt",
+        "evidence/verification/2026-11-23-standby-client-preflights.json",
+        "evidence/verification/E-standby-https-20261123T070252Z.txt",
+        "evidence/verification/E-standby-balanced-20261123T070254Z.txt"
       ],
-      "review_note": "Mac3 user inspection confirms nginx present but required leaf/key files absent. Separate standby leaf/key issued under same existing approved CA onMac2; OpenSSL verifies both old primary and new standby against thatCA. Native Mac2 loopback TLS preflight with new leaf returnsHTTP200/SSL_VERIFY0 without -k or --cacert. Files remain ignored/local pending secure operator transfer; actual standby deployment/cutover still pending."
+      "review_note": "Standby nginx applied on Mac3 at06:58:44 UTC with existing approved-CA leaf/key. Native Mac2 trusted preflight gives200/304 and twelve200 A6/B6. Operator preflights on Mac1/Mac3/Mac4 also give trusted HTTP2/200 with standby-mac3 and A/B identities. These use explicit --resolve, so they prove connectivity/trust only. Scheduled authoritative change, concurrent cached-old/fresh-new clients, convergence and restoration remain pending."
     },
     {
       "id": "packet-capture",
