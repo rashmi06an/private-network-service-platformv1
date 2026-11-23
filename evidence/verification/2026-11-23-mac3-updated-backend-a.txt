@@ -1,0 +1,59 @@
+SOURCE: User-pasted Mac3 terminal output; normalized formatting.
+REVIEW: Corrected Backend A started and direct HTTP checks returned the new headers/body.
+Startup excerpt is from a still-running recorder; no completed EXIT_CODE was provided.
+
+STARTUP EXCERPT:
+START_UTC=2026-11-23T04:27:46Z
+MACHINE=Shubh1.local
+COMMIT=180d73fb916c477f606e0921e7e2204bddc8a7c4
+COMMAND: backend-a/.venv/bin/python -u backend-a/app.py
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3001
+ * Running on http://10.7.28.78:3001
+Press CTRL+C to quit
+10.7.28.78 - - [23/Nov/2026 09:57:58] "GET /api/status HTTP/1.1" 200 -
+10.7.28.78 - - [23/Nov/2026 09:57:58] "GET /api/cache-demo HTTP/1.1" 200 -
+
+COMMAND: /usr/bin/curl --noproxy '*' --connect-timeout 3 --max-time 8 -i http://10.7.28.78:3001/api/status
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.15.2
+Date: Mon, 23 Nov 2026 04:27:58 GMT
+Content-Type: application/json
+Content-Length: 30
+Cache-Control: no-store
+X-Backend: A
+Connection: close
+
+{"backend":"A","status":"ok"}
+
+COMMAND: /usr/bin/curl --noproxy '*' --connect-timeout 3 --max-time 8 -i http://10.7.28.78:3001/api/cache-demo
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.15.2
+Date: Mon, 23 Nov 2026 04:27:58 GMT
+Content-Type: application/json
+Content-Length: 46
+Cache-Control: public, max-age=60
+ETag: "team1-cache-v2"
+Date: Mon, 23 Nov 2026 04:27:58 GMT
+X-Backend: A
+Connection: close
+
+{"message":"Cache demonstration","version":2}
+
+SUBSEQUENT LISTENER CHECK:
+COMMAND: lsof -nP -iTCP:3001 -sTCP:LISTEN
+COMMAND   PID      USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+Python  18523 shubhaang    3u  IPv4 0xfd8bc89f89515ecd      0t0  TCP *:3001 (LISTEN)
+
+ADDITIONAL OBSERVATION (summary, not raw log):
+User also pasted two HTTP400 entries at 09:58:09 local time containing TLS ClientHello
+bytes starting with 0x16 0x03 0x01. They indicate TLS traffic sent to this plain HTTP
+backend port. The source client/application was not identified. Direct backend checks
+use HTTP; client HTTPS belongs on nginx port 8443. The prior listener PID18467 was
+reported before the successful retry; PID18523 was reported after it.
+
+LIMITS: This proves local direct Backend A behavior only. Backend B deployment,
+trusted edge/cache integration, conditional304 and LAN acceptance remain pending.
