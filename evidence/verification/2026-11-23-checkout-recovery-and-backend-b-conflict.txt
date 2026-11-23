@@ -1,0 +1,46 @@
+SOURCE: Excerpts and observations from user-pasted Mac3/Mac4 terminal output.
+Formatting normalized. Setup completion is not claimed as updated B runtime proof.
+
+MAC3 UPDATE EXCERPTS:
+ROLE=mac3 IP=10.7.28.78
+LOCAL_EVIDENCE_BACKUP=/Users/shubhaang/Documents/CN-submission/.local-state/evidence-before-update-20261123T043653Z-yjw421ix
+Preserved: evidence/verification/R1-backend-a-20261123T042514Z.txt
+Updating 180d73f..2203422
+Fast-forward
+PASS: checkout updated; original colliding logs remain in the printed local backup
+
+MAC4 UPDATE EXCERPTS:
+ROLE=mac4 IP=10.7.27.247
+LOCAL_EVIDENCE_BACKUP=/Users/ankitrajsingh/Documents/CN-submission/.local-state/evidence-before-update-20261123T044114Z-pgokhf8v
+Preserved: evidence/verification/R1-backup-setup-20261123T041652Z.txt
+Updating 16ff0bd..2203422
+Fast-forward
+PASS: checkout updated; original colliding logs remain in the printed local backup
+Successfully installed Flask-3.1.3 Jinja2-3.1.6 MarkupSafe-3.0.3 Werkzeug-3.1.9 blinker-1.9.0 click-8.5.0 itsdangerous-2.2.0
+
+MAC4 RECORDER FAILURE:
+START_UTC=2026-11-23T04:41:40Z
+MACHINE=Ankits-MacBook-Pro-7.local
+COMMIT=22034225d744baaaf77a0b1b5b3a1f6ddd9f38eb
+COMMAND: backend-b/.venv/bin/python -u backend-b/app.py
+ * Serving Flask app 'app'
+ * Debug mode: off
+Address already in use
+Port 3002 is in use by another program. Either identify and stop that program, or start the server with a different port.
+
+EXIT_CODE=1
+END_UTC=2026-11-23T04:41:41Z
+
+MAC4 DIRECT RESPONSE OBSERVATIONS:
+Both requests to http://10.7.27.247:3002/api/status and /api/cache-demo returned
+HTTP/1.1 200 OK at Mon, 23 Nov 2026 04:41:53 GMT, from Werkzeug/3.1.9 Python/3.14.6.
+Status lacked Cache-Control: no-store. Cache-demo still showed:
+Cache-Control: public, max-age=60
+ETag: "backend-b-v1"
+X-Backend: B
+{"backend":"B","message":"Cache demonstration"}
+
+REVIEW: Checkout collision recovery succeeded on both actual Macs. B dependencies
+are installed on the correct Mac4, but old B still occupies port3002. Identify the
+listener command/cwd, stop only the identified old B, then start corrected B and
+repeat direct checks. Keep backup DNS and corrected Mac3 A running.
