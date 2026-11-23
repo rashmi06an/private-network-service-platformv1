@@ -1,0 +1,35 @@
+START_UTC=2026-11-23T06:12:08Z
+MACHINE=Shubh1.local
+COMMIT=9e1bec0164c8dbc5ef75b295b14e69c2aba82139
+COMMAND: scripts/test-https.sh
+HTTP/2 200 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 06:12:09 GMT
+content-type: application/json
+content-length: 30
+cache-control: no-store
+x-backend: B
+x-edge: primary-mac2
+
+HTTP/2 200 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 06:12:09 GMT
+content-type: application/json
+content-length: 46
+cache-control: public, max-age=60
+etag: "team1-cache-v2"
+x-backend: A
+x-edge: primary-mac2
+
+HTTP/2 304 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 06:12:09 GMT
+cache-control: public, max-age=60
+etag: "team1-cache-v2"
+x-backend: B
+x-edge: primary-mac2
+
+PASS: trusted by-name HTTPS, edge/backend headers, cache headers and conditional 304
+
+EXIT_CODE=0
+END_UTC=2026-11-23T06:12:09Z

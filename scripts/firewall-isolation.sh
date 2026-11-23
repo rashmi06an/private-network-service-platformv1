@@ -18,7 +18,8 @@ case "$action" in
  apply)
   [ ! -f "$state/active-token" ] || die 'Project anchor already active; use show, set-edges or rollback'
   sudo pfctl -sr > "$state/main-before.txt"
-  grep -F 'anchor "com.apple/*"' "$state/main-before.txt" >/dev/null || die 'Required parent anchor call missing; do not load a detached anchor'
+  sudo pfctl -s info > "$state/info-before.txt"
+  grep -Eq '^[[:space:]]*anchor[[:space:]]+"com[.]apple/[*]"([[:space:]]|$)' "$state/main-before.txt" >/dev/null || die 'Required parent anchor call missing; do not load a detached anchor'
   existing=$(sudo pfctl -a "$anchor" -sr 2>/dev/null)
   [ -z "$existing" ] || die 'Project anchor contains pre-existing rules; inspect before changing'
   sudo cp -p /etc/pf.conf "$state/pf.conf.before"

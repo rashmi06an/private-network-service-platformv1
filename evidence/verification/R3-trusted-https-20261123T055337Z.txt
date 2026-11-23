@@ -1,0 +1,8 @@
+START_UTC=2026-11-23T05:53:37Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=946324773f48b70d6f40555e928ff751965ebc2f
+COMMAND: scripts/test-https.sh
+curl: (28) Resolving timed out after 3005 milliseconds
+
+EXIT_CODE=28
+END_UTC=2026-11-23T05:53:41Z

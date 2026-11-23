@@ -1,0 +1,13 @@
+START_UTC=2026-11-23T05:52:40Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=946324773f48b70d6f40555e928ff751965ebc2f
+COMMAND: openssl x509 -in /opt/homebrew/etc/nginx/certs/app.team1.test.pem -noout -subject -issuer -dates -ext subjectAltName
+subject=O=mkcert development certificate, OU=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid )
+issuer=O=mkcert development CA, OU=samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid ), CN=mkcert samikshajangid0207@samikshas-MacBook-Pro.local (samiksha jangid )
+notBefore=Oct  2 07:23:32 2026 GMT
+notAfter=Jan  2 07:23:32 2029 GMT
+X509v3 Subject Alternative Name: 
+    DNS:app.team1.test, DNS:api.team1.test
+
+EXIT_CODE=0
+END_UTC=2026-11-23T05:52:40Z

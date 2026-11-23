@@ -1,0 +1,6 @@
+SOURCE: Team/user reply to the certificate-method clarification on23November2026.
+The question quoted the project PDF's page7 local-CA/mkcert faculty-approval condition.
+ACTUAL RESPONSE: Faculty से mkcert की अनुमति confirm है
+
+REVIEW: Team-reported faculty permission for the existing mkcert method is confirmed.
+All-client certificate trust is checked separately using real verified HTTPS requests.

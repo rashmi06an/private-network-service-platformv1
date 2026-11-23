@@ -1,0 +1,19 @@
+START_UTC=2026-11-23T06:11:58Z
+MACHINE=Rashmis-MacBook-Pro.local
+COMMIT=6ca73ebc20f94a897b23ce96c87a0a5d4b3a0731
+COMMAND: scripts/test-backend-isolation.sh restored
+RESTORED: backend A HTTP=200
+RESTORED: backend B HTTP=200
+HTTP/2 200 
+server: nginx/1.31.6
+date: Mon, 23 Nov 2026 06:12:01 GMT
+content-type: application/json
+content-length: 30
+cache-control: no-store
+x-backend: A
+x-edge: primary-mac2
+
+PASS: restored; by-name HTTPS via edge remains available
+
+EXIT_CODE=0
+END_UTC=2026-11-23T06:12:00Z

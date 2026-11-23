@@ -1,0 +1,20 @@
+START_UTC=2026-11-23T06:09:59Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=9e1bec0164c8dbc5ef75b295b14e69c2aba82139
+COMMAND: scripts/test-ha-failover.sh recovered
+stage=recovered request=1 HTTP=200 X-Backend=B
+stage=recovered request=2 HTTP=200 X-Backend=A
+stage=recovered request=3 HTTP=200 X-Backend=B
+stage=recovered request=4 HTTP=200 X-Backend=A
+stage=recovered request=5 HTTP=200 X-Backend=B
+stage=recovered request=6 HTTP=200 X-Backend=A
+stage=recovered request=7 HTTP=200 X-Backend=B
+stage=recovered request=8 HTTP=200 X-Backend=A
+stage=recovered request=9 HTTP=200 X-Backend=B
+stage=recovered request=10 HTTP=200 X-Backend=A
+stage=recovered request=11 HTTP=200 X-Backend=B
+stage=recovered request=12 HTTP=200 X-Backend=A
+PASS: recovered A=6 B=6
+
+EXIT_CODE=0
+END_UTC=2026-11-23T06:10:04Z

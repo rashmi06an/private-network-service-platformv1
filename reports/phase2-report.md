@@ -250,3 +250,41 @@ processing, allowing the serving layer to emit one wire Date. Native loopback
 checks of both apps'200 and304 responses now assert exactly one Date header.
 The complete regression suite currently passes nine test methods, including
 background process lifecycle/refusal and effective wrong-DNS rollback fixtures.
+
+### Extension D verified: ready baseline, A outage and recovery
+
+[Full timeline/provenance](../evidence/verification/2026-11-23-ha-repair-and-recovery.json)
+retains the earlier B outage and subsequent DNS non-answer rather than representing
+those failed checks as passes. B was restored under the background manager with
+PID82111. Mac1 later reported healthy local DNS and began a temporary keep-awake
+assertion; all six live DNS records and committed trusted HTTPS checks passed again.
+No definitive cause of the earlier intermittent primary non-answer is asserted.
+
+| Controlled stage | Actual result |
+|---|---|
+| [Ready baseline](../evidence/verification/D-balanced-ready-20261123T055933Z.txt) | 05:59:33-38 UTC: A6/B6, twelveHTTP200 |
+| [A unavailable](../evidence/verification/D-a-unavailable-20261123T060359Z.txt) | Guarded user stop of PID22992; Mac2 direct3001 connection refused |
+| [A-down](../evidence/verification/D-a-down-20261123T060400Z.txt) | 06:04:00-07 UTC: A0/B12, allHTTP200 |
+| [Restart A](../evidence/verification/D-a-restart-20261123T060845Z.txt) | 06:08:45 UTC: fixed checkout background PID24638, exit0 |
+| [Recovered](../evidence/verification/D-recovered-20261123T060959Z.txt) | 06:09:59-06:10:04 UTC: A6/B6, allHTTP200 |
+| [Current apps](../evidence/verification/D-recovered-apps-20261123T061004Z.txt) | Both no-store, shared-v2 ETag, direct304 and single wireDate |
+| [Trusted edge](../evidence/verification/D-recovered-https-20261123T061004Z.txt) | Normal hostname HTTP2/200 and304, primary-mac2 |
+
+The edge remains a single point of failure until the separate standby exercise;
+this controlled backend recovery is not automatic edge failover. Baseline and HA
+ledger items are verified again. The team also [confirmed faculty mkcert permission](../evidence/verification/2026-11-23-faculty-mkcert-confirmation.txt);
+public certificate identity is valid, while the remaining clients' trust checks
+are still required separately.
+
+### All-client trust verified and isolation baseline captured
+
+The team confirmed faculty permission for the existing mkcert method. Mac2 already
+has multiple trusted200/304 proofs. [Mac1's pre-isolation check](../evidence/verification/C-before-isolation-20261123T061158Z.txt)
+confirms both direct backend ports currently return200 and normal hostname HTTPS
+works without a trust bypass. [Mac3](../evidence/verification/TLS-mac3-client-20261123T061208Z.txt)
+and [Mac4](../evidence/verification/TLS-mac4-client-20261123T061225Z.txt) each then
+passed trusted hostname200/304. These are faithful transcriptions of team-pasted
+recorder blocks, with formatting normalized. Certificate-method approval and all
+four client trust checks are now verified. Firewall apply/denial/counters/rollback
+still need their actual controlled trial. The apply helper now records pre-PF info
+and requires a filter-anchor call, rather than accidentally matching a scrub anchor.

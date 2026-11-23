@@ -1,0 +1,19 @@
+{
+  "source": "Structured timeline of actual native Mac2 recorder files and team-supplied operator outputs. Operator restart files transcribed from actual output; Mac2 files are original tool-generated artifacts.",
+  "b_recovered": {
+    "utc": "2026-11-23T05:52:12Z",
+    "pid": 82111,
+    "app": "/Users/ankitrajsingh/Documents/CN-submission/backend-b/app.py"
+  },
+  "dns_observation": "Mac2 observed primary timeout while backup answered after B restart. Rashmi later reported unchanged IP10.7.27.145, running dnsmasq35291 bound to LAN/localhost53, local correct answer05:56:24 and caffeinate-i. No definitive sleep/cause diagnosis is claimed. All6 direct DNS checks pass05:59:32.",
+  "normal_baseline": "05:59:33-05:59:38 UTC:12HTTP200, A6/B6.",
+  "a_stop": "User identified current A PID22992; initial Ctrl+C attempt did not remove listener, then guarded TERM command was run and user reported no lsof rows. Mac2 independently confirms direct A3001 connection refused06:03:59-06:04:00.",
+  "a_down": "06:04:00-06:04:07 UTC:12HTTP200, A0/B12 through verified hostname HTTPS.",
+  "a_restart": {
+    "utc": "2026-11-23T06:08:45Z",
+    "pid": 24638,
+    "app": "/Users/shubhaang/Documents/CN-submission/backend-a/app.py"
+  },
+  "recovery": "06:09:59-06:10:05 UTC: A6/B6 all200; strict direct v2/304 checks on both and trusted by-name200/304 all pass. Both serving apps now emit one Date header after the fix.",
+  "working_copy_note": "R3-https-dns-budget-20261123T055711Z.txt used a locally patched timeout before that patch was committed. Acceptance relies on the subsequent committed9e1bec0 runs R3-https-stable and D-recovered-https, not that diagnostic run."
+}

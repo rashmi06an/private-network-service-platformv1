@@ -1,0 +1,9 @@
+START_UTC=2026-11-23T06:03:59Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=9e1bec0164c8dbc5ef75b295b14e69c2aba82139
+COMMAND: bash -c if\ /usr/bin/curl\ --noproxy\ \"\*\"\ --connect-timeout\ 3\ --max-time\ 5\ -sS\ -i\ http://10.7.28.78:3001/api/status\;\ then\ echo\ \"FAIL:\ A\ still\ answers\"\;\ exit\ 1\;\ else\ echo\ \"PASS:\ direct\ A\ endpoint\ is\ unavailable\ during\ controlled\ stop\"\;\ fi
+curl: (7) Failed to connect to 10.7.28.78 port 3001 after 1013 ms: Couldn't connect to server
+PASS: direct A endpoint is unavailable during controlled stop
+
+EXIT_CODE=0
+END_UTC=2026-11-23T06:04:00Z

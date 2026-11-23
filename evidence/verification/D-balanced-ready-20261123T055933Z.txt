@@ -1,0 +1,20 @@
+START_UTC=2026-11-23T05:59:33Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=9e1bec0164c8dbc5ef75b295b14e69c2aba82139
+COMMAND: scripts/test-ha-failover.sh balanced
+stage=balanced request=1 HTTP=200 X-Backend=A
+stage=balanced request=2 HTTP=200 X-Backend=B
+stage=balanced request=3 HTTP=200 X-Backend=A
+stage=balanced request=4 HTTP=200 X-Backend=B
+stage=balanced request=5 HTTP=200 X-Backend=A
+stage=balanced request=6 HTTP=200 X-Backend=B
+stage=balanced request=7 HTTP=200 X-Backend=A
+stage=balanced request=8 HTTP=200 X-Backend=B
+stage=balanced request=9 HTTP=200 X-Backend=A
+stage=balanced request=10 HTTP=200 X-Backend=B
+stage=balanced request=11 HTTP=200 X-Backend=A
+stage=balanced request=12 HTTP=200 X-Backend=B
+PASS: balanced A=6 B=6
+
+EXIT_CODE=0
+END_UTC=2026-11-23T05:59:38Z

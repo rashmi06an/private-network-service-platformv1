@@ -1,0 +1,20 @@
+START_UTC=2026-11-23T06:04:00Z
+MACHINE=samikshas-MacBook-Pro.local
+COMMIT=9e1bec0164c8dbc5ef75b295b14e69c2aba82139
+COMMAND: scripts/test-ha-failover.sh a-down
+stage=a-down request=1 HTTP=200 X-Backend=B
+stage=a-down request=2 HTTP=200 X-Backend=B
+stage=a-down request=3 HTTP=200 X-Backend=B
+stage=a-down request=4 HTTP=200 X-Backend=B
+stage=a-down request=5 HTTP=200 X-Backend=B
+stage=a-down request=6 HTTP=200 X-Backend=B
+stage=a-down request=7 HTTP=200 X-Backend=B
+stage=a-down request=8 HTTP=200 X-Backend=B
+stage=a-down request=9 HTTP=200 X-Backend=B
+stage=a-down request=10 HTTP=200 X-Backend=B
+stage=a-down request=11 HTTP=200 X-Backend=B
+stage=a-down request=12 HTTP=200 X-Backend=B
+PASS: a-down A=0 B=12
+
+EXIT_CODE=0
+END_UTC=2026-11-23T06:04:07Z
