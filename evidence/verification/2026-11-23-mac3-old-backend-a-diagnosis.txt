@@ -1,0 +1,31 @@
+SOURCE: User-pasted Mac3 terminal output; normalized formatting.
+CONTEXT: Updated Backend A launch failed because port 3001 was already occupied.
+The following responses came from the existing listener, not the failed new process.
+
+COMMAND: /usr/bin/curl --noproxy '*' --connect-timeout 3 --max-time 8 -i http://10.7.28.78:3001/api/status
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.14.8
+Date: Mon, 23 Nov 2026 04:25:25 GMT
+Content-Type: application/json
+Content-Length: 30
+X-Backend: A
+Connection: close
+
+{"backend":"A","status":"ok"}
+
+COMMAND: /usr/bin/curl --noproxy '*' --connect-timeout 3 --max-time 8 -i http://10.7.28.78:3001/api/cache-demo
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.14.8
+Date: Mon, 23 Nov 2026 04:25:25 GMT
+Content-Type: application/json
+Content-Length: 48
+Cache-Control: public, max-age=60
+ETag: "backend-a-v1"
+X-Backend: A
+Connection: close
+
+{"backend":"A","message":"Cache demonstration"}
+
+REVIEW: Updated deployment NOT verified. Existing A responds with the old validator
+and lacks the updated status no-store header. Stop the identified old Backend A,
+restart the corrected source on port 3001, and repeat both requests.

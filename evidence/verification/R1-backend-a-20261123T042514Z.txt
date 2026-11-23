@@ -1,0 +1,11 @@
+START_UTC=2026-11-23T04:25:14Z
+MACHINE=Shubh1.local
+COMMIT=180d73fb916c477f606e0921e7e2204bddc8a7c4
+COMMAND: backend-a/.venv/bin/python -u backend-a/app.py
+ * Serving Flask app 'app'
+ * Debug mode: off
+Address already in use
+Port 3001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+
+EXIT_CODE=1
+END_UTC=2026-11-23T04:25:15Z
