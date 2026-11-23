@@ -99,3 +99,7 @@ identified until performed. Do not replace missing results with expected outputs
 ## 23 November repair observation
 
 Ankit supplied [backup restart/query output](../evidence/verification/2026-11-23-mac4-backup-dns-restored.txt): new manual dnsmasq process 87561, app and ttl names returning 10.7.25.25 with TTL 30 from localhost and its own LAN address. This corrects the prior stale-answer observation for those queries. Cross-Mac reachability, API parity and a fresh system lookup during a controlled primary outage remain pending. The acceptance ledger stays open.
+
+### Cross-Mac follow-up
+
+[Mac 2 comparison and HTTPS](../evidence/verification/2026-11-23-mac2-dns-https-baseline.txt) now establishes backup reachability over the LAN, matching app/api answers, and a normal HTTPS 200 response from A after system-cache flush. The TTL record still differs between primary and backup. X-Edge is absent, and shared cache validation/new-config deployment remain unverified. This is partial baseline progress, not a completed failover/TTL experiment.

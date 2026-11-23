@@ -1,0 +1,42 @@
+SOURCE: Team-provided Mac 2 terminal output received 23 November 2026.
+Formatting normalized from chat. This is pre-deployment baseline/diagnostic evidence.
+
+Earlier check in the pasted session:
+IP: 10.7.25.25
+UTC: Mon Nov 23 03:26:49 UTC 2026
+nginx configuration syntax check: successful
+Primary app query: 10.7.25.25
+Backup app query: timed out (before the backup repair).
+
+Later six-record comparison from Mac 2, after backup restart:
+DNS SERVER: 10.7.27.145
+app.team1.test. 30 IN A 10.7.25.25
+api.team1.test. 30 IN A 10.7.25.25
+ttl.team1.test. 30 IN A 10.7.28.78
+
+DNS SERVER: 10.7.27.247
+app.team1.test. 30 IN A 10.7.25.25
+api.team1.test. 30 IN A 10.7.25.25
+ttl.team1.test. 30 IN A 10.7.25.25
+
+After the team ran sudo dscacheutil -flushcache and killall -HUP mDNSResponder:
+dscacheutil -q host -a name app.team1.test
+name: app.team1.test
+ip_address: 10.7.25.25
+
+Normal HTTPS request, without certificate bypass or address override:
+/usr/bin/curl --noproxy '*' --connect-timeout 3 --max-time 10 -i https://app.team1.test:8443/api/status
+HTTP/1.1 200 OK
+Server: nginx/1.31.6
+Date: Mon, 23 Nov 2026 03:35:57 GMT
+Content-Type: application/json
+Content-Length: 30
+Connection: keep-alive
+X-Backend: A
+
+{"backend":"A","status":"ok"}
+
+REVIEW: Backup DNS is now reachable from another Mac and app/api match primary,
+but ttl data still disagrees. Fresh normal system resolution and HTTPS to Backend A
+work. This does not prove DNS failover under primary outage, shared cache validation,
+or application of the corrected nginx template. No X-Edge appears in this output.

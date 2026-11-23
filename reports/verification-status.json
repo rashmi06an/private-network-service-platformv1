@@ -13,8 +13,10 @@
       "id": "baseline",
       "requirement": "Both updated backends, trusted by-name HTTPS, both backend identities and stable cache validator",
       "status": "pending",
-      "artifacts": [],
-      "review_note": ""
+      "artifacts": [
+        "evidence/verification/2026-11-23-mac2-dns-https-baseline.txt"
+      ],
+      "review_note": "23 Nov Mac2: flushed system lookup resolves 10.7.25.25; normal verified HTTPS gives HTTP200 Backend A. Updated application cache/edge-header deployment still pending."
     },
     {
       "id": "dns-clients",
@@ -28,9 +30,10 @@
       "requirement": "Identical app/api/ttl data; stopped primary; fresh normal lookup/HTTPS via backup and its query receipt; restoration",
       "status": "pending",
       "artifacts": [
-        "evidence/verification/2026-11-23-mac4-backup-dns-restored.txt"
+        "evidence/verification/2026-11-23-mac4-backup-dns-restored.txt",
+        "evidence/verification/2026-11-23-mac2-dns-https-baseline.txt"
       ],
-      "review_note": "23 Nov: Ankit restarted the manual backup config; local and own-LAN-IP app/ttl queries return 10.7.25.25 TTL30. Cross-Mac/API parity and controlled primary-outage/fresh-client proof remain pending; not full failover acceptance."
+      "review_note": "23 Nov Mac2 can query both resolvers. app/api agree at 10.7.25.25 TTL30; primary ttl still 10.7.28.78 while backup ttl is 10.7.25.25. Restore parity before the controlled outage/fresh-client test."
     },
     {
       "id": "ttl-expiry",
