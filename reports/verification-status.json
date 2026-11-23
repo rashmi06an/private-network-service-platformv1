@@ -47,22 +47,28 @@
         "evidence/verification/R1-mac2-client-dns-20261123T044808Z.txt",
         "evidence/verification/R2-mac3-client-dns-20261123T050122Z.txt",
         "evidence/verification/R2-mac1-client-dns-20261123T050558Z.txt",
-        "evidence/verification/R2-mac4-client-dns-20261123T050617Z.txt"
+        "evidence/verification/R2-mac4-client-dns-20261123T050617Z.txt",
+        "evidence/verification/2026-11-23-mac4-wifi-dns-final-readback.txt"
       ],
-      "review_note": "Mac2 effective scoped settings04:48 UTC and Mac3 install/effective settings05:01:22-05:01:26 UTC both show10.7.27.145 and10.7.27.247 for team1.test; both setup commands exit0. Requirement for at least2 clients is verified. Additional operational fixes pending: Mac1 currently localhost-only; Mac4 still old10.7.17.21. Correct both before using them as failover/cutover clients. Superseding05:05/05:06 UTC: canonical private-zone installs now pass on Mac1 andMac4 too; all4 scoped clients have both current resolvers. Mac4 service-level Wi-Fi DNS still needs a separate obsolete-address cleanup."
+      "review_note": "Mac2 effective scoped settings04:48 UTC and Mac3 install/effective settings05:01:22-05:01:26 UTC both show10.7.27.145 and10.7.27.247 for team1.test; both setup commands exit0. Requirement for at least2 clients is verified. Additional operational fixes pending: Mac1 currently localhost-only; Mac4 still old10.7.17.21. Correct both before using them as failover/cutover clients. Superseding05:05/05:06 UTC: canonical private-zone installs now pass on Mac1 andMac4 too; all4 scoped clients have both current resolvers. Mac4 service-level Wi-Fi DNS still needs a separate obsolete-address cleanup. Fresh05:18:49 UTC Mac4 Wi-Fi readback is only8.8.8.8; stale service-level entry is now confirmed removed."
     },
     {
       "id": "dns-failover",
       "requirement": "Identical app/api/ttl data; stopped primary; fresh normal lookup/HTTPS via backup and its query receipt; restoration",
-      "status": "pending",
+      "status": "verified",
       "artifacts": [
         "evidence/verification/2026-11-23-mac4-backup-dns-restored.txt",
         "evidence/verification/2026-11-23-mac2-dns-https-baseline.txt",
         "evidence/verification/R1-primary-setup-20261123T035000Z.txt",
         "evidence/verification/R1-backup-setup-20261123T041652Z.txt",
-        "evidence/verification/R1-dns-sync-20261123T044821Z.txt"
+        "evidence/verification/R1-dns-sync-20261123T044821Z.txt",
+        "evidence/verification/A-primary-stop-20261123T051526Z.txt",
+        "evidence/verification/A-primary-down-20261123T051545Z.txt",
+        "evidence/verification/A-backup-receipt-20261123T051432Z.txt",
+        "evidence/verification/A-primary-restore-20261123T051640Z.txt",
+        "evidence/verification/A-restored-20261123T051653Z.txt"
       ],
-      "review_note": "Primary canonical setup passed 23 Nov 03:50 UTC; backup canonical setup passed 04:16:52-04:16:56 UTC at commit16ff0bd. Both local setup checks show app/api/ttl=10.7.25.25 TTL30 and exit0, with config backups. Post-migration cross-client parity/settings, controlled primary outage, fresh client resolution/HTTPS, backup query receipt and restoration remain pending. Mac2 both-up check04:48:21-04:48:22 UTC exit0: all six app/api/ttl A answers match10.7.25.25 TTL30 after canonical migrations. This supersedes older primary ttl mismatch in the pasted transcript. Controlled outage/fresh client/backup receipt/restore still pending."
+      "review_note": "Primary canonical setup passed 23 Nov 03:50 UTC; backup canonical setup passed 04:16:52-04:16:56 UTC at commit16ff0bd. Both local setup checks show app/api/ttl=10.7.25.25 TTL30 and exit0, with config backups. Post-migration cross-client parity/settings, controlled primary outage, fresh client resolution/HTTPS, backup query receipt and restoration remain pending. Mac2 both-up check04:48:21-04:48:22 UTC exit0: all six app/api/ttl A answers match10.7.25.25 TTL30 after canonical migrations. This supersedes older primary ttl mismatch in the pasted transcript. Controlled outage/fresh client/backup receipt/restore still pending. Superseding controlled trial23Nov: primary stopped05:15:26-05:15:34 UTC; no port53 listener output supplied. Mac2 flushed caches and primary-down helper confirmed non-answer, backup parity, normal system lookup and trusted hostname HTTP2/200 by05:15:53. Backup receipt separates EDNS direct-dig transactions at05:15:48 from normal resolver A query38321/client UDP50756 at05:15:51.712912 and answer05:15:51.716443. Primary restored05:16:40-41; both-up check fromMac4 passed05:16:53-54. Two-client settings separately verified. Native Mac2 down-test file copied byte-for-byte; other recorder/capture excerpts transcribed from actual pasted output with formatting normalized. No capture exit code or binary pcap was supplied/claimed."
     },
     {
       "id": "ttl-expiry",

@@ -180,3 +180,22 @@ four Macs. Mac4's separate Wi-Fi DNS list retains the old primary address and ne
 cleanup with original-list backup/readback. DNS failover remains unverified until
 a controlled outage, fresh system lookup/HTTPS, backup receipt and restoration are
 captured; script timestamps now distinguish direct-dig checks from normal lookup.
+
+### Extension A verified: controlled primary outage and restoration
+
+| UTC on23November | Actual evidence |
+|---|---|
+| 05:15:26–05:15:34 | [Rashmi stopped primary DNS](../evidence/verification/A-primary-stop-20261123T051526Z.txt); the accompanying port53 listing had no listener rows |
+| 05:15:45–05:15:53 | [Mac2 after cache flush](../evidence/verification/A-primary-down-20261123T051545Z.txt): primary non-answer, backup's three correct answers, system lookup10.7.25.25 and normal trusted HTTP2/200 with primary-mac2 |
+| 05:15:51.712912–05:15:51.716443 | [Ankit's actual backup receipt](../evidence/verification/A-backup-receipt-20261123T051432Z.txt): normal resolver A query ID38321 fromMac2 UDP50756 to backup53, followed by10.7.25.25 answer |
+| 05:16:40–05:16:41 | [Primary restored](../evidence/verification/A-primary-restore-20261123T051640Z.txt) |
+| 05:16:53–05:16:54 | [Both datasets checked fromMac4](../evidence/verification/A-restored-20261123T051653Z.txt), all six names/IP/TTL checks pass |
+
+The backup receipt also contains the three earlier explicit-dig requests at05:15:48;
+those are separated from the later normal resolver A transaction above. The native
+Mac2 recorder file was copied directly; other files are faithful transcriptions of
+actual team-pasted output. The supplied receipt excerpt has no completed capture
+exit-code footer, so no such code is invented. This text receipt proves Extension A
+but does not replace the separate mandatory saved binary packet capture/frame index.
+The DNS-failover ledger item is now verified. [Fresh Mac4 service readback](../evidence/verification/2026-11-23-mac4-wifi-dns-final-readback.txt)
+at05:18:49 UTC is only8.8.8.8, confirming stale service DNS cleanup.

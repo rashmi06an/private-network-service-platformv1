@@ -116,3 +116,14 @@ uses a project-owned temporary DNS daemon on the actual Mac 2 LAN IP, port 53,
 with sudo and an exact PID file. This avoids current macOS ignoring localhost
 scoped overrides on a non-53 port. The helper refuses existing listeners, restores
 the original scoped DNS file and terminates only its own DNS daemon afterwards.
+
+### Local helper validation before the team run
+
+[Isolated native-dnsmasq validation](../reports/ttl-cache-local-validation.json)
+ran the expiry/flush helper against two owned loopback high-port dnsmasq authorities,
+with explicit source-copy substitutions for their addresses/ports and temporary
+state root. It observed natural refresh at31.19seconds and a separate manual flush
+at5.27seconds. This tests the helper's actual DNS-cache behavior; it is not evidence
+that the four-Mac experiment ran. The live expiry/flush ledger items remain pending.
+Use different evidence labels for the two DNS operators (for example,
+B-expiry-record-mac1 and B-expiry-record-mac4) so their files remain distinct.

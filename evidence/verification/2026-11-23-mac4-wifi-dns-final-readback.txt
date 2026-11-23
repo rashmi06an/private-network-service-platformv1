@@ -1,0 +1,9 @@
+SOURCE: User-pasted fresh Mac4 readback, superseding earlier mixed scrollback.
+COMMAND: date -u
+Mon Nov 23 05:18:49 UTC 2026
+COMMAND: networksetup -getdnsservers Wi-Fi
+8.8.8.8
+
+REVIEW: Obsolete10.7.17.21 removed from Wi-Fi service DNS; current private-zone
+settings independently retain both10.7.27.145 and10.7.27.247. User reported saving
+the former service list under .local-state/wifi-dns-before-<UTC>.txt before changing.

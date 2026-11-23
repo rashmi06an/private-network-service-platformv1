@@ -1,0 +1,29 @@
+START_UTC=2026-11-23T05:14:32Z
+MACHINE=Ankits-MacBook-Pro-7.local
+COMMIT=298f5eccad90ebbda8ee56ce715943d465c2985e
+COMMAND: sudo env TZ=UTC tcpdump -ni en0 -l -tttt -vv port\ 53\ and\ host\ 10.7.25.25
+tcpdump: listening on en0, link-type EN10MB (Ethernet), snapshot length 524288 bytes
+2026-11-23 05:15:48.496314 IP (tos 0x0, ttl 64, id 10148, offset 0, flags [none], proto UDP (17), length 71)
+    10.7.25.25.59450 > 10.7.27.247.53: [udp sum ok] 50588+ [1au] A? app.team1.test. ar: . OPT UDPsize=4096 (43)
+2026-11-23 05:15:48.506253 IP (tos 0x0, ttl 64, id 9180, offset 0, flags [none], proto UDP (17), length 87)
+    10.7.27.247.53 > 10.7.25.25.59450: [udp sum ok] 50588* q: A? app.team1.test. 1/0/1 app.team1.test. A 10.7.25.25 ar: . OPT UDPsize=1232 (59)
+2026-11-23 05:15:48.537023 IP (tos 0x0, ttl 64, id 35481, offset 0, flags [none], proto UDP (17), length 71)
+    10.7.25.25.58444 > 10.7.27.247.53: [udp sum ok] 34946+ [1au] A? api.team1.test. ar: . OPT UDPsize=4096 (43)
+2026-11-23 05:15:48.540723 IP (tos 0x0, ttl 64, id 14833, offset 0, flags [none], proto UDP (17), length 87)
+    10.7.27.247.53 > 10.7.25.25.58444: [udp sum ok] 34946* q: A? api.team1.test. 1/0/1 api.team1.test. A 10.7.25.25 ar: . OPT UDPsize=1232 (59)
+2026-11-23 05:15:48.569700 IP (tos 0x0, ttl 64, id 64122, offset 0, flags [none], proto UDP (17), length 71)
+    10.7.25.25.51517 > 10.7.27.247.53: [udp sum ok] 11033+ [1au] A? ttl.team1.test. ar: . OPT UDPsize=4096 (43)
+2026-11-23 05:15:48.572564 IP (tos 0x0, ttl 64, id 58377, offset 0, flags [none], proto UDP (17), length 87)
+    10.7.27.247.53 > 10.7.25.25.51517: [udp sum ok] 11033* q: A? ttl.team1.test. 1/0/1 ttl.team1.test. A 10.7.25.25 ar: . OPT UDPsize=1232 (59)
+2026-11-23 05:15:51.700448 IP (tos 0x0, ttl 64, id 8351, offset 0, flags [none], proto UDP (17), length 60)
+    10.7.25.25.55184 > 10.7.27.247.53: [udp sum ok] 33916+ AAAA? app.team1.test. (32)
+2026-11-23 05:15:51.700452 IP (tos 0x0, ttl 64, id 38539, offset 0, flags [none], proto UDP (17), length 64)
+    10.7.25.25.56065 > 10.7.27.247.53: [udp sum ok] 9911+ Type64? _dns.resolver.arpa. (36)
+2026-11-23 05:15:51.705204 IP (tos 0x0, ttl 64, id 18558, offset 0, flags [none], proto UDP (17), length 60)
+    10.7.27.247.53 > 10.7.25.25.55184: [udp sum ok] 33916 q: AAAA? app.team1.test. 0/0/0 (32)
+2026-11-23 05:15:51.708037 IP (tos 0x0, ttl 64, id 23225, offset 0, flags [none], proto UDP (17), length 64)
+    10.7.27.247.53 > 10.7.25.25.56065: [udp sum ok] 9911 Refused q: Type64? _dns.resolver.arpa. 0/0/0 (36)
+2026-11-23 05:15:51.712912 IP (tos 0x0, ttl 64, id 10224, offset 0, flags [none], proto UDP (17), length 60)
+    10.7.25.25.50756 > 10.7.27.247.53: [udp sum ok] 38321+ A? app.team1.test. (32)
+2026-11-23 05:15:51.716443 IP (tos 0x0, ttl 64, id 31877, offset 0, flags [none], proto UDP (17), length 76)
+    10.7.27.247.53 > 10.7.25.25.50756: [udp sum ok] 38321* q: A? app.team1.test. 1/0/0 app.team1.test. A 10.7.25.25 (48)

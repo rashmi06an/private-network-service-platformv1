@@ -1,0 +1,18 @@
+[
+  {
+    "mode": "expiry",
+    "scope": "Isolated native dnsmasq authorities on loopback high ports, source script with explicit address/port/root substitutions; not four-Mac LAN evidence.",
+    "result": [
+      "PASS: natural cached OLD -> NEW after expiry; elapsed=31.19s"
+    ],
+    "exit_code": 0
+  },
+  {
+    "mode": "flush",
+    "scope": "Isolated native dnsmasq authorities on loopback high ports, source script with explicit address/port/root substitutions; not four-Mac LAN evidence.",
+    "result": [
+      "PASS: manual cache flush changed OLD -> NEW before TTL expiry; elapsed=5.27s"
+    ],
+    "exit_code": 0
+  }
+]

@@ -1,0 +1,10 @@
+START_UTC=2026-11-23T05:15:26Z
+MACHINE=Rashmis-MacBook-Pro.local
+COMMIT=298f5eccad90ebbda8ee56ce715943d465c2985e
+COMMAND: sudo brew services stop dnsmasq
+Password:
+Stopping `dnsmasq`... (might take a while)
+==> Successfully stopped `dnsmasq` (label: sh.brew.dnsmasq)
+
+EXIT_CODE=0
+END_UTC=2026-11-23T05:15:34Z
